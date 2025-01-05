@@ -68,8 +68,7 @@ function Nav() {
           <img 
               src="/images/manomokykla.png"
               alt="manomokyk.la"
-              width={150} 
-              height={70}/>
+              width={150} />
         </a>
       </div>
       <div className="navbar-center hidden lg:flex z-[50]">
