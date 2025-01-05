@@ -1,4 +1,4 @@
-# Eduinf 
+# manomokyk.la
  tai informacinė platforma, sukurta palengvinti mokyklų ir mokytojų paiešką, suteikiant vartotojams galimybę dalintis atsiliepimais bei vertinimais.
 
 ## Projekto tikslas
