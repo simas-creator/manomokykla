@@ -2,7 +2,9 @@
 import { NextResponse } from 'next/server';
 import register from "/action/register";
 import User from "@/lib/modals/user";
+import connect from '@/lib/mongodb';
 export async function POST(req) {
+    await connect();
     try {
         const { name, last, email, password } = await req.json();
         if (!name || !last || !email || !password) {
