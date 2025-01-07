@@ -25,7 +25,6 @@ export async function POST(req) {
         }
 
     } catch (error) {
-        console.error("Error during registration:", error.message);
         return NextResponse.json({ error: "Įvyko klaida registruojant vartotoją." }, { status: 500 });
     }
 }

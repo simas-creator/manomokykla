@@ -1,8 +1,11 @@
 'use client'
 import Link from "next/link";
 import { useState } from "react";
+import {useRouter} from "next/navigation";
+import { signIn } from "next-auth/react";
 const Login = () => {
   const [error, setError] = useState("");
+  const router = useRouter();
   const submit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -18,7 +21,7 @@ const Login = () => {
       const res = await fetch("/api/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, last, email, password }),
+          body: JSON.stringify({ email, password }),
       });
 
       if (!res.ok) {
@@ -26,32 +29,29 @@ const Login = () => {
           if(res.status === 500) {
               setError("Įveskite tinkamą el. pašto adresą")
           } else {
-              setError("Vartotojas jau užregistruotas");
+              setError("Įvyko klaida");
           }
           
           return;
       }
 
+
       const result = await res.json();
 
       if (!result.success) {
           // Handle logical errors returned by the API
-          setError(result.message || "Vartotojas jau užregistruotas.");
-          console.log("User registration failed:", result.message);
+          setError("Vartotojas jau užregistruotas.");
       } else {
-          // Success case
-          setError("");
-          console.log("Registration successful:", result.message);
-          // Perform further actions, e.g., redirecting
-          router.push("/prisijungti")
+        const signInResult = await signIn("credentials", {
+            redirect: true,
+            callbackUrl: "/skydelis", // Adjust the redirect URL as needed
+            email,
+            password,
+        });
       }
   } catch (error) {
-      // Handle fetch errors
-
-      console.error("Error during submission:", error);
       setError("Įvyko serverio klaida");
-  
-  }
+    }
   }
   return (
     <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6 mt-10">

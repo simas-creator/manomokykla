@@ -9,7 +9,7 @@ const register = async (name, last, email, password) => {
         await connect();
         // Validate input
         if (!name || !last || !email || !password) {
-            throw new Error("All fields are required.");
+            return;
         }
 
         // Check if user already exists
