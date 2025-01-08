@@ -42,7 +42,7 @@ const Login = () => {
           // Handle logical errors returned by the API
           setError("Vartotojas jau užregistruotas.");
       } else {
-        const signInResult = await signIn("credentials", {
+          await signIn("credentials", {
             redirect: true,
             callbackUrl: "/skydelis", // Adjust the redirect URL as needed
             email,

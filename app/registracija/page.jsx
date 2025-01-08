@@ -42,7 +42,7 @@ const Register = () => {
     
             if (!result.success) {
                 // Handle logical errors returned by the API
-                setError("Vartotojas jau užregistruotas.");
+                setError(result.error);
             } else {
                 // Success case
                 setError("");
@@ -50,9 +50,6 @@ const Register = () => {
                 router.push("/prisijungti")
             }
         } catch (error) {
-            // Handle fetch errors
-
-            console.error("Error during submission:", error);
             setError("Įvyko serverio klaida");
         
         }
