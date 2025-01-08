@@ -4,9 +4,6 @@ import User from "@/lib/modals/user";
 import connect from '@/lib/mongodb';
 import bcrypt from 'bcryptjs'
 
-export const config = {
-    runtime: 'nodejs', // Correct way to specify runtime
-};
 export async function POST(req) {
     await connect();
     try {
