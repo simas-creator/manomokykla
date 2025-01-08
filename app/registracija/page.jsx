@@ -42,12 +42,10 @@ const Register = () => {
     
             if (!result.success) {
                 // Handle logical errors returned by the API
-                setError(result.message || "Vartotojas jau užregistruotas.");
-                console.log("User registration failed:", result.message);
+                setError("Vartotojas jau užregistruotas.");
             } else {
                 // Success case
                 setError("");
-                console.log("Registration successful:", result.message);
                 // Perform further actions, e.g., redirecting
                 router.push("/prisijungti")
             }
