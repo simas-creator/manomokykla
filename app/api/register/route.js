@@ -3,6 +3,11 @@ import { NextResponse } from 'next/server';
 import register from "/action/register";
 import User from "@/lib/modals/user";
 import connect from '@/lib/mongodb';
+
+export const config = {
+    runtime: 'nodejs',
+  };
+  
 export async function POST(req) {
     await connect();
     try {

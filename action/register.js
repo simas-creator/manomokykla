@@ -3,6 +3,11 @@ import User from "@/lib/modals/user"; // Ensure the path is correct
 import connect from "@/lib/mongodb";
 import bcrypt from "bcryptjs";
 
+
+export const config = {
+    runtime: 'nodejs',
+  };
+  
 const register = async (name, last, email, password) => {
     try {
         // Establish a database connection
