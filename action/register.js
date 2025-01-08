@@ -1,7 +1,7 @@
 "use server";
 import User from "@/lib/modals/user"; // Ensure the path is correct
 import connect from "@/lib/mongodb";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const register = async (name, last, email, password) => {
     try {
