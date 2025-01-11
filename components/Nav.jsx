@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-
 
 function Nav() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -9,7 +9,7 @@ function Nav() {
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
   };
-
+  const {data: session, status} = useSession(false);
   return (
     <div className="navbar bg-base-100 relative">
       <div className="navbar-start">
@@ -94,11 +94,21 @@ function Nav() {
           </li>
         </ul>
       </div>
-      <div className="navbar-end">
-        <a href="/prisijungti" className="btn btn-outline btn-primary">
-          Prisijungti
+      
+      {session? (
+        <div className="navbar-end">
+        <a href="/skydelis" className="btn btn-outline btn-primary">
+          Paskyra
         </a>
       </div>
+      ) : 
+      <div className="navbar-end">
+        <a href="/prisijungti" className="btn btn-outline btn-primary">
+          Paskyra
+        </a>
+      </div>}
+      
+      
     </div>
   );
 }

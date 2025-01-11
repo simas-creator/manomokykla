@@ -42,7 +42,7 @@ const Login = () => {
           // Handle logical errors returned by the API
           setError("Vartotojas jau užregistruotas.");
       } else {
-          await signIn("credentials", {
+          await signIn("Credentials", {
             redirect: true,
             callbackUrl: "/skydelis", // Adjust the redirect URL as needed
             email,
@@ -76,9 +76,10 @@ const Login = () => {
               <p className="text-red-500">{error}</p>
               <button className="btn btn-primary w-full mt-4 mb-2">Prisijungti &rarr;</button>
               <p className="text-sm">Neturite paskyros? <Link className="link link-primary link-hover" href='/registracija'>Registruotis</Link></p>
-            <div className="divider">arba</div>
+          </form>
+          <div className="divider">arba</div>
             <section>
-              <button className="w-full flex bg-slate-50 py-2 px-4 gap-1 rounded-md items-center">
+              <button onClick={() => signIn('google')} className="w-full flex bg-slate-50 py-2 px-4 gap-1 rounded-md items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-brand-google">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                   <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z" />
@@ -86,7 +87,6 @@ const Login = () => {
                   <span className="text-neutral-700 text-sm">Google</span>
               </button>
             </section>
-          </form>
     </div>
   )
 }
