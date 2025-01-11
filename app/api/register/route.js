@@ -21,6 +21,6 @@ export async function POST(req) {
         await user.save();
         return NextResponse.json({success: true, message: "Vartotojas užregistruotas"}, {status: 200})
     } catch (error) {
-        return NextResponse.json({ error: "Įvyko klaida registruojant vartotoją." }, { status: 500 });
+        return NextResponse.json({ error: "Įvyko klaida registruojant vartotoją.", error }, { status: 500 });
     }
 }

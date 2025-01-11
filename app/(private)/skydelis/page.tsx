@@ -2,7 +2,7 @@
 import { useSession } from 'next-auth/react'
 import React from 'react'
 import Dashb from '@/components/Dashb'
-const page = () => {
+const Page = () => {
   const {data: session, status} = useSession()
   if (status === "loading") {
     return <div className='flex w-full justify-center p-20'>Kraunama...</div>; 
@@ -23,4 +23,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
