@@ -1,7 +1,6 @@
 import "./globals.css";
 import Nav from "/components/Nav";
 import  Footer from "/components/Footer";
-import { EdgeStoreProvider } from "../lib/edgestore";
 import { Montserrat } from 'next/font/google';
 import { Roboto } from 'next/font/google';
 import SessionWrapper from "@/components/SessionWrapper";
@@ -32,7 +31,7 @@ export default function RootLayout({ children }) {
         >
           <Nav />
           <main className="flex-grow">
-            <EdgeStoreProvider>{children}</EdgeStoreProvider>
+           {children}
           </main>
           <Footer/>
         </body>

@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import connect from "@/lib/mongodb";
 import User from "@/lib/modals/user"; // Adjust the path to your user model
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 
 export async function POST(req) {
     await connect();

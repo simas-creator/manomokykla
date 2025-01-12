@@ -32,15 +32,19 @@ const Login = () => {
       const result = await signIn("credentials", {
         email,
         password,
+        redirect: false,
       });
 
       if (result?.error) {
-        setError(result.error || "Neteisingas el. paštas arba slaptažodis");
+        setError("Neteisingas el. paštas arba slaptažodis");
+        setLoading(false);
       } else {
         router.push("/skydelis");
       }
     } catch (err) {
+      setLoading(false);
       setError("Įvyko serverio klaida");
+      console.log(err)
     }
   };
 
@@ -48,7 +52,7 @@ const Login = () => {
     <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
       <h1 className="font-semibold text-3xl mt-5 font-title">Prisijungti</h1>
       <p className="text-slate-500 mt-2 mb-4">Nurodykite reikiamus duomenis</p>
-      <form onSubmit={submit}>
+      <form onSubmit={(e) => submit(e)}>
         <div className="mt-2 flex-col flex">
           <label htmlFor="email" className="font-title">El. paštas</label>
           <input 
@@ -80,7 +84,7 @@ const Login = () => {
       <div className="divider">arba</div>
       <section>
         <button 
-          onClick={() => signIn('google', { callbackUrl: "/skydelis" })} 
+          onClick={() => signIn('google')} 
           className="w-full flex bg-slate-50 py-2 px-4 gap-1 rounded-md items-center"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-brand-google">
