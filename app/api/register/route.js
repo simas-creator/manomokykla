@@ -23,6 +23,6 @@ export async function POST(req) {
 
         return NextResponse.json({ success: true, message: "Registracija sėkminga" });
     } catch (error) {
-        return NextResponse.json({ success: false, error: "Serverio klaida" }, { status: 500 });
+        return NextResponse.json({ success: false, error: error }, { status: 500 });
     }
 }
