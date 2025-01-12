@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 const Dashb = () => {
   const {data: session} = useSession()
   return (
@@ -8,7 +8,7 @@ const Dashb = () => {
       <aside className="w-64 bg-white shadow-lg p-6">
         <h2 className="text-2xl font-bold mb-6">Paskyra</h2>
         <nav className="space-y-4">
-          <a href="#" className="block text-gray-700 hover:text-blue-500">Atsijungti</a>
+          <a href="#" onClick={() => signOut({callbackUrl: "/prisijungti"})} className="block text-gray-700 hover:text-blue-500">Atsijungti</a>
         </nav>
       </aside>
 
