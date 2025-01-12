@@ -18,7 +18,7 @@ export async function POST(req) {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, last, email, password: hashedPassword });
+        const newUser = new User({ name, last, email: email.toLowerCase(), password: hashedPassword });
         await newUser.save();
 
         return NextResponse.json({ success: true, message: "Registracija sėkminga" });

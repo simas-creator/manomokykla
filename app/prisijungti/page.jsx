@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
   const [error, setError] = useState("");
   const router = useRouter();
@@ -21,11 +22,14 @@ const Login = () => {
     const formData = new FormData(e.target);
     const email = formData.get("email");
     const password = formData.get("password");
-
+    if(!email || !password) {
+      setError("Visi laukai turi būti užpildyti");
+      return;
+    }
+    setLoading(true);
     try {
       // Sign in with the Credentials provider
       const result = await signIn("credentials", {
-        redirect: false,
         email,
         password,
       });
@@ -62,7 +66,13 @@ const Login = () => {
           />
         </div>
         <p className="text-red-500">{error}</p>
-        <button className="btn btn-primary w-full mt-4 mb-2">Prisijungti &rarr;</button>
+        {loading ? (<button className="btn btn-primary w-full mt-4 mb-2" disabled>
+          Kraunama...
+        </button>) : (
+          <button className="btn btn-primary w-full mt-4 mb-2">Prisijungti &rarr;</button>
+          )}
+        
+        
         <p className="text-sm">
           Neturite paskyros? <Link className="link link-primary link-hover" href="/registracija">Registruotis</Link>
         </p>

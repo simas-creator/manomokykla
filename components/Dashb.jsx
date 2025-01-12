@@ -15,7 +15,7 @@ const Dashb = () => {
       {/* Main Content */}
       <main className="flex-1 p-8">
         <header className="mb-8">
-          <h1 className="text-3xl font-semibold">{session.user.email}</h1>
+          <h1 className="text-3xl font-semibold">{session.user.email || session.user.name}</h1>
           <p className="text-gray-600">Jūsų įvertinimų apžvalga.</p>
         </header>
 
