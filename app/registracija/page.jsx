@@ -26,18 +26,13 @@ const Register = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, last, email, password }),
             });
-    
             if (!res.ok) {
                 // Handle HTTP errors
-                if(res.status === 500) {
-                    setError("Įveskite tinkamą el. pašto adresą")
-                } else {
-                    setError("Vartotojas jau užregistruotas");
-                }
+                setError(err || "Įvyko klaida registruojantis")
                 
                 return;
             }
-    
+            
             const result = await res.json();
     
             if (!result.success) {
@@ -50,7 +45,7 @@ const Register = () => {
                 router.push("/prisijungti")
             }
         } catch (error) {
-            setError("Įvyko serverio klaida");
+            setError("Įvyko klaida registruojantis");
         
         }
     };
