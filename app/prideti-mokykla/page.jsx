@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useEdgeStore } from '../lib/edgestore';
 
 const SchoolForm = () => {
   const router = useRouter();
@@ -13,7 +12,6 @@ const SchoolForm = () => {
     mu: "Mokykla",
   });
 
-  const { edgestore } = useEdgeStore();
   
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -139,7 +137,6 @@ const SchoolForm = () => {
             <option>Universitetas</option>
           </select>
         </div>
-
         <button type="submit" className="btn btn-outline btn-primary w-full py-2 rounded-lg">
           Pridėti
         </button>
