@@ -20,7 +20,7 @@ const FilterSchools = ({ regions, onFilter }) => {
                 <circle cx="11" cy="11" r="8" className=""></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65" className=""></line>
               </svg>
-              <input type="name" name="search" className="h-12 w-full cursor-text rounded-md border border-gray-100 bg-gray-100 py-4 pr-40 pl-12 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" placeholder="Ieškokite mokyklos pavadinimo" />
+              <input type="name" name="search" className="h-12 w-full cursor-text rounded-md border border-gray-100 bg-gray-100 py-4 pr-40 pl-12 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" placeholder="Ieškokite mokyklos" />
             </div>
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

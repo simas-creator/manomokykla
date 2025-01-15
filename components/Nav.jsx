@@ -51,7 +51,7 @@ function Nav() {
                   <Link href="/prideti-mokykla">Pridėti</Link>
                   </li>
                   <li>
-                    <Link href="/mokyklu-ivertinimai">Peržiūrėti</Link>
+                    <Link href="/perziureti-mokyklas">Peržiūrėti</Link>
                   </li>
                 </ul>
               </li>
@@ -81,7 +81,7 @@ function Nav() {
                 <Link href="/prideti-mokykla">Pridėti</Link>
                 </li>
                 <li>
-                <Link href="/mokyklu-ivertinimai">Peržiūrėti</Link>
+                <Link href="/perziureti-mokyklas">Peržiūrėti</Link>
                 </li>
               </ul>
             </details>
