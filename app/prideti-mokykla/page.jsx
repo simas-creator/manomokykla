@@ -5,6 +5,8 @@ import {storage} from '/firebase';
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage';
 
 const SchoolForm = () => {
+  const [error, setError] = useState(null);
+  const [fileError, setFileError] = useState(null);
   const router = useRouter();
   const [jsonData, setJsonData] = useState({
     name: "",
@@ -18,21 +20,31 @@ const SchoolForm = () => {
     const { name, value, files } = e.target;
     if (name === "image" && files?.length > 0) {
       setFile(files[0]);
+      setFileError("");
       const previewUrl = URL.createObjectURL(files[0]);
       setImagePreview(previewUrl);
     } else {
       setJsonData({ ...jsonData, [name]: value });
+      setError("")
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const storageRef = ref(storage, `images/${file.name}`);
+    if (!jsonData.name || jsonData.name.trim() === "" || jsonData.name.length < 4) {
+      setError("Įveskite tinkamą pavadinimą");
+    } else setError(null);
+    if (!file) {
+      setFileError("Būtina įkelti nuotrauką");
+      return;
+    } else setFileError(null);
+
+
+    const storageRef = ref(storage, `${file.name}`);
     await uploadBytes(storageRef, file);
     const iUrl = await getDownloadURL(storageRef);
   
     const updatedData = { ...jsonData, url: iUrl };
-    clg(updatedData);
     try {
       const response = await fetch("/api/schools/add", {
         method: "POST",
@@ -68,11 +80,8 @@ const SchoolForm = () => {
             value={jsonData.name}
             onChange={handleChange}
             className="input input-bordered input-primary w-full"
-            required
-            onInvalid={(e) => e.target.setCustomValidity('Įveskite mokyklą')}
-            onInput={(e) => e.target.setCustomValidity('')}
-            minLength={3}
           />
+          {error && <p className="text-sm text-red-600">{error}</p>}
         </div>
 
         {/* Input for Image */}
@@ -85,14 +94,14 @@ const SchoolForm = () => {
             name="image"
             onChange={handleChange}
           />
-          <p className="text-sm text-gray-700">{jsonData.fileName}</p>
+          <p className="text-sm text-gray-700">{file?.name}</p>
         </div>
+        {fileError && <p className="text-sm text-red-600">{fileError}</p>}
         {imagePreview && (
         <div>
             <img
               src={imagePreview}
-              className="rounded-lg border-2 border-gray-300"
-              width={300}
+              className="rounded-lg border-2 border-gray-300 h-20 w-20"
             />
         </div>
       )}
