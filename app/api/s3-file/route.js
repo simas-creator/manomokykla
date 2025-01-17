@@ -34,6 +34,7 @@ export async function POST(req) {
 
         return NextResponse.json({success: true, fileName});
     } catch (error) {
+        console.log(error);
         return NextResponse.json({ error: "klaida įkeliant failą"}, { status: 500 });
     }
 }
