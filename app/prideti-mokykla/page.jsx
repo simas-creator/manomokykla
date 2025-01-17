@@ -1,8 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {storage} from '/firebase';
-import {ref, uploadBytes, getDownloadURL} from 'firebase/storage';
 
 const SchoolForm = () => {
   const [error, setError] = useState(null);
@@ -19,15 +17,36 @@ const SchoolForm = () => {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image" && files?.length > 0) {
-      setFile(files[0]);
-      setFileError("");
-      const previewUrl = URL.createObjectURL(files[0]);
-      setImagePreview(previewUrl);
+        const uploadedFile = files[0];
+
+        // Validate file type
+        const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
+        if (!validImageTypes.includes(uploadedFile.type)) {
+            setFileError("Netinkamas failo tipas");
+            setFile(null);
+            setImagePreview(null);
+            return;
+        }
+
+        // Validate file size (5MB max)
+        const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+        if (uploadedFile.size > maxFileSize) {
+            setFileError("Failas negali būti didesnis nei 5MB");
+            setFile(null);
+            setImagePreview(null);
+            return;
+        }
+
+        // If valid, update state
+        setFile(uploadedFile);
+        setFileError(null);
+        const previewUrl = URL.createObjectURL(uploadedFile);
+        setImagePreview(previewUrl);
     } else {
-      setJsonData({ ...jsonData, [name]: value });
-      setError("")
+        setJsonData({ ...jsonData, [name]: value });
+        setError(null);
     }
-  };
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,9 +59,8 @@ const SchoolForm = () => {
     } else setFileError(null);
 
 
-    const storageRef = ref(storage, `${file.name}`);
-    await uploadBytes(storageRef, file);
-    const iUrl = await getDownloadURL(storageRef);
+    /// add image to cloudinary
+    const iUrl = null;
   
     const updatedData = { ...jsonData, url: iUrl };
     try {
