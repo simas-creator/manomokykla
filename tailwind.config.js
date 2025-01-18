@@ -33,6 +33,9 @@ module.exports = {
         background: "var(--background)", 
         foreground: "var(--foreground)", 
       },
+      screens: {
+        'amd': '800px',
+      },
     },
   }
   ,

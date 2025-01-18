@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { set } from 'mongoose';
 
 const SchoolForm = () => {
   const [error, setError] = useState(null);
@@ -9,11 +10,12 @@ const SchoolForm = () => {
   const [jsonData, setJsonData] = useState({
     name: "",
     apskritis: "Alytaus",
-    url: "",
+    imgUrl: "",
     mu: "Mokykla",
   });
   const [imagePreview, setImagePreview] = useState(null)
   const [file, setFile] = useState(null)
+  const [loading, setLoading] = useState(false);
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image" && files?.length > 0) {
@@ -50,37 +52,58 @@ const SchoolForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (!jsonData.name || jsonData.name.trim() === "" || jsonData.name.length < 4) {
+      setLoading(false);
       setError("Įveskite tinkamą pavadinimą");
-    } else setError(null);
+      return;
+    } else {
+      setError(null);
+    }
     if (!file) {
+      setLoading(false);
       setFileError("Būtina įkelti nuotrauką");
       return;
-    } else setFileError(null);
+    } else {
+      setFileError(null);
+    }
+    const formData = new FormData();
+    formData.append("file", file);
 
-
-    /// add image to cloudinary
-    const iUrl = null;
-  
-    const updatedData = { ...jsonData, url: iUrl };
     try {
+      const res1 = await fetch("/api/s3-file", {
+        method: "POST",
+        body: formData,
+      })
+
+      if (!res1.ok) {
+        setFileError("Klaida įkeliant failą");
+        setLoading(false);
+        return;
+      }
+
+      const data = await res1.json();
+      jsonData.imgUrl = data.fileName;
+
       const response = await fetch("/api/schools/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedData),
+        body: JSON.stringify(jsonData),
       });
-
       if (response.ok) {
         const result = await response.json();
         console.log("Server response:", result);
-        router.push("./mokyklu-ivertinimai");
+        router.push("/perziureti-mokyklas");
       } else {
         console.log("Error:", response.status, response.statusText);
       }
     } catch (error) {
-      console.error("Fetch error:", error);
+      console.log("Fetch error:", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
   
@@ -160,9 +183,13 @@ const SchoolForm = () => {
             <option>Universitetas</option>
           </select>
         </div>
-        <button type="submit" className="btn btn-outline btn-primary w-full py-2 rounded-lg">
-          Pridėti
-        </button>
+        
+        {/* Submit Button */}
+        {loading ? (<button disabled className="btn btn-outline btn-primary w-full py-2 rounded-lg">
+            Kraunama...
+        </button>): (<button type="submit" className="btn btn-outline btn-primary w-full py-2 rounded-lg">
+            Pridėti
+        </button>)}
       </form>
     </section>
   );
