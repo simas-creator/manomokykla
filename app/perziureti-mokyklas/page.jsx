@@ -38,10 +38,15 @@ const Page = () => {
   return (
     <div>
       <FilterSchools />
+      <div className='flex justify-center items-center'>
+        {loading && <p>Kraunama...</p>}
+        {!loading && data.length === 0 && <p>Atsiprašome, bet nieko neradome.</p>}
+      </div>
+      
       <div className="grid w-full items-center justify-center">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 grid-flow-row gap-10 p-4 w-full max-w-screen-xl sm:justify-center sm:items-center">
-          {loading && <p>Kraunama...</p>}
-          {!loading && data.length === 0 && <p>Atsiprašome, bet nieko neradome.</p>}
+          
+          
           {data.map((school) => (
             <SchoolCase 
               key={`${school.apskritis}-${school.name}`} 

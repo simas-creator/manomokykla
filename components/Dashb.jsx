@@ -1,26 +1,22 @@
 import React from 'react';
 import { signOut, useSession } from 'next-auth/react';
+
 const Dashb = () => {
-  const {data: session} = useSession()
+  const { data: session } = useSession();
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-lg p-6">
-        <h2 className="text-2xl font-bold mb-6">Paskyra</h2>
-        <nav className="space-y-4">
-          <a href="#" onClick={() => signOut({callbackUrl: "/prisijungti"})} className="block text-gray-700 hover:text-blue-500">Atsijungti</a>
-        </nav>
-      </aside>
+    <div className="min-h-screen bg-gray-100 flex flex-col">
 
       {/* Main Content */}
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 md:p-8">
         <header className="mb-8">
-          <h1 className="text-3xl font-semibold">{session.user.email || session.user.name}</h1>
+          <h1 className="text-2xl md:text-3xl font-semibold">
+            {session.user.email || session.user.name}
+          </h1>
           <p className="text-gray-600">Jūsų įvertinimų apžvalga.</p>
         </header>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-xl font-semibold">Iš viso įvertinimų</h3>
             <p className="text-4xl font-bold text-primary">45</p>
@@ -64,6 +60,14 @@ const Dashb = () => {
           </div>
         </section>
       </main>
+      <div className='bg-white h-20 justify-center items-center flex'>
+        <button
+          onClick={() => signOut()}
+          className="bg-primary text-white px-4 py-2 rounded-lg hover:opacity-80 transition"
+        >
+          Atsijungti
+        </button>
+      </div>
     </div>
   );
 };

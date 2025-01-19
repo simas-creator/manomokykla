@@ -154,7 +154,7 @@ const SchoolForm = () => {
             name="apskritis"
             value={jsonData.apskritis}
             onChange={handleChange}
-            className="block w-full rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="block w-full rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option>Alytaus</option>
             <option>Kauno</option>
@@ -177,7 +177,7 @@ const SchoolForm = () => {
             name="mu"
             value={jsonData.mu}
             onChange={handleChange}
-            className="block w-full rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="block w-full rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option>Mokykla</option>
             <option>Universitetas</option>
