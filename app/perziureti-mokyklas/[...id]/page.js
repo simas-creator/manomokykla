@@ -22,7 +22,7 @@ const Page = () => {
           console.log("error occurred")
         }
       } catch (err) {
-        console.log('error', error)
+        console.log('error', err)
       } finally {
         setLoading(false) 
       }
