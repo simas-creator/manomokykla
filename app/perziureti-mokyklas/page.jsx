@@ -50,8 +50,7 @@ const Page = () => {
           {data.map((school) => (
             <SchoolCase 
               key={`${school.apskritis}-${school.name}`} 
-              name={school.name} 
-              imgUrl={school.imgUrl} 
+              school={school}
             />
           ))}
         </div>
