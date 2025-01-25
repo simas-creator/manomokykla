@@ -1,7 +1,6 @@
 'use client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { set } from 'mongoose';
 
 const SchoolForm = () => {
   const [error, setError] = useState(null);
@@ -69,7 +68,7 @@ const SchoolForm = () => {
     }
     const formData = new FormData();
     formData.append("file", file);
-
+    formData.append("mokykla", jsonData.name);
     try {
       const res1 = await fetch("/api/s3-file", {
         method: "POST",

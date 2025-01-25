@@ -3,13 +3,10 @@ import { NextResponse } from "next/server";
 import School from "@/lib/modals/school";
 
 export const GET = async (request, { params }) => {
+  const number = await params.number
   try {
-    const {number} = params;
-    console.log(number);
-
-    if (!number) {
-      return NextResponse.json({ error: 'ID parameter is missing' }, { status: 400 });
-    }
+    
+    
     const aNumber = parseInt(number)
     await connect();
 

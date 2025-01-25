@@ -1,7 +1,8 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import SchoolPage from "@/components/SchoolPage";
 
 const Page = () => {
   const pathname = usePathname()
@@ -42,7 +43,7 @@ const Page = () => {
 
   return (
     <div>
-      {school.name}
+      <SchoolPage School={school}/>
     </div>
   )
 }

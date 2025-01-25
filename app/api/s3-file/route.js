@@ -10,10 +10,23 @@ const s3Client = new S3Client({
     },
 });
 
-async function uploadToS3(fileBuffer, fileName) {
+async function uploadSchoolPic(fileBuffer, fileName) {
     const uploadParams = {
         Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME,
         Key: `mokyklos/${fileName}-${Date.now()}.jpg`,
+        Body: fileBuffer,
+        ContentType: "image/jpeg",
+    };
+
+    const command = new PutObjectCommand(uploadParams);
+    await s3Client.send(command);
+    return uploadParams.Key;
+}
+
+async function uploadTeacherPic(fileBuffer, fileName) {
+    const uploadParams = {
+        Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME,
+        Key: `mokytojai/${fileName}-${Date.now()}.jpg`,
         Body: fileBuffer,
         ContentType: "image/jpeg",
     };
@@ -28,6 +41,8 @@ export async function POST(req) {
         const formData = await req.formData();
 
         const file = formData.get("file");
+        const t1 = formData.get("mokytojas");
+        const t2 = formData.get("mokykla");
 
         if (!file) {
             return NextResponse.json({ error: "Failas yra privalomas" }, { status: 400 });
@@ -43,9 +58,13 @@ export async function POST(req) {
             .toBuffer();
 
         // Upload resized image to S3
-        const fileName = await uploadToS3(resizedBuffer, file.name);
-
-        return NextResponse.json({ success: true, fileName });
+        if(t1) {
+            const fileName = await uploadTeacherPic(resizedBuffer, file.name);
+            return NextResponse.json({ success: true, fileName });
+        } else if(t2) {
+            const fileName = await uploadSchoolPic(resizedBuffer, file.name);
+            return NextResponse.json({ success: true, fileName });
+        }
     } catch (error) {
         console.error("Upload error:", error);
         return NextResponse.json({ error: "klaida įkeliant failą" }, { status: 500 });

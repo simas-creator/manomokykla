@@ -51,6 +51,7 @@ const Page = () => {
             <SchoolCase 
               key={`${school.apskritis}-${school.name}`} 
               school={school}
+              
             />
           ))}
         </div>
