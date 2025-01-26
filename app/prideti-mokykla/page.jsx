@@ -10,7 +10,7 @@ const SchoolForm = () => {
     name: "",
     apskritis: "Alytaus",
     imgUrl: "",
-    mu: "Mokykla",
+    mu: "Gimnazija",
   });
   const [imagePreview, setImagePreview] = useState(null)
   const [file, setFile] = useState(null)
@@ -178,8 +178,9 @@ const SchoolForm = () => {
             onChange={handleChange}
             className="block w-full rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
           >
-            <option>Mokykla</option>
+            <option>Gimnazija</option>
             <option>Universitetas</option>
+            <option>Profesinė mokykla</option>
           </select>
         </div>
         
