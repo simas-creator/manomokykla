@@ -10,6 +10,8 @@ const SchoolPage = ({School}) => {
   const [fileError, setFileError] = useState(null);
   const [teachers, setTeachers] = useState([]);
 
+  const [schoolRating, setSchoolRating] = useState(0);
+  
   useEffect(() => {
     async function getTeachers() {
       const response = await fetch(`/api/teachers/${School.n}`);
@@ -19,6 +21,7 @@ const SchoolPage = ({School}) => {
       setTeachers(tchrs);
     }
     getTeachers();
+    setSchoolRating(School.rating);
   }, [School?.n])
   
   const truncate = (text, n) => {
@@ -122,132 +125,133 @@ const SchoolPage = ({School}) => {
   return (
     <section>
         <main>
+          
+          <div className='p-10 w-auto'>
+            <h1 className='font-title text-3xl'>{School.name}</h1>
+            <h3>Įvertinimas: {schoolRating.toFixed(1)}</h3>
+            <div className='divider'></div>
             
-            <div className='p-10 w-auto'>
-              <h1 className='font-title text-3xl'>{School.name}</h1>
-              <div className='divider'></div>
-              
-              <div className='collapse bg-primary max-w-xl collapse-arrow'>
-                <input type="checkbox" />
-                <div className='collapse-title text-lg font-title text-gray-200'>Pridėti mokytoją</div>
+            <div className='collapse bg-primary max-w-xl collapse-arrow'>
+              <input type="checkbox" />
+              <div className='collapse-title text-lg font-title text-gray-200'>Pridėti mokytoją</div>
 
-                <div className='collapse-content'>
-                <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg space-y-4 my-5 font-title">
-                  <div className="flex gap-10">
-                    <div className="space-y-2">
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                        Vardas*
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="first"
-                        onChange={handleData}
-                        className="input input-bordered input-primary w-full max-w-xs"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="surname" className="block text-sm font-medium text-gray-700">
-                        Pavardė*
-                      </label>
-                      <input
-                        type="text"
-                        id="surname"
-                        name="surname"
-                        onChange={handleData}
-                        className="input input-bordered input-primary w-full max-w-xs"                        
-                      />
-                    </div>
-                  </div>
+              <div className='collapse-content'>
+              <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg space-y-4 my-5 font-title">
+                <div className="flex gap-10">
                   <div className="space-y-2">
-                    <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
-                      Dalykas*
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                      Vardas*
                     </label>
                     <input
                       type="text"
-                      id="subject"
-                      name="subject"
+                      id="name"
+                      name="first"
                       onChange={handleData}
-                      className="input input-bordered input-primary w-full"                
+                      className="input input-bordered input-primary w-full max-w-xs"
                     />
                   </div>
-                  
-                    
-                    <div className="rating items-center">
-                      <label htmlFor="rating" className="block text-sm font-medium text-gray-700 mr-2">Įvertinimas:</label>
-                      {[1, 2, 3, 4, 5].map((value, index) => (
-                        <input
-                          key={value}
-                          type="radio"
-                          name="rating"
-                          value={value}
-                          className="mask mask-star-2 bg-orange-400"
-                          onChange={handleData}
-                          defaultChecked={index === 0}
-                        />
-                      ))}
-                    </div>
-
-                    <div>
-                      <div className="flex items-center space-x-2">
-                        {fileError? (<div>
-                          <label htmlFor="files" className="btn bg-white text-error btn-error hover:bg-white">
-                            {fileError}
-                        </label>
-                        </div>) : (<div>
-                          <label htmlFor="files" className="btn bg-white text-primary btn-primary hover:text-black hover:bg-primary">
-                          Pasirinkite nuotrauką
-                        </label>
-                        </div>)}
-                        
-                        <input
-                          id="files"
-                          className="hidden"
-                          type="file"
-                          name="file"
-                          onChange={handleData}
-                        />
-                        <p className="text-sm text-gray-700">{truncate(jsonData.picture?.name, 20)}</p>
-                      </div>
-                      
-                      <div className="py-4">
-                        {imagePreview && (
-                          <img
-                            src={imagePreview}
-                            alt="Nuotrauka"
-                            className="w-20 h-20 object-contain rounded-md border-2"
-                          />
-                        )}
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="review" className="block text-sm font-medium text-gray-700">
-                        Aprašymas
-                      </label>
-                      <textarea
-                        id="review"
-                        name="review"
-                        onChange={handleData}
-
-                        className="textarea textarea-bordered textarea-primary w-full max-h-40 h-20"
-                        rows="4"
-                        maxLength={200}
-                      ></textarea>
-                    </div>
-                    <div>
-                      {error && <p className="text-red-500 text-sm">{error}</p>}
-                    </div>
-                    {loading ? (<button type="submit" disabled className="btn bg-white text-primary btn-primary hover:text-black hover:bg-primary">
-                      Kraunama...
-                    </button>
-                    ) : (<button type="submit" className="btn bg-white text-primary btn-primary hover:text-black hover:bg-primary">
-                      Pridėti
-                    </button>)}
-                    
-                  </form>
+                  <div className="space-y-2">
+                    <label htmlFor="surname" className="block text-sm font-medium text-gray-700">
+                      Pavardė*
+                    </label>
+                    <input
+                      type="text"
+                      id="surname"
+                      name="surname"
+                      onChange={handleData}
+                      className="input input-bordered input-primary w-full max-w-xs"                        
+                    />
+                  </div>
                 </div>
+                <div className="space-y-2">
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
+                    Dalykas*
+                  </label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    onChange={handleData}
+                    className="input input-bordered input-primary w-full"                
+                  />
+                </div>
+                
+                  
+                  <div className="rating items-center">
+                    <label htmlFor="rating" className="block text-sm font-medium text-gray-700 mr-2">Įvertinimas:</label>
+                    {[1, 2, 3, 4, 5].map((value, index) => (
+                      <input
+                        key={value}
+                        type="radio"
+                        name="rating"
+                        value={value}
+                        className="mask mask-star-2 bg-orange-400"
+                        onChange={handleData}
+                        defaultChecked={index === 0}
+                      />
+                    ))}
+                  </div>
+
+                  <div>
+                    <div className="flex items-center space-x-2">
+                      {fileError? (<div>
+                        <label htmlFor="files" className="btn bg-white text-error btn-error hover:bg-white">
+                          {fileError}
+                      </label>
+                      </div>) : (<div>
+                        <label htmlFor="files" className="btn bg-white text-primary btn-primary hover:text-black hover:bg-primary">
+                        Pasirinkite nuotrauką
+                      </label>
+                      </div>)}
+                      
+                      <input
+                        id="files"
+                        className="hidden"
+                        type="file"
+                        name="file"
+                        onChange={handleData}
+                      />
+                      <p className="text-sm text-gray-700">{truncate(jsonData.picture?.name, 20)}</p>
+                    </div>
+                    
+                    <div className="py-4">
+                      {imagePreview && (
+                        <img
+                          src={imagePreview}
+                          alt="Nuotrauka"
+                          className="w-20 h-20 object-contain rounded-md border-2"
+                        />
+                      )}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="review" className="block text-sm font-medium text-gray-700">
+                      Aprašymas
+                    </label>
+                    <textarea
+                      id="review"
+                      name="review"
+                      onChange={handleData}
+
+                      className="textarea textarea-bordered textarea-primary w-full max-h-40 h-20"
+                      rows="4"
+                      maxLength={200}
+                    ></textarea>
+                  </div>
+                  <div>
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
+                  </div>
+                  {loading ? (<button type="submit" disabled className="btn bg-white text-primary btn-primary hover:text-black hover:bg-primary">
+                    Kraunama...
+                  </button>
+                  ) : (<button type="submit" className="btn bg-white text-primary btn-primary hover:text-black hover:bg-primary">
+                    Pridėti
+                  </button>)}
+                  
+                </form>
               </div>
             </div>
+          </div>
         </main>
     
     <div>
@@ -262,7 +266,7 @@ const SchoolPage = ({School}) => {
     </div>
   ))
 ) : (
-  <div>No teachers found.</div>
+  <div>Mokytojų nerasta.</div>
 )}
 
     </div>

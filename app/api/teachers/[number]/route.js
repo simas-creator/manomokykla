@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export const GET = async (req, {params}) => {
     await connect();
     try {
-        const number = await params.number;
+        const number = (await params).number;
         const data = await Teacher.find({n: number});
         if(!data) {
             return NextResponse.json({ message: 'No teacher found' }, { status: 404 });

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import School from "@/lib/modals/school";
 
 export const GET = async (request, { params }) => {
-  const number = await params.number
+  const number = (await params).number;
   try {
     
     

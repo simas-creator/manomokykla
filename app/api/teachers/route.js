@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
 import Teacher from '@/lib/modals/teacher';
 import connect from '@/lib/mongodb';
+import School from '@/lib/modals/school';
 
 export const POST = async (req) => {
     try {
         const data = await req.json();
-        const { first, surname, rating, review, subject, imgUrl, n} = data
+        let { first, surname, rating, review, subject, imgUrl, n} = data
+        console.log(first, surname, rating, review, subject, imgUrl, n);
         if(!first || !surname || !subject) {
             return NextResponse.json({ message: 'Užpildykite privalomus laukelius' }, { status: 400 });
         }
@@ -16,8 +18,16 @@ export const POST = async (req) => {
             imageUrl = `https://mokyklos.s3.eu-north-1.amazonaws.com/${imgUrl}`;
         }
         
-        await connect();
+        const db = await connect();
+        rating = parseFloat(rating);
 
+        /// update school rating
+        const teacherCount = await db.collection("teachers").countDocuments({ n: n });
+        const school = await School.findOne({n: n});
+        const schoolR = school.rating;
+        const newSchoolR = (schoolR * teacherCount + rating) / (teacherCount + 1);
+        await School.updateOne({n: n}, {rating: newSchoolR});
+        
         const teacher = new Teacher({
             name: first,
             surname,

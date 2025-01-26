@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 const SchoolCase = ({
   school = {
     name: "Kauno Technologijos Universiteto Gimnazija",
-    rating: 4.0,
+    rating: 0.0,
     teacher1: {
       first: "Jonas Jonaitis",
       review:
@@ -19,7 +19,7 @@ const SchoolCase = ({
   }
 }) => {
   const router = useRouter();
-  const rating = school.rating || 4
+  const rating = school.rating
   const replaceLithuanianChars = (str) => {
     const charMap = {
       'ą': 'a', 'č': 'c', 'ę': 'e', 'ė': 'e', 'į': 'i', 'š': 's', 'ų': 'u', 'ū': 'u', 'ž': 'z',

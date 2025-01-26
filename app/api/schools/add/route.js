@@ -24,7 +24,8 @@ export async function POST(req) {
       mu,
       teachers: [],
       imgUrl: `https://mokyklos.s3.eu-north-1.amazonaws.com/${imgUrl}`,
-      n
+      n,
+      rating: 0,
     });
 
     // Save the document to the database
