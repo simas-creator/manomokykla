@@ -48,17 +48,17 @@ const SchoolCase = ({
 };
   const truncate = (str, n) => {
     if (!str) return "";
-    if(str === `${undefined} ${undefined}` && n === 20) {
+    if(str === `${undefined} ${undefined}` && n === 14) {
       return "Vardas Pavardė"
     } else if (str === `undefined` && n === 30) {
-      return "Atsiliepimas apie mokytoją"
+      return "Atsiliepimas..."
     }
     return str.length > n ? str.slice(0, n) + "..." : str;
   }
   return (
     <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg h-auto bg-white rounded-lg shadow-md border border-gray-200 flex flex-col">
       {/* Image Section */}
-      <div className="w-full h-40">
+      <div className="w-full h-36">
         <img
           src={school.imgUrl}
           alt={school.name}
@@ -119,7 +119,7 @@ const SchoolCase = ({
                 </div>
                 <div className="flex flex-col">
                   <p className="ml-2 text-sm text-gray-500">Mokytojas(-a)</p>
-                  <p className=" ml-2 text-gray-800 font-medium">{truncate(`${teachers[index]?.name} ${teachers[index]?.surname}`, 20)}</p>
+                  <p className=" ml-2 text-gray-800 font-medium">{truncate(`${teachers[index]?.name} ${teachers[index]?.surname}`, 14)}</p>
                 </div>
               </div>
 

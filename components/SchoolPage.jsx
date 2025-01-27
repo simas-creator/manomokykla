@@ -127,8 +127,25 @@ const SchoolPage = ({School}) => {
         <main>
           
           <div className='p-10 w-auto'>
-            <h1 className='font-title text-3xl'>{School.name}</h1>
-            <h3>Įvertinimas: {schoolRating.toFixed(1)}</h3>
+            <div className="flex gap-5 items-center flex-wrap">
+              <div>
+                <img 
+                src={School.imgUrl}
+                className="h-20 w-20 rounded-lg object-cover hover:ring-2 hover:ring-primary "
+                />
+              </div>
+              <div className="flex flex-col">
+                <h1 className='font-title text-3xl'>{School.name}</h1>
+                <div className="flex gap-2 mt-2">
+                  <h3 className="text-xl text-gray-400 font-title">{schoolRating.toFixed(1)}</h3>
+                  <div className="mask mask-star bg-orange-400 h-6 w-6"></div>
+                </div>
+                
+              </div>
+              
+            </div>
+            
+            
             <div className='divider'></div>
             
             <div className='collapse bg-primary max-w-xl collapse-arrow'>
