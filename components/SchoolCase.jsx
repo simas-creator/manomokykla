@@ -1,25 +1,16 @@
-import React from "react";
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
 const SchoolCase = ({
   school = {
-    name: "Kauno Technologijos Universiteto Gimnazija",
+    name: "",
     rating: 0.0,
-    teacher1: {
-      first: "Jonas Jonaitis",
-      review:
-        "Mokytojas labai atsakingas ir moko labai gerai. Labai patenkintas. Mokytojas labai atsakingas ir moko labai gerai. Labai patenkintas.",
-    },
-    teacher2: {
-      first: "Petras Petraitis",
-      review:
-        "Mokytojas labai atsakingas ir moko labai gerai. Labai patenkintas. Mokytojas labai atsakingas ir moko labai gerai. Labai patenkintas.",
-    },
     imgUrl: "https://via.placeholder.com/320x180",
   }
 }) => {
   const router = useRouter();
-  const rating = school.rating
+  const rating = school.rating;
+  const [teachers, setTeachers] = useState([]);
   const replaceLithuanianChars = (str) => {
     const charMap = {
       'ą': 'a', 'č': 'c', 'ę': 'e', 'ė': 'e', 'į': 'i', 'š': 's', 'ų': 'u', 'ū': 'u', 'ž': 'z',
@@ -27,14 +18,41 @@ const SchoolCase = ({
     };
     return str.replace(/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/g, (char) => charMap[char] || char);
   };
-
   const id = replaceLithuanianChars(school.name.toLowerCase().replace(/\s/g, "-"));
-  
+  useEffect(() => {
+    const getTeachers = async () => {
+      try {
+        const res = await fetch(`/api/teachers/${school.n}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!res.ok) {
+          console.log(res.message, "error")
+          return;
+        }
+
+        const result = await res.json();
+        setTeachers(result.data);
+        console.log(result);
+      } catch (error) {
+        console.error("Fetch error:", res.message);
+      }
+    }
+    getTeachers();
+  }, [school.n]);
   const handleLinkClick = () => {
   router.push(`/perziureti-mokyklas/${id}-${school.n}`);
 };
   const truncate = (str, n) => {
     if (!str) return "";
+    if(str === `${undefined} ${undefined}` && n === 20) {
+      return "Vardas Pavardė"
+    } else if (str === `undefined` && n === 30) {
+      return "Atsiliepimas apie mokytoją"
+    }
     return str.length > n ? str.slice(0, n) + "..." : str;
   }
   return (
@@ -85,7 +103,7 @@ const SchoolCase = ({
 
         {/* Teachers and Reviews */}
         <div className="grid grid-cols-2 gap-2 overflow-hidden">
-          {[school.teacher1, school.teacher2].map((teacher, index) => (
+          {[teachers[0], teachers[1]].map((teacher, index) => (
             <div key={index} className="flex flex-col items-start gap-2">
               <div className="flex items-center">
                 {/* Profile Picture */}
@@ -101,13 +119,13 @@ const SchoolCase = ({
                 </div>
                 <div className="flex flex-col">
                   <p className="ml-2 text-sm text-gray-500">Mokytojas(-a)</p>
-                  <p className=" ml-2 text-gray-800 font-medium">{truncate(school.teacher1?.first, 20) || truncate("Vardas Pavarde", 18)}</p>
+                  <p className=" ml-2 text-gray-800 font-medium">{truncate(`${teachers[index]?.name} ${teachers[index]?.surname}`, 20)}</p>
                 </div>
               </div>
 
               {/* Review Text */}
               <div className="text-sm text-gray-600 line-clamp-2">
-                {truncate(school.teacher1?.review, 30) || "Sis mokytojas yra labai geras ir padeda visais iskilusiais klausimas"}
+                {truncate(`${teachers[index]?.comment}`, 30)}
               </div>
             </div> 
           ))}

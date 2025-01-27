@@ -9,13 +9,13 @@ Kuriant šį projektą buvo naudojam
 os šios technologijos:
 
 ### Next.js
-pagrindinė platforma optimizuotai sąsajai kurti.
+Pagrindinė platforma optimizuotai sąsajai kurti.
 
 ### MongoDB
-duomenų bazė, skirta saugoti vartotojų atsiliepimus ir informaciją apie mokyklas bei mokytojus.
+Duomenų bazė, skirta saugoti vartotojų atsiliepimus ir informaciją apie mokyklas bei mokytojus.
 
-### EDGESTORE
-Naudojama vartotojų profilio nuotraukoms saugoti
+### AMAZON S3
+Naudojama mokyklų bei mokytojų profilio nuotraukoms saugoti
 
 ### Tailwind CSS
 moderniam ir pritaikomam dizainui užtikrinti.

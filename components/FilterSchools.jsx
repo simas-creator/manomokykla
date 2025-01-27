@@ -40,7 +40,14 @@ const FilterSchools = ({ regions, onFilter }) => {
                   <option>Vilniaus</option>
                 </select>
               </div>
-
+              <div className="flex flex-col">
+                <label htmlFor="tipas" className="text-sm text-stone-600 font-medium">Tipas</label>
+                <select id="tipas" className="mt-2 block w-full cursor-pointer rounded-md border border-gray-100 bg-gray-100 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                  <option>Gimnazija</option>
+                  <option>Universitetas</option>
+                  <option>Profesinė mokykla</option>
+                </select>
+              </div>
               <div className="flex flex-col">
                 <label htmlFor="ivertinimai" className="text-sm font-medium text-stone-600">Įvertinimai</label>
                 <select id="ivertinimai" className="mt-2 block w-full cursor-pointer rounded-md border border-gray-100 bg-gray-100 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
@@ -48,6 +55,7 @@ const FilterSchools = ({ regions, onFilter }) => {
                   <option>Nuo žemiausio</option>
                 </select>
               </div>
+              
             </div>
 
             <div className="mt-6 grid w-full grid-cols-2 justify-end space-x-4 md:flex">

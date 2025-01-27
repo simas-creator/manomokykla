@@ -175,69 +175,7 @@ const SchoolPage = ({School}) => {
                     className="input input-bordered input-primary w-full"                
                   />
                 </div>
-                
                   
-                  <div className="rating items-center">
-                    <label htmlFor="rating" className="block text-sm font-medium text-gray-700 mr-2">Įvertinimas:</label>
-                    {[1, 2, 3, 4, 5].map((value, index) => (
-                      <input
-                        key={value}
-                        type="radio"
-                        name="rating"
-                        value={value}
-                        className="mask mask-star-2 bg-orange-400"
-                        onChange={handleData}
-                        defaultChecked={index === 0}
-                      />
-                    ))}
-                  </div>
-
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      {fileError? (<div>
-                        <label htmlFor="files" className="btn bg-white text-error btn-error hover:bg-white">
-                          {fileError}
-                      </label>
-                      </div>) : (<div>
-                        <label htmlFor="files" className="btn bg-white text-primary btn-primary hover:text-black hover:bg-primary">
-                        Pasirinkite nuotrauką
-                      </label>
-                      </div>)}
-                      
-                      <input
-                        id="files"
-                        className="hidden"
-                        type="file"
-                        name="file"
-                        onChange={handleData}
-                      />
-                      <p className="text-sm text-gray-700">{truncate(jsonData.picture?.name, 20)}</p>
-                    </div>
-                    
-                    <div className="py-4">
-                      {imagePreview && (
-                        <img
-                          src={imagePreview}
-                          alt="Nuotrauka"
-                          className="w-20 h-20 object-contain rounded-md border-2"
-                        />
-                      )}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="review" className="block text-sm font-medium text-gray-700">
-                      Aprašymas
-                    </label>
-                    <textarea
-                      id="review"
-                      name="review"
-                      onChange={handleData}
-
-                      className="textarea textarea-bordered textarea-primary w-full max-h-40 h-20"
-                      rows="4"
-                      maxLength={200}
-                    ></textarea>
-                  </div>
                   <div>
                     {error && <p className="text-red-500 text-sm">{error}</p>}
                   </div>
