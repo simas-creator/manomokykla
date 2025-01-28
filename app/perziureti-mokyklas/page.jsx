@@ -49,8 +49,8 @@ const Page = () => {
           
           {data.map((school) => (
             <SchoolCase 
-              key={`${school.apskritis}-${school.name}`} 
-              school={school}
+            key={`${school.apskritis}-${school.name}`} 
+            school={school}
               
             />
           ))}

@@ -17,10 +17,10 @@ const FilterTeachers = () => {
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <div className="flex flex-col">
-              <label htmlFor="apskritis" className="text-sm font-medium text-stone-600">Mokykla ar universitetas</label>
+              <label htmlFor="apskritis" className="text-sm font-medium text-stone-600">Dalykas</label>
               <select id="apskritis" className="mt-2 block w-full cursor-pointer rounded-md border border-gray-100 bg-gray-100 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                <option>Mokykla</option>
-                <option>Universitetas</option>
+                <option>Matematika</option>
+                <option>Lietuvių k.</option>
               </select>
             </div>
 

@@ -1,6 +1,8 @@
 'use client'
 import { useEffect, useState } from "react";
-
+import TeacherCase from "@/components/TeacherCase";
+import StarRating from "@/components/StarRating";
+import FilterTeachers from "@/components/FilterTeachers";
 const SchoolPage = ({School}) => {
 
   const [jsonData, setJsonData] = useState({n: School.n, rating: 1});
@@ -138,7 +140,7 @@ const SchoolPage = ({School}) => {
                 <h1 className='font-title text-3xl'>{School.name}</h1>
                 <div className="flex gap-2 mt-2">
                   <h3 className="text-xl text-gray-400 font-title">{schoolRating.toFixed(1)}</h3>
-                  <div className="mask mask-star bg-orange-400 h-6 w-6"></div>
+                  <StarRating r={schoolRating} />
                 </div>
                 
               </div>
@@ -208,17 +210,18 @@ const SchoolPage = ({School}) => {
             </div>
           </div>
         </main>
-    
     <div>
-      <h1>Mokytojai</h1>
+      <FilterTeachers />
+    </div>
+    <div>
       {teachers && teachers.length > 0 ? (
   teachers.map((teacher, index) => (
-    <div key={teacher._id || index} className="teacher-card">
-      <h2>{teacher.name} {teacher.surname}</h2>
-      {teacher.comment && <p>{teacher.comment}</p>}
-      <p>Įvertinimas: {teacher.rating}</p>
-      <p>Dalykas: {teacher.subject}</p>
-    </div>
+    
+    <TeacherCase
+      key={index}
+      teacher={teacher}
+    />
+
   ))
 ) : (
   <div>Mokytojų nerasta.</div>

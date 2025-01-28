@@ -1,6 +1,6 @@
 import React from "react";
 
-const StarRating = ({ r = 1 }) => {
+const StarRating = ({ r = 1, size = "sm"}) => {
   const starCount = 5; // Total number of stars
 
   // Determine the full, half, and empty stars
@@ -10,9 +10,12 @@ const StarRating = ({ r = 1 }) => {
   return (
     <div className="rating rating-sm items-center py-1">
       {/* Render full stars */}
-      <div className='px-1 text-sm opacity-60'>
+      {size === "xl" ? (<div className='px-1 text-xl opacity-60'>
         {r.toFixed(1)}
-      </div>
+      </div>) : (<div className='px-1 text-3xl font-title text-gray-400'>
+        {r.toFixed(1)}
+      </div>)}
+      
       {Array.from({ length: fullStars }).map((_, index) => (
         <input
           key={`full-${index}`}
