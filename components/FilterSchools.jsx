@@ -18,12 +18,12 @@ const FilterSchools = ({ regions, onFilter }) => {
       </svg>
       <input type="name" name="search" className="h-12 w-full cursor-text rounded-md border border-gray-100 bg-gray-100 py-4 pr-15 pl-12 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" placeholder="Ieškokite mokyklos" />
     </div>
-      <div className="collapse bg-white border border-primary collapse-arrow ">
+      <div className="collapse bg-white border border-primary collapse-arrow">
         <input type="checkbox" />
-        <h3 className="collapse-title text-primary">Filtras</h3>
+        <h3 className="collapse-title text-primary font-medium">Filtras</h3>
         
         <div className="flex flex-col collapse-content ">
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
+        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
           <form className="">
             
 
