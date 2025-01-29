@@ -8,23 +8,30 @@ const StarRating = ({ r = 1, size = "sm"}) => {
   const halfStar = r % 1 >= 0.5; // Check if there's a half star
 
   return (
-    <div className="rating rating-sm items-center py-1">
+    <div className="rating rating-xl py-1 gap-1 items-center">
       {/* Render full stars */}
-      {size === "xl" ? (<div className='px-1 text-xl opacity-60'>
+      {size === "xl" ? (<div className='px-1 text-lg md:text-2xl text-gray-400 font-title'>
         {r.toFixed(1)}
-      </div>) : (<div className='px-1 text-3xl font-title text-gray-400'>
+      </div>) : (<div className='px-1 text-md font-title text-gray-400'>
         {r.toFixed(1)}
       </div>)}
       
       {Array.from({ length: fullStars }).map((_, index) => (
-        <input
+        size === "xl" ? (<input
+          key={`full-${index}`}
+          type="radio"
+          name="rating"
+          className="mask mask-star-2 bg-orange-400 h-5 w-5 md:w-7 md:h-7"
+          defaultChecked
+          disabled
+        />) : (<input
           key={`full-${index}`}
           type="radio"
           name="rating"
           className="mask mask-star-2 bg-orange-400"
           defaultChecked
           disabled
-        />
+        />)
       ))}
       
       {/* Render half star */}
@@ -32,7 +39,7 @@ const StarRating = ({ r = 1, size = "sm"}) => {
         <input
           type="radio"
           name="rating"
-          className="mask mask-star-2 bg-orange-400 opacity-50"
+          className="mask h-5 w-5 md:h-7 md:w-7 mask-star-2 bg-orange-400 opacity-50"
           defaultChecked
           disabled
         />
@@ -44,7 +51,7 @@ const StarRating = ({ r = 1, size = "sm"}) => {
           key={`empty-${index}`}
           type="radio"
           name="rating"
-          className="mask mask-star-2 bg-gray-300"
+          className="mask mask-star-2 bg-gray-300 h-5 w-5 md:h-7 md:w-7"
           disabled
         />
       ))}

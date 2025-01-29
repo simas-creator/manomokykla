@@ -20,7 +20,7 @@ const FilterTeachers = () => {
               <label htmlFor="apskritis" className="text-sm font-medium text-stone-600">Dalykas</label>
               <select id="apskritis" className="mt-2 block w-full cursor-pointer rounded-md border border-gray-100 bg-gray-100 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                 <option>Matematika</option>
-                <option>Lietuvių k.</option>
+                <option>Lietuvi</option>
               </select>
             </div>
 

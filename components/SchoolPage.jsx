@@ -137,10 +137,9 @@ const SchoolPage = ({School}) => {
                 />
               </div>
               <div className="flex flex-col">
-                <h1 className='font-title text-3xl'>{School.name}</h1>
+                <h1 className='font-title text-xl md:text-3xl'>{School.name}</h1>
                 <div className="flex gap-2 mt-2">
-                  <h3 className="text-xl text-gray-400 font-title">{schoolRating.toFixed(1)}</h3>
-                  <StarRating r={schoolRating} />
+                  <StarRating r={schoolRating} size="xl" />
                 </div>
                 
               </div>
@@ -183,6 +182,7 @@ const SchoolPage = ({School}) => {
                   </div>
                 </div>
                 <div className="space-y-2">
+                  
                   <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
                     Dalykas*
                   </label>
