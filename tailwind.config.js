@@ -1,45 +1,49 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'class',
+  // No dark mode here, or use 'class' if you want to toggle it manually
+  darkMode: false,  // Disable dark mode
+
   daisyui: {
     themes: [
+      // Define the light theme as your default theme
       {
-        mytheme: {     
-          "primary": "#009dff",    
-          "secondary": "#9dff00",          
-          "accent": "#ff009d",          
+        light: {
+          "primary": "#009dff",
+          "secondary": "#9dff00",
+          "accent": "#ff009d",
           "neutral": "#f0f0f0",
           "base-100": "#ffffff",
           "info": "#0000ff",
           "success": "#00ff00",
           "warning": "#00ff00",
           "error": "#ff0000",
-          },
         },
-      ],
-    },
+      },
+    ],
+  },
+
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  
+
   theme: {
     extend: {
       fontFamily: {
-        title: ["Montserrat", "sans-serif"], 
-        body: ["Roboto", "sans-serif"], 
+        title: ["Montserrat", "sans-serif"],
+        body: ["Roboto", "sans-serif"],
       },
       colors: {
-        background: "var(--background)", 
-        foreground: "var(--foreground)", 
+        background: "var(--background)",
+        foreground: "var(--foreground)",
       },
       screens: {
         'amd': '800px',
       },
     },
-  }
-  ,
+  },
+
   plugins: [
     require('daisyui'),
   ],
