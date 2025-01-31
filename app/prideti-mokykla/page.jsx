@@ -10,7 +10,7 @@ const SchoolForm = () => {
     name: "",
     apskritis: "Alytaus",
     imgUrl: "",
-    mu: "Gimnazija",
+    type: "Gimnazija",
   });
   const [imagePreview, setImagePreview] = useState(null)
   const [file, setFile] = useState(null)
@@ -170,11 +170,11 @@ const SchoolForm = () => {
 
         {/* Dropdown for Type */}
         <div className="space-y-4">
-          <label htmlFor="mu" className="block text-sm font-medium text-gray-700">Tipas*</label>
+          <label htmlFor="type" className="block text-sm font-medium text-gray-700">Tipas*</label>
           <select
-            id="mu"
-            name="mu"
-            value={jsonData.mu}
+            id="type"
+            name="type"
+            value={jsonData.type}
             onChange={handleChange}
             className="block w-full rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
           >

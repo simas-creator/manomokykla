@@ -9,8 +9,8 @@ export async function POST(req) {
 
     const db = await connect();
 
-    const {name, apskritis, mu, imgUrl } = await req.json();
-    console.log("Received data:", { name, apskritis, mu, imgUrl });  
+    const {name, apskritis, type, imgUrl } = await req.json();
+    console.log("Received data:", { name, apskritis, type, imgUrl });  
     ;
     const counterObj = await db.collection("counters").findOneAndUpdate(
       { name : "schoolCounter"},
@@ -21,7 +21,7 @@ export async function POST(req) {
     const newSchool = new School({
       name,
       apskritis,
-      mu,
+      type,
       teachers: [],
       imgUrl: `https://mokyklos.s3.eu-north-1.amazonaws.com/${imgUrl}`,
       n,

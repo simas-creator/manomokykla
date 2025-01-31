@@ -133,7 +133,7 @@ const SchoolPage = ({School}) => {
               <div>
                 <img 
                 src={School.imgUrl}
-                className="h-20 w-20 rounded-lg object-cover hover:ring-2 hover:ring-primary "
+                className="h-20 w-20 rounded-lg object-cover border border-2 "
                 />
               </div>
               <div className="flex flex-col">
@@ -149,7 +149,28 @@ const SchoolPage = ({School}) => {
             
             <div className='divider'></div>
             
-            <div className='collapse bg-primary max-w-xl collapse-arrow'>
+            <div>
+              <FilterTeachers />
+            </div>
+          </div>
+        </main>
+    
+    <div>
+      {teachers && teachers.length > 0 ? (
+  teachers.map((teacher, index) => (
+    
+    <TeacherCase
+      key={index}
+      teacher={teacher}
+    />
+
+  ))
+) : (
+  <div>Mokytojų nerasta.</div>
+)}
+
+    </div>
+    <div className='collapse bg-primary max-w-xl collapse-arrow m-auto'>
               <input type="checkbox" />
               <div className='collapse-title text-lg font-title text-gray-200'>Pridėti mokytoją</div>
 
@@ -181,7 +202,20 @@ const SchoolPage = ({School}) => {
                     />
                   </div>
                 </div>
-                <div className="space-y-2">
+                {School.type === 'Gimnazija' ? 
+                (<div className="space-y-2">
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
+                    Dalykas*
+                  </label>
+                  <select name="" id="" className="bg-gray-100 py-2 px-4 w-full rounded-lg">
+                    <option className="hover:bg-black" value="">Biologija</option>
+                    <option value="" className="">Chemija</option>
+                    <option value="">Fizika</option>
+                    <option value="">Geografija</option>
+
+                  </select>
+                </div>) : 
+                (<div className="space-y-2">
                   
                   <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
                     Dalykas*
@@ -193,7 +227,8 @@ const SchoolPage = ({School}) => {
                     onChange={handleData}
                     className="input input-bordered input-primary w-full"                
                   />
-                </div>
+                </div>)}
+                
                   
                   <div>
                     {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -208,26 +243,6 @@ const SchoolPage = ({School}) => {
                 </form>
               </div>
             </div>
-          </div>
-        </main>
-    <div>
-      <FilterTeachers />
-    </div>
-    <div>
-      {teachers && teachers.length > 0 ? (
-  teachers.map((teacher, index) => (
-    
-    <TeacherCase
-      key={index}
-      teacher={teacher}
-    />
-
-  ))
-) : (
-  <div>Mokytojų nerasta.</div>
-)}
-
-    </div>
     </section>
   )
 }
