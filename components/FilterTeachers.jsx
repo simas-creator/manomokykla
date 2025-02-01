@@ -1,6 +1,9 @@
 import React from 'react'
 
 const FilterTeachers = () => {
+  const Options = (options) => {
+    
+  }
   return (
     <div className="lg:max-w-screen-lg w-full m-auto p-10">
 
