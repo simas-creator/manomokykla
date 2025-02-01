@@ -1,5 +1,4 @@
 'use client';
-import { useState } from "react";
 
 const FilterParameter = ({ parameters, type, active, setActive }) => {  // Accept 'parameters' as a prop
   const isOpen = active === type;
@@ -35,7 +34,7 @@ const FilterParameter = ({ parameters, type, active, setActive }) => {  // Accep
         {isOpen && (
           <div className="absolute z-10 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden max-h-48 overflow-y-auto opacity-95">
             <ul className="text-gray-700">
-              {parameters && parameters.map((p, index) => (  // Ensure parameters is defined
+              {parameters && parameters.map((p, index) => (
                 <li key={index} className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer transition-colors duration-150">
                   {p}
                 </li>

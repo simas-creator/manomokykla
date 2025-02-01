@@ -9,8 +9,7 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
   const parameters=["Alytaus", "Kauno", "Klaipėdos", "Marijampolės", "Panevėžio", "Šiaulių", "Tauragės", "Telšių", "Utenos", "Vilniaus", "Alytaus"]
   const types = ["Gimnazija", "Universitetas", "Profesinė mokykla"];
-  const best = ["Nuo aukščiausio", "Nuo žemiausio"];
-  const az = ["Nuo A-Z", "Nuo Z-A"];
+  const best = ["Nuo aukščiausio", "Nuo žemiausio", "Nuo A-Z", "Nuo Z-A"];
   const [active, setActive] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
@@ -44,13 +43,15 @@ const Page = () => {
     <div className='w-full'>
       <SearchBar parameter={"Ieškokite mokyklos"}/>
       <div className='w-full'>
-        <div className='grid lg:max-w-screen-lg lg:px-10 lg:m-auto grid-cols-2 grid-flow-row sm:grid-cols-4 grid-rows-1 gap-4 px-10 justify-items-center my-4 lg:mt-2 lg:mb-4 '>
-          <FilterParameter active={active} setActive={setActive} parameters={parameters} type={"Apskritis"}/>
-          <FilterParameter active={active} setActive={setActive} parameters={types} type={"Tipas"}/>
-          <FilterParameter active={active} setActive={setActive} parameters={best} type={"Pagal įvertinimus"}/>
-          <FilterParameter active={active} setActive={setActive} parameters={az} type={"Pagal abecėlę"}/>
-        </div>
-      </div>
+  <div className=' grid-rows-2 sm:grid-rows-1 grid-cols-2 grid lg:max-w-screen-lg lg:px-10 lg:m-auto sm:grid-cols-3 gap-4 px-10 justify-items-center my-4 lg:mt-2 lg:mb-4'>
+
+    <FilterParameter active={active} setActive={setActive} parameters={parameters} type={"Apskritis"} />
+    <FilterParameter active={active} setActive={setActive} parameters={types} type={"Tipas"} />
+    <FilterParameter active={active} setActive={setActive} parameters={best} type={"Rūšiuoti"} />
+
+  </div>
+</div>
+
       
       
       <div className='flex justify-center items-center'>

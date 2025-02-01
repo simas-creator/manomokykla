@@ -1,11 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // No dark mode here, or use 'class' if you want to toggle it manually
-  darkMode: false,  // Disable dark mode
+  darkMode: false,
 
   daisyui: {
     themes: [
-      // Define the light theme as your default theme
       {
         light: {
           "primary": "#009dff",

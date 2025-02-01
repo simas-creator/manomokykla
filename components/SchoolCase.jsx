@@ -1,6 +1,27 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+const getTeachers = async (setTeachers, school) => {
+  try {
+    const res = await fetch(`/api/teachers/${school.n}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      console.log(res.message, "error")
+      return;
+    }
+
+    const result = await res.json();
+    setTeachers(result.data);
+    console.log(result);
+  } catch (error) {
+    console.error("Fetch error:", error);
+  }
+}
 const SchoolCase = ({
   school = {
     name: "",
@@ -20,28 +41,7 @@ const SchoolCase = ({
   };
   const id = replaceLithuanianChars(school.name.toLowerCase().replace(/\s/g, "-"));
   useEffect(() => {
-    const getTeachers = async () => {
-      try {
-        const res = await fetch(`/api/teachers/${school.n}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!res.ok) {
-          console.log(res.message, "error")
-          return;
-        }
-
-        const result = await res.json();
-        setTeachers(result.data);
-        console.log(result);
-      } catch (error) {
-        console.error("Fetch error:", res.message);
-      }
-    }
-    getTeachers();
+    getTeachers(setTeachers, school);
   }, [school.n]);
   const handleLinkClick = () => {
   router.push(`/perziureti-mokyklas/${id}-${school.n}`);

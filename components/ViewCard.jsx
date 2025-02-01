@@ -5,7 +5,7 @@ import React from 'react'
 const ViewCard = () => {
   return (
     
-    <Link href="/perziureti-mokytojus">
+    <Link href="/perziureti-mokytojus" prefetch>
       <div className="w-[300px] h-full">
         <div className="group lg:h-80 relative cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-lg">
           <span className="absolute top-10 z-0 h-20 w-20 rounded-full bg-primary transition-all duration-300 group-hover:scale-[10]"></span>
