@@ -12,11 +12,7 @@ export const POST = async (req) => {
             return NextResponse.json({ message: 'Užpildykite privalomus laukelius' }, { status: 400 });
         }
         let imageUrl;
-        if(!imgUrl) {
-            imageUrl = 'https://mokyklos.s3.eu-north-1.amazonaws.com/mokytojai/teacher.svg'
-        } else {
-            imageUrl = `https://mokyklos.s3.eu-north-1.amazonaws.com/${imgUrl}`;
-        }
+        
         
         const db = await connect();
         rating = parseFloat(rating);
@@ -26,17 +22,26 @@ export const POST = async (req) => {
         const school = await School.findOne({n: n});
         const schoolR = school.rating;
         const newSchoolR = (schoolR * teacherCount + rating) / (teacherCount + 1);
-        await School.updateOne({n: n}, {rating: newSchoolR});
-        
+        await school.updateOne({n: n}, {rating: newSchoolR});
+        if (school.type !== "Gimnazija") {
+            imageUrl = 'https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/graduation-cap-svgrepo-com.svg'
+        } else {
+            imageUrl = `https://mokyklos.s3.eu-north-1.amazonaws.com/${imgUrl}`;
+        }
         const teacher = new Teacher({
             name: first,
             surname,
             rating,
-            comment: review,
+            reviews: [],
             subject,
             imageUrl,
             n
         })
+        if (teacherCount < 2) {
+            await School.updateOne({n: n}, {
+                teachers: [...teacher, teacher]
+            })
+        }
         await teacher.save();
 
         return NextResponse.json({ message: 'Mokytojas pridetas' }, { status: 200 });

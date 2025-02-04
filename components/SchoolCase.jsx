@@ -1,44 +1,45 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
-const getTeachers = async (setTeachers, school) => {
-  try {
-    const res = await fetch(`/api/teachers/${school.n}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!res.ok) {
-      console.log(res.message, "error")
-      return;
-    }
-
-    const result = await res.json();
-    setTeachers(result.data);
-    console.log(result);
-  } catch (error) {
-    console.error("Fetch error:", error);
-  }
-}
 const SchoolCase = ({
   school = {
     name: "",
     rating: 0.0,
-    imgUrl: "https://via.placeholder.com/320x180",
+    imgUrl: "",
   }
 }) => {
   const router = useRouter();
   const rating = school.rating;
   const [teachers, setTeachers] = useState([]);
-  const replaceLithuanianChars = (str) => {
+  const getTeachers = useCallback(async () => {
+
+    try {
+      const res = await fetch(`/api/teachers/${school.n}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        console.log(res.message, "error");
+        return;
+      }
+
+      const result = await res.json();
+      setTeachers(result.data);
+      console.log(result);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  }, [school?.n]);
+  const replaceLithuanianChars = useCallback((str) => {
     const charMap = {
       'ą': 'a', 'č': 'c', 'ę': 'e', 'ė': 'e', 'į': 'i', 'š': 's', 'ų': 'u', 'ū': 'u', 'ž': 'z',
       'Ą': 'A', 'Č': 'C', 'Ę': 'E', 'Ė': 'E', 'Į': 'I', 'Š': 'S', 'Ų': 'U', 'Ū': 'U', 'Ž': 'Z'
     };
     return str.replace(/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/g, (char) => charMap[char] || char);
-  };
+  }, []);
   const id = replaceLithuanianChars(school.name.toLowerCase().replace(/\s/g, "-"));
   useEffect(() => {
     getTeachers(setTeachers, school);
@@ -46,7 +47,7 @@ const SchoolCase = ({
   const handleLinkClick = () => {
   router.push(`/perziureti-mokyklas/${id}-${school.n}`);
 };
-  const truncate = (str, n) => {
+  const truncate = useCallback((str, n) => {
     if (!str) return "";
     if(str === `${undefined} ${undefined}` && n === 14) {
       return "Vardas Pavardė"
@@ -54,15 +55,15 @@ const SchoolCase = ({
       return "Atsiliepimas..."
     }
     return str.length > n ? str.slice(0, n) + "..." : str;
-  }
+  }, [])
   return (
     <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg h-auto bg-white rounded-lg shadow-md border border-gray-200 flex flex-col">
       {/* Image Section */}
-      <div className="w-full h-36">
+      <div className="w-full h-36 overflow-hidden">
         <img
           src={school.imgUrl}
           alt={school.name}
-          className="w-full h-full object-cover rounded-t-lg opacity-30"
+          className="h-full m-auto object-contain rounded-t-lg opacity-30"
         />
         <div className="border-2"></div>
       </div>

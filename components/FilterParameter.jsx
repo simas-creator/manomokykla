@@ -1,11 +1,18 @@
 'use client';
-
-const FilterParameter = ({ parameters, type, active, setActive }) => {  // Accept 'parameters' as a prop
+import { useState } from "react";
+const FilterParameter = ({parameters, type, active, setActive, wFor, filter, setFilter }) => {  // Accept 'parameters' as a prop
+  const [open, setOpen] = useState(false)
   const isOpen = active === type;
-
+  const handleChange = (p) => {
+    setFilter(p);
+  }
   const toggleDropdown = () => {
-    setActive(isOpen ? null : type)
+    if(wFor !== "form") {
+      setActive(isOpen ? null : type)
+    } else setOpen(!open);
   };
+  
+  
 
   return (
     <div className="min-w-min">
@@ -14,7 +21,8 @@ const FilterParameter = ({ parameters, type, active, setActive }) => {  // Accep
           onClick={toggleDropdown}
           className="flex items-center justify-between min-w-min px-6 py-2 border-2 border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-100 focus:outline-none transition duration-200"
         >
-          <span>{type}</span>
+          {filter && <span>{filter}</span> || <span>{type}</span>}
+          
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -35,7 +43,7 @@ const FilterParameter = ({ parameters, type, active, setActive }) => {  // Accep
           <div className="absolute z-10 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden max-h-48 overflow-y-auto opacity-95">
             <ul className="text-gray-700">
               {parameters && parameters.map((p, index) => (
-                <li key={index} className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer transition-colors duration-150">
+                <li key={index} onClick={() => handleChange(p)} className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer transition-colors duration-150">
                   {p}
                 </li>
               ))}

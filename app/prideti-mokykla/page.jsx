@@ -141,9 +141,10 @@ const SchoolForm = () => {
         <div>
             <img
               src={imagePreview}
-              className="rounded-lg border-2 border-gray-300 h-20 w-20"
+              className="rounded-lg object-contain border-2 border-gray-300 h-20 w-20"
             />
         </div>
+        
       )}
         {/* Dropdown for Apskritis */}
         <div className="space-y-4">
