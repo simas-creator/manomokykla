@@ -9,8 +9,11 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
   const parameters=["Alytaus", "Kauno", "Klaipėdos", "Marijampolės", "Panevėžio", "Šiaulių", "Tauragės", "Telšių", "Utenos", "Vilniaus", "Alytaus"]
   const types = ["Gimnazija", "Universitetas", "Profesinė mokykla"];
-  const best = ["Nuo aukščiausio", "Nuo žemiausio", "Nuo A-Z", "Nuo Z-A"];
+  const best = ["Nuo aukščiausio", "Nuo žemiausio"];
   const [active, setActive] = useState(null);
+  const [filter1, setFilter1] = useState(null);
+  const [filter2, setFilter2] = useState(null);
+  const [filter3, setFilter3] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,9 +48,9 @@ const Page = () => {
       <div className='w-full'>
   <div className=' grid-rows-2 sm:grid-rows-1 grid-cols-2 grid lg:max-w-screen-lg lg:px-10 lg:m-auto sm:grid-cols-3 gap-4 px-10 justify-items-center my-4 lg:mt-2 lg:mb-4'>
 
-    <FilterParameter active={active} setActive={setActive} parameters={parameters} type={"Apskritis"} />
-    <FilterParameter active={active} setActive={setActive} parameters={types} type={"Tipas"} />
-    <FilterParameter active={active} setActive={setActive} parameters={best} type={"Rūšiuoti"} />
+    <FilterParameter active={active} setActive={setActive} parameters={parameters} type={"Apskritis"} filter={filter1} setFilter={setFilter1}/>
+    <FilterParameter active={active} setActive={setActive} parameters={types} type={"Tipas"} filter={filter2} setFilter={setFilter2}/>
+    <FilterParameter active={active} setActive={setActive} parameters={best} type={"Įvertinimai"} filter={filter3} setFilter={setFilter3}/>
 
   </div>
 </div>
