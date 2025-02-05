@@ -55,7 +55,7 @@ const SchoolPage = ({School}) => {
   
   return (
     <section>
-        <main className='px-10 mt-10 w-auto'>
+        <main className='px-10 mt-10 w-auto flex flex-col'>
 
             <div className="flex gap-5 items-center flex-wrap">
               <div>
@@ -74,7 +74,9 @@ const SchoolPage = ({School}) => {
               
             </div>
             
-            
+            <div className="mt-3 lg:max-w-screen-lg">
+              <button onClick={() => handleForm()} className="w-auto px-4 py-2 border-2 rounded-lg border-gray-300 transition-colors hover:bg-gray-100">Pridėti mokytoją</button>
+            </div>
             <div className='divider'></div>
             
 
@@ -100,9 +102,7 @@ const SchoolPage = ({School}) => {
         <div className="p-10 w-full flex justify-center">Mokytojų nerasta.</div>
       )}
     </div> 
-      <div className="lg:max-w-screen-lg lg:pl-6 m-auto pl-12">
-        <button onClick={() => handleForm()} className="w-auto px-4 py-2 border-2 rounded-lg border-gray-300 transition-colors hover:bg-gray-100">Pridėti mokytoją</button>
-      </div>
+      
     </div>) : (<div>
       <TeacherForm School={School}/>
       <div className="max-w-lg m-auto">
