@@ -1,15 +1,19 @@
 'use client';
-import { useState } from "react";
+
 const FilterParameter = ({parameters, type, active, setActive, wFor, filter, setFilter }) => {  // Accept 'parameters' as a prop
-  const [open, setOpen] = useState(false)
+
   const isOpen = active === type;
   const handleChange = (p) => {
     setFilter(p);
   }
+  const handleRemove = (e) => {
+    setFilter(null);
+    toggleDropdown();
+  }
   const toggleDropdown = () => {
-    if(wFor !== "form") {
       setActive(isOpen ? null : type)
-    } else setOpen(!open);
+      console.log(isOpen)
+
   };
   
   
@@ -41,6 +45,10 @@ const FilterParameter = ({parameters, type, active, setActive, wFor, filter, set
 
         {isOpen && (
           <div className="absolute z-10 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden max-h-48 overflow-y-auto opacity-95">
+            <div className="text-sm text-red-400 hover:cursor-pointer pl-4 w-full py-2 hover:bg-gray-100" onClick={(e) => handleRemove(e)}>
+              
+              Naikinti filtrą
+            </div>
             <ul className="text-gray-700">
               {parameters && parameters.map((p, index) => (
                 <li key={index} onClick={() => handleChange(p)} className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer transition-colors duration-150">

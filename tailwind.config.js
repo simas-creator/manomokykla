@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: false,
+  darkMode: 'media',
 
   daisyui: {
     themes: [

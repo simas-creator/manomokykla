@@ -1,0 +1,133 @@
+import { useState } from "react";
+import CustomSelect from "@/components/CustomSelect";
+const TeacherForm = ({School}) => {
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [subj, setSubj] = useState(null);
+    const [jsonData, setJsonData] = useState({n: School.n, rating: 1});
+    const subjects = [
+        "Biologija",
+        "Chemija",
+        "Dailė",
+        "Ekonomika",
+        "Fizika",
+        "Geografija",
+        "Informacinės technologijos",
+        "Istorija",
+        "Fizinis ugdymas",
+        "Lietuvių kalba ir literatūra",
+        "Matematika",
+        "Muzika",
+        "Technologijos",
+        "Užsienio kalba (anglų)",
+        "Užsienio kalba (prancūzų)",
+        "Užsienio kalba (rusų)",
+        "Užsienio kalba (vokiečių)"
+      ];
+      const truncate = (text, n) => {
+        return text?.length > n ? text.slice(0, n - 1) + '...' : text;
+      }
+    
+      const handleData = (e) => {
+        setJsonData({
+          ...jsonData,
+          [e.target.name]: e.target.value
+        })
+    }
+      const handleSubmit = async (e) => {
+    
+        e.preventDefault();
+        setLoading(true);
+        const { first, surname, subject} = jsonData;
+        if(!first || !surname || !subject) {
+          setError('Užpildykite privalomus laukelius');
+          setLoading(false);
+          return;
+        } else {
+          setError(null)
+        }
+    
+        try {
+          const response = await fetch('/api/teachers', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)
+          })
+    
+          if(!response.ok) {
+            console.log("Įvyko klaida", response.statusText);
+            return
+          }
+    
+        } catch (error) {
+          console.log(error, 'error');
+        } finally {
+          setLoading(false);
+        }
+        window.location.reload()
+      }
+  return (
+    <form className="max-w-lg mx-auto p-4 border-2 rounded-lg space-y-4 my-5 font-title">
+        <div className="flex gap-10">
+            <div className="space-y-2">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                Vardas*
+            </label>
+            <input
+                type="text"
+                id="name"
+                name="first"
+                onChange={handleData}
+                className="input input-bordered input-primary w-full max-w-xs"
+            />
+            </div>
+            <div className="space-y-2">
+            <label htmlFor="surname" className="block text-sm font-medium text-gray-700">
+                Pavardė*
+            </label>
+            <input
+                type="text"
+                id="surname"
+                name="surname"
+                onChange={handleData}
+                className="input input-bordered input-primary w-full max-w-xs"                        
+            />
+            </div>
+        </div>
+        {School.type === 'Gimnazija' ? 
+        (<div className="space-y-2">
+            <CustomSelect action={setSubj}  name={"Dalykas"} parameters={subjects} subj={subj}/>
+            {console.log(School.type)}
+        </div>) : 
+        (<div className="space-y-2">
+            
+            <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
+            Dalykas*
+            </label>
+            <input
+            type="text"
+            id="subject"
+            name="subject"
+            onChange={handleData}
+            className="input input-bordered input-primary w-full"                
+            />
+        </div>)}
+        
+            
+        <div>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+        </div>
+        {loading ? (<button type="submit" disabled className="btn bg-white text-primary btn-primary hover:text-black hover:bg-primary">
+        Kraunama...
+        </button>
+        ) : (<button onClick={handleSubmit} className="btn bg-white text-primary btn-primary hover:text-black hover:bg-primary">
+        Pridėti
+        </button>)}
+        
+    </form>
+  )
+}
+
+export default TeacherForm

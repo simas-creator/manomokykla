@@ -11,7 +11,10 @@ const CustomSelect = ({ name, parameters, action, subj }) => {
   const toggleDropdown = () => {
     setActive((prev) => !prev);
   };
-
+  const handleOptionClick = (p) => {
+    action(p);
+    setActive(false);
+  };
   return (
     <div className="w-full relative">
       <button
@@ -76,7 +79,7 @@ const CustomSelect = ({ name, parameters, action, subj }) => {
                   <li
                     key={index}
                     className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors duration-150"
-                    onClick={() => action(p)}
+                    onClick={() => handleOptionClick(p)}
                   >
                     {p}
                   </li>
