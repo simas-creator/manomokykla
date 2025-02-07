@@ -1,10 +1,11 @@
 import { useState } from "react";
 import CustomSelect from "@/components/CustomSelect";
+import { useSession } from "next-auth/react";
 const TeacherForm = ({School}) => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [subj, setSubj] = useState(null);
-    const [jsonData, setJsonData] = useState({n: School.n, rating: 1});
+    const [jsonData, setJsonData] = useState({n: School.n});
     const subjects = [
         "Biologija",
         "Chemija",
@@ -24,6 +25,7 @@ const TeacherForm = ({School}) => {
         "Užsienio kalba (rusų)",
         "Užsienio kalba (vokiečių)"
       ];
+      const {data: session, status} = useSession();
       const truncate = (text, n) => {
         return text?.length > n ? text.slice(0, n - 1) + '...' : text;
       }
@@ -38,8 +40,9 @@ const TeacherForm = ({School}) => {
     
         e.preventDefault();
         setLoading(true);
-        const { first, surname, subject} = jsonData;
-        if(!first || !surname || !subject) {
+        const { first, surname } = jsonData;
+        setJsonData({...jsonData, subj: subj, user: session.user.email});
+        if(!first || !surname || !subj) {
           setError('Užpildykite privalomus laukelius');
           setLoading(false);
           return;
@@ -99,7 +102,6 @@ const TeacherForm = ({School}) => {
         {School.type === 'Gimnazija' ? 
         (<div className="space-y-2">
             <CustomSelect action={setSubj}  name={"Dalykas"} parameters={subjects} subj={subj}/>
-            {console.log(School.type)}
         </div>) : 
         (<div className="space-y-2">
             

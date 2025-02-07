@@ -6,9 +6,9 @@ import School from '@/lib/modals/school';
 export const POST = async (req) => {
     try {
         const data = await req.json();
-        let { first, surname, rating, review, subject, imgUrl, n} = data
-        console.log(first, surname, rating, review, subject, imgUrl, n);
-        if(!first || !surname || !subject) {
+        let { first, surname, subj, n, user} = data;
+        console.log(first, surname, subj, n, user);
+        if(!first || !surname || !subj) {
             return NextResponse.json({ message: 'Užpildykite privalomus laukelius' }, { status: 400 });
         }
         let imageUrl;

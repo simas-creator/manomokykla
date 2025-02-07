@@ -38,6 +38,7 @@ module.exports = {
       },
       screens: {
         'amd': '800px',
+        'bsm': '523px',
       },
     },
   },

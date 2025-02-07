@@ -61,11 +61,11 @@ const SchoolPage = ({School}) => {
               <div>
                 <img 
                 src={School.imgUrl}
-                className="h-20 w-20 rounded-lg object-cover border-2 "
+                className="w-full absolute left-0 opacity-30 object-cover h-52 bsm:static bsm:h-20 bsm:w-20 bsm:opacity-100 bsm:rounded-lg objects-cover bsm:border-2 border-2"
                 />
               </div>
-              <div className="flex flex-col">
-                <h1 className='font-title text-xl md:text-3xl'>{School.name}</h1>
+              <div className="flex flex-col z-10">
+                <h1 className='font-title text-xl font-medium md:text-3xl'>{School.name}</h1>
                 <div className="flex gap-2 mt-2">
                   <StarRating r={schoolRating} size="xl" />
                 </div>
@@ -74,10 +74,11 @@ const SchoolPage = ({School}) => {
               
             </div>
             
-            <div className="mt-3 lg:max-w-screen-lg">
-              <button onClick={() => handleForm()} className="w-auto px-4 py-2 border-2 rounded-lg border-gray-300 transition-colors hover:bg-gray-100">Pridėti mokytoją</button>
+            <div className="mt-3 lg:max-w-screen-lg z-10">
+              <button onClick={() => handleForm()} className="w-auto px-4 py-2 border rounded-lg border-primary transition-colors text-primary font-medium hover:text-black text-sm hover:bg-primary">Pridėti mokytoją</button>
             </div>
-            <div className='divider'></div>
+            
+            <div className='sm:border mt-6'></div>
             
 
         </main>
@@ -98,15 +99,31 @@ const SchoolPage = ({School}) => {
           />
 
         ))
-      ) : (
-        <div className="p-10 w-full flex justify-center">Mokytojų nerasta.</div>
+       && 
+       <div className="w-full px-2 py-4">
+          <p>
+          Nematote savo mokytojo? <span onClick={() => handleForm()} className="hover:cursor-pointer hover:underline text-primary">Pridėti</span>
+          </p>
+        </div>) : (
+       
+        <div className="p-10 w-full flex justify-center items-center flex-col">
+          <div>
+          Mokytojų nerasta.
+          </div>
+          <div className="w-full px-2 py-4">
+            <p>
+            Nematote savo mokytojo? <span onClick={() => handleForm()} className="hover:cursor-pointer hover:underline text-primary">Pridėti</span>
+            </p>
+          </div>
+         </div>
+        
       )}
     </div> 
       
-    </div>) : (<div>
+    </div>) : (<div className="px-8 mb-8">
       <TeacherForm School={School}/>
       <div className="max-w-lg m-auto">
-        <button className="w-auto px-4 py-2 border-gray-300 border-2 rounded-md" onClick={() => setForm(false)}>Grįžti atgal</button>
+        <button className="w-auto px-4 py-2 border-primary border rounded-md text-primary font-medium " onClick={() => setForm(false)}>Grįžti atgal</button>
       </div>
       
       </div>)}

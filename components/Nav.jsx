@@ -9,7 +9,9 @@ function Nav() {
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
   };
+
   const {data: session, status} = useSession(false);
+  console.log(session)
   return (
     <div className="navbar bg-base-100 relative">
       <div className="navbar-start">
