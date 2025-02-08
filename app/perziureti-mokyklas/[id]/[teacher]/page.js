@@ -1,17 +1,34 @@
-import TeacherPage from '@/components/TeacherPage'
-import Teacher from '@/lib/modals/teacher';
-import { headers } from "next/headers";
-const getTeacher = async (n, m) => {
-  const teacher = await Teacher.findOne({n, m});
-  return teacher;
-}
-export default async function Page() {
-  const headerList = await headers();
-  const pathname = headerList.get("x-current-path");
-  const parts = pathname.split('/');
-  const n = parseInt(parts[2].match(/[0-9]+/g).join(""));
-  const m = parseInt(parts[3].match(/[0-9]+/g).join(""));
-  console.log(n, m)
-  const teacher = await getTeacher(n, m);
-    return (<TeacherPage teacher={teacher}/>)
+"use client";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import TeacherPage from '@/components/TeacherPage';
+
+export default function Page() {
+  const pathname = usePathname();
+  const [teacher, setTeacher] = useState(null);
+
+  useEffect(() => {
+    if (!pathname) return;
+
+    const fetchTeacher = async () => {
+      const pathname = window.location.pathname; // Get the actual page URL
+      try {
+        const res = await fetch(`/api/url?path=${encodeURIComponent(pathname)}`);
+    
+        if (!res.ok) {
+          throw new Error("Failed to fetch teacher");
+        }
+    
+        const data = await res.json();
+        setTeacher(data);
+      } catch (error) {
+        console.error("Fetch failed:", error);
+        return null;
+      }
+    };    
+
+    fetchTeacher();
+  }, [pathname]);
+
+  return <TeacherPage teacher={teacher} />;
 }

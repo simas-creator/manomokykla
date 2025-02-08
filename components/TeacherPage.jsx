@@ -7,11 +7,11 @@ const TeacherPage = ({teacher}) => {
       <main className="w-full px-10 mt-10">
         <div className="flex items-center gap-3 flex-wrap">
           <div className="p-3 rounded-full border-2 overflow-hidden w-20 h-20">
-            <img src={teacher.imageUrl} alt="" />
+            <img src={teacher?.imageUrl} alt="" />
           </div>
           <div>
-          <h1 className="md:text-3xl font-medium font-title text-xl">{teacher.name} {teacher.surname}</h1>
-          <h3 className="text-gray-500">{teacher.subject}</h3>
+          <h1 className="md:text-3xl font-medium font-title text-xl">{teacher?.name} {teacher?.surname}</h1>
+          <h3 className="text-gray-500">{teacher?.subject}</h3>
           </div>
           
         </div>
