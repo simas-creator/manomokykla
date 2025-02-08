@@ -16,8 +16,13 @@ const SchoolForm = () => {
     apskritis: "Alytaus",
     imgUrl: "",
     type: "Gimnazija",
-    user: session.user.email
+    user
   });
+  useEffect(() => {
+    if (session?.user?.email) {
+      setJsonData(prev => ({ ...prev, user: session.user.email }));
+    }
+  }, [session]);
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image" && files?.length > 0) {
