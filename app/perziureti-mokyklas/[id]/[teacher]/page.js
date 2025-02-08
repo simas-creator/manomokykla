@@ -5,7 +5,7 @@ const getTeacher = async (n, m) => {
   const teacher = await Teacher.findOne({n, m});
   return teacher;
 }
-export default async function Page({params}) {
+export default async function Page() {
   const headerList = await headers();
   const pathname = headerList.get("x-current-path");
   const parts = pathname.split('/');
