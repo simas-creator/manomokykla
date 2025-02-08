@@ -9,9 +9,9 @@ export default async function Page({params}) {
   const headerList = await headers();
   const pathname = headerList.get("x-current-path");
   const parts = pathname.split('/');
-  const n = parts[2].match(/[0-9]+/g).join("");
-  const m = parts[3].match(/[0-9]+/g).join("");
+  const n = parseInt(parts[2].match(/[0-9]+/g).join(""));
+  const m = parseInt(parts[3].match(/[0-9]+/g).join(""));
+  console.log(n, m)
   const teacher = await getTeacher(n, m);
-  console.log(teacher)
     return (<TeacherPage teacher={teacher}/>)
 }

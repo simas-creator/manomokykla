@@ -36,9 +36,18 @@ const SchoolCase = ({
   const replaceLithuanianChars = useCallback((str) => {
     const charMap = {
       'ą': 'a', 'č': 'c', 'ę': 'e', 'ė': 'e', 'į': 'i', 'š': 's', 'ų': 'u', 'ū': 'u', 'ž': 'z',
-      'Ą': 'A', 'Č': 'C', 'Ę': 'E', 'Ė': 'E', 'Į': 'I', 'Š': 'S', 'Ų': 'U', 'Ū': 'U', 'Ž': 'Z'
+      'Ą': 'A', 'Č': 'C', 'Ę': 'E', 'Ė': 'E', 'Į': 'I', 'Š': 'S', 'Ų': 'U', 'Ū': 'U', 'Ž': 'Z',
+      '„': '', '“': '',
     };
-    return str.replace(/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/g, (char) => charMap[char] || char);
+    
+    return str
+    .normalize("NFKD") 
+    .replace(/[„“‘’"']/g, '') 
+    .replace(/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/g, (char) => charMap[char] || char)
+    .replace(/[^a-zA-Z0-9-]/g, '') 
+    .replace(/-{2,}/g, '-') 
+    .toLowerCase();
+    
   }, []);
   const id = replaceLithuanianChars(school.name.toLowerCase().replace(/\s/g, "-"));
   useEffect(() => {

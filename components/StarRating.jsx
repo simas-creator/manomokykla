@@ -55,7 +55,8 @@ const StarRating = ({ r = 0, size = "sm", number = undefined}) => {
           disabled
         />
       ))}
-      <div className="text-gray-400 text-lg md:text-xl">({number})</div>
+      {number !== undefined && <div className="text-gray-400 text-lg md:text-xl">({number})</div>}
+      
     </div>
   );
 };
