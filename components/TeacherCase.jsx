@@ -1,12 +1,27 @@
 'use client'
-
+import { useRouter} from "next/navigation";
+import { useCallback } from "react";
 const TeacherCase = ({
  teacher
 }) => {
+  const router = useRouter();
+  const url = window.location.href;
+  const {rating, name, surname, subject, imageUrl} = teacher;
+  const replaceLithuanianChars = useCallback((str) => {
+      const charMap = {
+        'ą': 'a', 'č': 'c', 'ę': 'e', 'ė': 'e', 'į': 'i', 'š': 's', 'ų': 'u', 'ū': 'u', 'ž': 'z',
+        'Ą': 'A', 'Č': 'C', 'Ę': 'E', 'Ė': 'E', 'Į': 'I', 'Š': 'S', 'Ų': 'U', 'Ū': 'U', 'Ž': 'Z'
+      };
+      return str.replace(/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/g, (char) => charMap[char] || char);
+    }, []);
+  const fullUrl = `${url}/${replaceLithuanianChars(`${name}-${surname}`).toLowerCase()}-${teacher.m}`
+  const handleClick = () => {
+    router.push(`${fullUrl}`)
+  }
   const truncate = (text, n) => {
     return text?.length > n ? text.slice(0, n - 1) + '...' : text;
   }
-  const {rating, name, surname, subject, imageUrl} = teacher;
+  
   return (
     <div className="card bg-base-100 max-w-96 w-full min-h-28 shadow-xl p-4 flex flex-row items-center gap-4 border flex-wrap">
       
@@ -27,7 +42,7 @@ const TeacherCase = ({
         
       </div>
       <div className="flex justify-end">
-        <button className="btn btn-primary btn-outline">Peržiūrėti</button>
+        <button onClick={() => handleClick()} className="btn btn-primary btn-outline">Peržiūrėti</button>
       </div>
     </div>
   );

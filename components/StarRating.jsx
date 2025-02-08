@@ -1,6 +1,6 @@
 import React from "react";
 
-const StarRating = ({ r = 1, size = "sm"}) => {
+const StarRating = ({ r = 0, size = "sm", number = undefined}) => {
   const starCount = 5; // Total number of stars
 
   // Determine the full, half, and empty stars
@@ -55,7 +55,7 @@ const StarRating = ({ r = 1, size = "sm"}) => {
           disabled
         />
       ))}
-      
+      <div className="text-gray-400 text-lg md:text-xl">({number})</div>
     </div>
   );
 };
