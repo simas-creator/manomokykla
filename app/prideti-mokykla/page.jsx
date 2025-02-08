@@ -1,7 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 const SchoolForm = () => {
   const [error, setError] = useState(null);
   const [fileError, setFileError] = useState(null);
