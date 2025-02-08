@@ -7,24 +7,20 @@ import School from "@/lib/modals/school";
 export async function POST(req) {
   try {
 
-    const db = await connect();
+    await connect();
 
     const {name, apskritis, type, imgUrl } = await req.json();
     console.log("Received data:", { name, apskritis, type, imgUrl });  
     ;
-    const counterObj = await db.collection("counters").findOneAndUpdate(
-      { name : "schoolCounter"},
-      { $inc: { number: 1 } },
-      { returnDocument: "after", upsert: true }
-    )
-    const n = counterObj.number;
+    const n = await School.countDocuments();
+    
     const newSchool = new School({
       name,
       apskritis,
       type,
       teachers: [],
       imgUrl: `https://mokyklos.s3.eu-north-1.amazonaws.com/${imgUrl}`,
-      n,
+      n: n + 1,
       rating: 0,
     });
 

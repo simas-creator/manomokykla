@@ -6,41 +6,68 @@ import School from '@/lib/modals/school';
 export const POST = async (req) => {
     try {
         const data = await req.json();
-        let { first, surname, subj, n, user} = data;
+        let { first, surname, subj, n, user } = data;
         console.log(first, surname, subj, n, user);
-        if(!first || !surname || !subj) {
+        if (!first || !surname || !subj) {
             return NextResponse.json({ message: 'Užpildykite privalomus laukelius' }, { status: 400 });
         }
         let imageUrl;
-        
-        
-        const db = await connect();
-        rating = parseFloat(rating);
 
-        /// update school rating
-        const teacherCount = await db.collection("teachers").countDocuments({ n: n });
-        const school = await School.findOne({n: n});
-        const schoolR = school.rating;
-        const newSchoolR = (schoolR * teacherCount + rating) / (teacherCount + 1);
-        await school.updateOne({n: n}, {rating: newSchoolR});
-        if (school.type !== "Gimnazija") {
-            imageUrl = 'https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/graduation-cap-svgrepo-com.svg'
-        } else {
-            imageUrl = `https://mokyklos.s3.eu-north-1.amazonaws.com/${imgUrl}`;
+        await connect();
+
+        const teacherCount = await Teacher.countDocuments({ n: n });
+
+        switch (subj) {
+            case 'Biologija':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/biologija.png";
+                break;
+            case 'Chemija':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/chemija.png";
+                break;
+            case 'Fizika':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/fizika.png";
+                break;
+            case 'Matematika':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/matematika.png";
+                break;
+            case 'Informatika':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/IT.png";
+                break;
+            case 'Lietuvių kalba':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/ltkalba.png";
+                break;
+            case 'Anglų kalba':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/anglu.png";
+                break;
+            case 'Istorija':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/istorija.png";
+                break;
+            case 'Geografija':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/geografija.png";
+                break;
+            case 'Kūno kultūra':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/fizinisugdymas.png";
+                break;
+            default:
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/profesorius.png";
+                break;
         }
+        
+
         const teacher = new Teacher({
             name: first,
             surname,
-            rating,
+            rating: 0,
             reviews: [],
-            subject,
+            subject: subj,
             imageUrl,
-            n
-        })
+            n, // school identifier
+            m: teacherCount + 1, // teacher identifier
+            user,
+        });
+
         if (teacherCount < 2) {
-            await School.updateOne({n: n}, {
-                teachers: [...teacher, teacher]
-            })
+            await School.updateOne({ n: n }, { $push: { teachers: teacher } });
         }
         await teacher.save();
 
@@ -51,7 +78,5 @@ export const POST = async (req) => {
             { message: "An error occurred while saving teacher data" },
             { status: 500 }
         );
-        
     }
-    
-}
+};

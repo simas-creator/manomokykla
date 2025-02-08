@@ -51,7 +51,9 @@ const FilterParameter = ({parameters, type, active, setActive, wFor, filter, set
             </div>
             <ul className="text-gray-700">
               {parameters && parameters.map((p, index) => (
-                <li key={index} onClick={() => handleChange(p)} className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer transition-colors duration-150">
+                <li key={index} onClick={() => {
+                  handleChange(p)
+                  toggleDropdown()}} className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer transition-colors duration-150">
                   {p}
                 </li>
               ))}

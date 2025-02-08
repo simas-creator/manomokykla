@@ -35,13 +35,18 @@ const TeacherForm = ({School}) => {
           ...jsonData,
           [e.target.name]: e.target.value
         })
+        console.log(jsonData)
     }
       const handleSubmit = async (e) => {
     
         e.preventDefault();
         setLoading(true);
         const { first, surname } = jsonData;
-        setJsonData({...jsonData, subj: subj, user: session.user.email});
+        const requestBody = {
+          ...jsonData,
+          subj: subj,
+          user: session?.user?.email,
+      };
         if(!first || !surname || !subj) {
           setError('Užpildykite privalomus laukelius');
           setLoading(false);
@@ -56,7 +61,7 @@ const TeacherForm = ({School}) => {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify(jsonData)
+            body: JSON.stringify(requestBody)
           })
     
           if(!response.ok) {
@@ -68,8 +73,8 @@ const TeacherForm = ({School}) => {
           console.log(error, 'error');
         } finally {
           setLoading(false);
+          window.location.reload()
         }
-        window.location.reload()
       }
   return (
     <form className="max-w-lg mx-auto p-4 border-2 rounded-lg space-y-4 my-5 font-title">

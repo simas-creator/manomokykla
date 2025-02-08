@@ -6,13 +6,13 @@ const TeacherCase = ({
   const truncate = (text, n) => {
     return text?.length > n ? text.slice(0, n - 1) + '...' : text;
   }
-  const {rating, name, surname, subject, imgUrl} = teacher;
+  const {rating, name, surname, subject, imageUrl} = teacher;
   return (
     <div className="card bg-base-100 w-auto max-w-96 h-auto shadow-xl p-4 flex flex-row items-center gap-4 border">
       
       <div className="avatar">
-        <div className="w-16 h-16 rounded-full border-2 border-primary overflow-hidden">
-          <img src={imgUrl} alt={`${name} ${surname}`} />
+        <div className="p-2 w-16 h-16 rounded-full border-2 border-gray-300 overflow-hidden">
+          <img className="" src={imageUrl} alt={`${name} ${surname}`} />
         </div>
       </div>
       <div className="flex flex-col">
@@ -27,7 +27,7 @@ const TeacherCase = ({
         
       </div>
       <div className="">
-        <button className="btn btn-outline">Peržiūrėti</button>
+        <button className="btn btn-primary btn-outline">Peržiūrėti</button>
       </div>
     </div>
   );

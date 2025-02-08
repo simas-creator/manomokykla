@@ -1,20 +1,23 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
+import { useSession } from 'next-auth/react'
 const SchoolForm = () => {
   const [error, setError] = useState(null);
   const [fileError, setFileError] = useState(null);
   const router = useRouter();
+  
+  const [imagePreview, setImagePreview] = useState(null)
+  const [file, setFile] = useState(null)
+  const [loading, setLoading] = useState(false);
+  const {data: session, status} = useSession();
   const [jsonData, setJsonData] = useState({
     name: "",
     apskritis: "Alytaus",
     imgUrl: "",
     type: "Gimnazija",
+    user: session.user.email
   });
-  const [imagePreview, setImagePreview] = useState(null)
-  const [file, setFile] = useState(null)
-  const [loading, setLoading] = useState(false);
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image" && files?.length > 0) {
