@@ -30,10 +30,10 @@ const SchoolPage = ({School}) => {
     "Matematika",
     "Muzika",
     "Technologijos",
-    "Užsienio kalba (anglų)",
-    "Užsienio kalba (prancūzų)",
-    "Užsienio kalba (rusų)",
-    "Užsienio kalba (vokiečių)"
+    "Anglų",
+    "Prancūzų",
+    "Rusų",
+    "Vokiečių"
   ];
   const handleForm = () => {
     if(status !== "authenticated") {
@@ -73,7 +73,7 @@ const SchoolPage = ({School}) => {
     <section>
         <main className='px-10 mt-10 w-auto flex flex-col'>
 
-            <div className="flex gap-5 items-center flex-wrap">
+            <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row">
               <div>
                 <img 
                 src={School.imgUrl}
@@ -112,23 +112,26 @@ const SchoolPage = ({School}) => {
     </div>
   ) : teachers.length > 0 ? (
     <>
-      {teachers.map((teacher, index) => (
-        <TeacherCase key={index} teacher={teacher} />
-      ))}
-      <div className="w-full px-2 py-4">
-        <p>
-          Nematote savo mokytojo?{" "}
-          <span onClick={() => handleForm()} className="hover:cursor-pointer hover:underline text-primary">
-            Pridėti
-          </span>
-        </p>
+      <div className="w-full mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 px-10 justify-items-center mb-6">
+        {teachers.map((teacher, index) => (
+          <TeacherCase key={index} teacher={teacher} />
+        ))}
+        
       </div>
+      <div className="pt-4 pb-8 m-auto px-10">
+          <p className="w-full text-wrap">
+            Nematote savo mokytojo?{" "}
+            <span onClick={() => handleForm()} className="hover:cursor-pointer hover:underline text-primary">
+              Pridėti
+            </span>
+          </p>
+        </div>
     </>
   ) : (
     <div className="p-10 w-full flex justify-center items-center flex-col">
       <div>Mokytojų nerasta.</div>
       
-      <div className="w-full px-2 py-4">
+      <div className="w-full px-2 py-8">
         <p>
           Nematote savo mokytojo?{" "}
           <span onClick={() => handleForm()} className="hover:cursor-pointer hover:underline text-primary">
@@ -141,10 +144,10 @@ const SchoolPage = ({School}) => {
 </div>
 
       
-    </div>) : (<div className="px-8 mb-8">
+    </div>) : (<div className="px-8 mb-8 py-2">
       <TeacherForm School={School}/>
       <div className="max-w-lg m-auto">
-        <button className="w-auto px-4 py-2 border-gray-300 border rounded-md text-gray-700" onClick={() => setForm(false)}>Grįžti atgal</button>
+        <button className="w-auto px-4 py-2 mb-2 border-gray-300 border rounded-md text-gray-700" onClick={() => setForm(false)}>Grįžti atgal</button>
       </div>
       
       </div>)}

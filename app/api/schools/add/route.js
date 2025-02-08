@@ -9,8 +9,8 @@ export async function POST(req) {
 
     await connect();
 
-    const {name, apskritis, type, imgUrl } = await req.json();
-    console.log("Received data:", { name, apskritis, type, imgUrl });  
+    const {name, apskritis, type, imgUrl, user } = await req.json();
+    console.log("Received data:", { name, apskritis, type, imgUrl, user });  
     ;
     const n = await School.countDocuments();
     
@@ -22,6 +22,8 @@ export async function POST(req) {
       imgUrl: `https://mokyklos.s3.eu-north-1.amazonaws.com/${imgUrl}`,
       n: n + 1,
       rating: 0,
+      user,
+      status: "pending",
     });
 
     // Save the document to the database

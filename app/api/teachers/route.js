@@ -30,24 +30,47 @@ export const POST = async (req) => {
             case 'Matematika':
                 imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/matematika.png";
                 break;
-            case 'Informatika':
+            case 'Muzika':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/muzika.png";
+                break;
+            case 'Informacinės technologijos':
                 imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/IT.png";
                 break;
-            case 'Lietuvių kalba':
+            case 'Lietuvių kalba ir literatūra':
                 imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/ltkalba.png";
                 break;
-            case 'Anglų kalba':
+            case 'Anglų':
                 imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/anglu.png";
                 break;
             case 'Istorija':
                 imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/istorija.png";
                 break;
+            case 'Fizinis ugdymas': 
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/fizinisugdymas.png";
+                break;
             case 'Geografija':
                 imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/geografija.png";
                 break;
-            case 'Kūno kultūra':
-                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/fizinisugdymas.png";
+            case 'Vokiečių':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/vokieciu.png";
                 break;
+            case 'Rusų':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/rusu.png";
+                break;
+            case 'Prancūzų':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/prancuzu.png";
+                break;
+            case 'Ekonomika':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/ekonomika.png";
+                break;
+            case 'Technologijos':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/technologijos.png";
+                break;
+            case 'Dailė':
+                imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/dail.png";
+                break;
+            
+                
             default:
                 imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/profesorius.png";
                 break;
@@ -64,6 +87,7 @@ export const POST = async (req) => {
             n, // school identifier
             m: teacherCount + 1, // teacher identifier
             user,
+            status: "pending",
         });
 
         if (teacherCount < 2) {

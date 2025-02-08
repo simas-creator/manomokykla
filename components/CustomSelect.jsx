@@ -71,10 +71,10 @@ const CustomSelect = ({ name, parameters, action, subj }) => {
           </div>
 
           {/* Options */}
-          <ul className="max-h-48 overflow-y-auto" role="listbox">
+          <ul className="max-h-44 overflow-y-auto" role="listbox">
             {parameters &&
               parameters
-                .filter((p) => p && p.toLowerCase().startsWith(filt.toLowerCase()))
+                .filter((p) => p && p.toLowerCase().includes(filt.toLowerCase()))
                 .map((p, index) => (
                   <li
                     key={index}

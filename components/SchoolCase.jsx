@@ -49,7 +49,7 @@ const SchoolCase = ({
 };
   const truncate = useCallback((str, n) => {
     if (!str) return "";
-    if(str === `${undefined} ${undefined}` && n === 14) {
+    if(str === `${undefined} ${undefined}` && n === 12) {
       return "Vardas Pavardė"
     } else if (str === `undefined` && n === 30) {
       return "Atsiliepimas..."
@@ -63,11 +63,11 @@ const SchoolCase = ({
         <img
           src={school.imgUrl}
           alt={school.name}
-          className="h-full m-auto object-contain rounded-t-lg opacity-30"
+          className="h-full w-full m-auto object-cover rounded-t-lg opacity-30"
         />
-        <div className="border-2"></div>
+        
       </div>
-      
+      <div className="border"></div>
       {/* Content Section */}
       <div className="p-4 flex flex-col justify-between flex-grow">
         {/* School Name */}
@@ -120,7 +120,7 @@ const SchoolCase = ({
                 </div>
                 <div className="flex flex-col">
                   <p className="ml-2 text-sm text-gray-500">Mokytojas(-a)</p>
-                  <p className=" ml-2 text-gray-800 font-medium">{truncate(`${teachers[index]?.name} ${teachers[index]?.surname}`, 14)}</p>
+                  <p className=" ml-2 text-gray-800 font-medium">{truncate(`${teachers[index]?.name} ${teachers[index]?.surname}`, 12)}</p>
                 </div>
               </div>
 

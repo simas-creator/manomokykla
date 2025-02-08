@@ -7,24 +7,24 @@ const TeacherForm = ({School}) => {
     const [subj, setSubj] = useState(null);
     const [jsonData, setJsonData] = useState({n: School.n});
     const subjects = [
-        "Biologija",
-        "Chemija",
-        "Dailė",
-        "Ekonomika",
-        "Fizika",
-        "Geografija",
-        "Informacinės technologijos",
-        "Istorija",
-        "Fizinis ugdymas",
-        "Lietuvių kalba ir literatūra",
-        "Matematika",
-        "Muzika",
-        "Technologijos",
-        "Užsienio kalba (anglų)",
-        "Užsienio kalba (prancūzų)",
-        "Užsienio kalba (rusų)",
-        "Užsienio kalba (vokiečių)"
-      ];
+      "Biologija",
+      "Chemija",
+      "Dailė",
+      "Ekonomika",
+      "Fizika",
+      "Geografija",
+      "Informacinės technologijos",
+      "Istorija",
+      "Fizinis ugdymas",
+      "Lietuvių kalba ir literatūra",
+      "Matematika",
+      "Muzika",
+      "Technologijos",
+      "Anglų",
+      "Prancūzų",
+      "Rusų",
+      "Vokiečių"
+    ];
       const {data: session, status} = useSession();
       const truncate = (text, n) => {
         return text?.length > n ? text.slice(0, n - 1) + '...' : text;
