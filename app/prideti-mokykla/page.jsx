@@ -16,7 +16,6 @@ const SchoolForm = () => {
     apskritis: "Alytaus",
     imgUrl: "",
     type: "Gimnazija",
-    user
   });
   useEffect(() => {
     if (session?.user?.email) {
