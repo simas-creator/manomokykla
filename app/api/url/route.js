@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import Teacher from "@/lib/modals/teacher";
-
+import connect from "@/lib/mongodb";
 export async function GET(request) {
+
   try {
+    await connect();
     // Get the actual page URL from query parameters
     const url = new URL(request.url);
     const pathname = url.searchParams.get("path"); // Extract the passed path
