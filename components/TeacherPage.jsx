@@ -1,22 +1,29 @@
 import Image from "next/image"
 import StarRating from "./StarRating";
-import { usePathname,} from "next/navigation";
 import { useEffect, useState } from "react";
 const TeacherPage = ({teacher}) => {
-  const path = usePathname();
   const [school, setSchool] = useState(null);
   const [schoolImage, setSchoolImage] = useState(null);
   useEffect(() => {
     if (!teacher || !teacher.n) return;
     const fetchSchool = async () => {
-      console.log(teacher.n)
-      const res = await fetch(`/api/schools/byn?n=${teacher?.n}`)  
-      const {data, image} = await res.json();
-      console.log(image)
-      console.log(data)
-      setSchool(data);
-      setSchoolImage(image);
-      return
+      const res = await fetch(`/api/schools/byn?n=${teacher?.n}`);
+
+if (!res.ok) {
+  console.log("Fetch failed with status:", res.status);
+  return; // Prevent parsing empty response
+}
+
+const object = await res.json(); // Read raw response
+
+try {
+  const { data, image } = object;
+  setSchool(data);
+  setSchoolImage(image);
+} catch (error) {
+  console.log("Failed to parse JSON:", error);
+}
+
     }
     fetchSchool();
   }, [teacher])
@@ -59,11 +66,13 @@ const TeacherPage = ({teacher}) => {
           {school}
          
         </div>
+        {schoolImage && 
         <div className="absolute end-0 top-[63px]">
           <div className="border-2 w-20 h-20 md:hidden">
             <img className="w-full h-full object-cover" src={schoolImage} alt="" />
           </div>
-        </div>
+        </div>}
+        
         
         
       </main>
