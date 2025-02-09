@@ -62,7 +62,7 @@ const Register = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
+        <div className="max-w-md mx-auto bg-white shadow-md ring ring-primary rounded-lg p-6 mt-10">
             <h1 className="font-semibold text-3xl mt-5 font-title">Registracija</h1>
             <p className="text-gray-500 mt-2 mb-4">Nurodykite reikiamus duomenis</p>
             <form onSubmit={(e) => submit(e)}>

@@ -33,7 +33,7 @@ const TeacherCase = ({
   }
   
   return (
-    <div className="card bg-base-100 max-w-96 w-full min-h-28 shadow-xl p-4 flex flex-row items-center gap-4 border flex-wrap">
+    <div className="card bg-base-100 max-w-96 w-full min-h-28 shadow-md p-4 flex flex-row items-center gap-4 border flex-wrap">
       
 
       <div className="p-2 w-12 h-12 rounded-full border-2 border-gray-300 overflow-hidden">

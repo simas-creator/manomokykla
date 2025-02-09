@@ -1,6 +1,7 @@
 import Image from "next/image"
 import StarRating from "./StarRating";
 const TeacherPage = ({teacher}) => {
+  
   return (
     <section>
       
