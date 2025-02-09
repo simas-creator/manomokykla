@@ -9,20 +9,20 @@ const TeacherPage = ({teacher}) => {
     const fetchSchool = async () => {
       const res = await fetch(`/api/schools/byn?n=${teacher?.n}`);
 
-if (!res.ok) {
-  console.log("Fetch failed with status:", res.status);
-  return; // Prevent parsing empty response
-}
+      if (!res.ok) {
+        console.log("Fetch failed with status:", res.status);
+        return; // Prevent parsing empty response
+      }
 
-const object = await res.json(); // Read raw response
+      const object = await res.json(); // Read raw response
 
-try {
-  const { data, image } = object;
-  setSchool(data);
-  setSchoolImage(image);
-} catch (error) {
-  console.log("Failed to parse JSON:", error);
-}
+      try {
+        const { data, image } = object;
+        setSchool(data);
+        setSchoolImage(image);
+      } catch (error) {
+        console.log("Failed to parse JSON:", error);
+      }
 
     }
     fetchSchool();
