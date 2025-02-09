@@ -8,9 +8,8 @@ export default function Page() {
   const [teacher, setTeacher] = useState(null);
 
   useEffect(() => {
-    if (!pathname) return;
+    console.log('url', pathname)
 
-    // Check sessionStorage first
     const cachedTeacher = sessionStorage.getItem(`teacher-${pathname}`);
     if (cachedTeacher) {
       setTeacher(JSON.parse(cachedTeacher));
