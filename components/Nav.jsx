@@ -13,7 +13,7 @@ function Nav() {
   const {data: session, status} = useSession(false);
   
   return (
-    <div className="navbar bg-base-100 border-b-2 fixed z-20">
+    <div className="navbar bg-base-100 border-b border-gray-100 fixed z-20">
       <div className="navbar-start">
         <div className="dropdown">
           {/* Toggle dropdown visibility */}
