@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connect from "@/lib/mongodb";
 import School from "@/lib/modals/school";
+import { revalidateTag } from "next/cache";
 
 
 
@@ -28,7 +29,7 @@ export async function POST(req) {
 
     // Save the document to the database
     const savedSchool = await newSchool.save();
-
+    revalidateTag('schools');
     return NextResponse.json({ success: true, school: savedSchool });
   } catch (error) {
     console.error("error:", error.message);

@@ -41,8 +41,6 @@ const SchoolPage = ({School}) => {
       return
     }
     setForm(true);
-    
-
   }
   useEffect(() => {
     if (!School?.n) return;
@@ -75,6 +73,7 @@ const SchoolPage = ({School}) => {
 
             <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row">
               <div>
+                {console.log(School)}
                 <img 
                 src={School.imgUrl}
                 className="h-32 w-32 bsm:h-20 bsm:w-20 bsm:opacity-100 bsm:rounded-lg object-cover bsm:border-2 border-2"

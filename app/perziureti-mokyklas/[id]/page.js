@@ -2,7 +2,7 @@ import SchoolPage from "@/components/SchoolPage";
 
 async function getSchoolData(n) {
   const res = await fetch(`${process.env.NEXTAUTH_URL}/api/schools/${n}`, {
-    next: {revalidate: 36000}
+    cache: "force-cache"
   });
 
   if (!res.ok) {

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import CustomSelect from "@/components/CustomSelect";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 const TeacherForm = ({School}) => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [subj, setSubj] = useState(null);
+    const router = useRouter()
     const [jsonData, setJsonData] = useState({n: School.n});
     const subjects = [
       "Biologija",
@@ -38,7 +40,7 @@ const TeacherForm = ({School}) => {
         console.log(jsonData)
     }
       const handleSubmit = async (e) => {
-    
+        
         e.preventDefault();
         setLoading(true);
         const { first, surname } = jsonData;
@@ -73,6 +75,7 @@ const TeacherForm = ({School}) => {
           console.log(error, 'error');
         } finally {
           setLoading(false);
+          router.refresh();
           window.location.reload()
         }
       }

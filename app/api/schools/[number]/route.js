@@ -23,6 +23,7 @@ export const GET = async (request, { params }) => {
       status: 200,
       headers: {
         "Cache-Control": "s-maxage=3000, stale-while-revalidate", // Cache for 50 minutes, serve stale content while revalidating
+        "x-next-cache-tags": "schools"
       },
     });
   } catch (error) {

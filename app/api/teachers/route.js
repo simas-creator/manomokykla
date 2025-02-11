@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Teacher from '@/lib/modals/teacher';
 import connect from '@/lib/mongodb';
 import School from '@/lib/modals/school';
+import { revalidateTag } from 'next/cache';
 
 export const POST = async (req) => {
     try {
@@ -94,7 +95,7 @@ export const POST = async (req) => {
             await School.updateOne({ n: n }, { $push: { teachers: teacher } });
         }
         await teacher.save();
-
+        revalidateTag('teachers');
         return NextResponse.json({ message: 'Mokytojas pridetas' }, { status: 200 });
     } catch (error) {
         console.log("error:", error.message);
