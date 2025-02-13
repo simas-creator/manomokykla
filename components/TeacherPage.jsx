@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ReviewForm from "@/components/ReviewForm"
+import ReviewCase from "@/components/ReviewCase"
 
 const TeacherPage = ({ teacher }) => {
   const { data: session, status } = useSession();
@@ -13,7 +14,7 @@ const TeacherPage = ({ teacher }) => {
   const [school, setSchool] = useState(null);
   const [schoolImage, setSchoolImage] = useState(null);
   const [form, setForm] = useState(false);
-
+  const [reviews, setReviews] = useState([])
   useEffect(() => {
     if (!session?.user?.email || !teacher?.n || !teacher?.m) return;
 
@@ -70,9 +71,27 @@ const TeacherPage = ({ teacher }) => {
         console.log("Failed to parse JSON:", error);
       }
     };
+    
     fetchSchool();
-  }, [teacher]);
-
+  }, []);
+  useEffect(() => {
+    const fetchReviews = async () => {
+      if(!teacher?.n || !teacher?.m) {
+        return;
+      }
+      const res = await fetch(`/api/reviews/view?n=${teacher?.n}&m=${teacher?.m}`, {
+        method: "GET",
+        headers: {
+          "Content-Type" : "application/json"
+        }
+      }
+      )
+      const data = await res.json();
+      console.log(data)
+      setReviews(data);
+    }
+    fetchReviews();
+  }, [teacher])
   return (
     <section className="">
       <main className="w-full px-10 mt-10 flex flex-1">
@@ -124,6 +143,12 @@ const TeacherPage = ({ teacher }) => {
         )}
       </main>
       <div className="border px-10 w-auto mx-10 mt-4"></div>
+      <div>
+        {reviews.length > 0 ? (
+          reviews.map((r, index) => 
+          <ReviewCase key={index} review={r}></ReviewCase>)
+        ) : loading ? (<div className="w-full ml-10 mt-4">Kraunama...</div>) : (<div className="w-full ml-10 mt-4">Įvertinimų nėra.</div>)}
+      </div>
       {form && <ReviewForm n={teacher?.n} m={teacher?.m} user={session?.user?.email} open={form} />}
     </section>
   );
