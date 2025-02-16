@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ReviewForm from "@/components/ReviewForm"
 import ReviewCase from "@/components/ReviewCase"
-
+import FilterParameter from "./FilterParameter";
 const TeacherPage = ({ teacher }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -15,6 +15,17 @@ const TeacherPage = ({ teacher }) => {
   const [schoolImage, setSchoolImage] = useState(null);
   const [form, setForm] = useState(false);
   const [reviews, setReviews] = useState([])
+  const parameters1 = [
+    'Nuo aukščiausio įvertinimo',
+    'Nuo žemiausio įvertinimo',
+  ]
+  const parameters2 = [
+    'Nuo naujausio',
+    'Nuo seniausio',
+  ]
+  const [active, setActive] = useState(false);
+  const [filter1, setFilter1] = useState(null);
+  const [filter2, setFilter2] = useState(null);
   useEffect(() => {
     if (!session?.user?.email || !teacher?.n || !teacher?.m) return;
 
@@ -142,12 +153,16 @@ const TeacherPage = ({ teacher }) => {
           </div>
         )}
       </main>
-      <div className="border px-10 w-auto mx-10 mt-4"></div>
-      <div>
-        {reviews.length > 0 ? (
+      <div className="border px-10 w-auto mx-10 mt-4 mb-6"></div>
+      <div className="w-full flex flex-wrap gap-y-2 gap-x-10 mx-10 mb-10">
+        <FilterParameter parameters={parameters1} filter={filter1} setFilter={setFilter1} type={'Įvertinimai'} active={active} setActive={setActive} />
+        <FilterParameter parameters={parameters2} filter={filter2} setFilter={setFilter2} type={'Laikas'}  active={active} setActive={setActive}/>
+      </div>
+      <div className="mb-8 grid gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center grid-flow-row">
+        {reviews.length > 0 && !form ? (
           reviews.map((r, index) => 
           <ReviewCase key={index} review={r}></ReviewCase>)
-        ) : loading ? (<div className="w-full ml-10 mt-4">Kraunama...</div>) : (<div className="w-full ml-10 mt-4">Įvertinimų nėra.</div>)}
+        ) : loading ? ('') : reviews.length > 0 ? ('') : reviews.length > 0  || form ? ('') : (<div className="w-full ml-10 mt-4">Įvertinimų nėra.</div>)}
       </div>
       {form && <ReviewForm n={teacher?.n} m={teacher?.m} user={session?.user?.email} open={form} />}
     </section>

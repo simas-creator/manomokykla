@@ -44,7 +44,7 @@ const FilterParameter = ({parameters, type, active, setActive, wFor, filter, set
         </button>
 
         {isOpen && (
-          <div className="absolute z-10 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden max-h-48 overflow-y-auto opacity-95">
+          <div className="absolute z-10 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden max-h-48 overflow-y-auto">
             <div className="text-sm text-red-400 hover:cursor-pointer pl-4 w-full py-2 hover:bg-gray-100" onClick={(e) => handleRemove(e)}>
               
               Naikinti filtrą

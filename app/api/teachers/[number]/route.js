@@ -11,7 +11,6 @@ export const GET = async (req, {params}) => {
         }
         return NextResponse.json({data}, { status: 200, 
             headers: {
-                "Cache-Control": "s-maxage=3600, stale-while-revalidate", 
                 "x-next-cache-tags": "teachers"
             },
          });
