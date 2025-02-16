@@ -1,4 +1,3 @@
-import React from "react";
 
 const StarRating = ({ r = 0, size = "sm", number = undefined }) => {
   const fullStars = Math.floor(r);

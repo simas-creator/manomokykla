@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Review from "@/lib/modals/review";
 import Teacher from "@/lib/modals/teacher";
 import connect from '@/lib/mongodb'
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 export async function POST(req) {
     try {
         await connect();
@@ -20,20 +20,19 @@ export async function POST(req) {
         if (alreadyExist) {
             return NextResponse.json({ message: "Jau įvertinote šį mokytoją." }, { status: 400 });
         }
-
+        let updatedTeacher;
         const rCount = await Review.countDocuments({n, m})
         if(rCount === 0) {
-            await Teacher.findOneAndUpdate({n, m}, {
+            updatedTeacher = await Teacher.findOneAndUpdate({n, m}, {
                 rating: ovrR
             })
             revalidateTag('teachers')
         } else {
             const teacher = await Teacher.findOne({n, m});
             const newR = ((rCount * teacher.rating + parseFloat(ovrR)) / (rCount + 1)).toFixed(1);
-            await Teacher.findOneAndUpdate({n, m}, {
+            updatedTeacher = await Teacher.findOneAndUpdate({n, m}, {
                 rating: newR
             })
-            console.log(newR)
         }
         console.log('ivertinimu skaicius: ', rCount)
 
@@ -51,8 +50,7 @@ export async function POST(req) {
         }
         const review = new Review(reviewData);
         await review.save();
-
-        return NextResponse.json({ message: "Įvertinimas išsaugotas sėkmingai!" }, { status: 200 });
+        return NextResponse.json({ message: "Įvertinimas išsaugotas sėkmingai!", updatedTeacher}, { status: 200 });
     } catch (error) {
         console.error("Server Error:", error);
         return NextResponse.json({ message: "Server error. Try again later." }, { status: 500 });

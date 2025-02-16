@@ -47,8 +47,9 @@ const TeacherPage = ({ teacher }) => {
         setLoading(false);
       }
     };
-
+    router.refresh()
     checkReview();
+    
   }, [session, teacher]); // Run when session or teacher changes
 
   const toggleForm = () => {
@@ -82,7 +83,7 @@ const TeacherPage = ({ teacher }) => {
         console.log("Failed to parse JSON:", error);
       }
     };
-    
+    router.refresh()
     fetchSchool();
   }, []);
   useEffect(() => {
@@ -101,7 +102,9 @@ const TeacherPage = ({ teacher }) => {
       console.log(data)
       setReviews(data);
     }
+    router.refresh()
     fetchReviews();
+    
   }, [teacher])
   return (
     <section className="">
@@ -119,7 +122,7 @@ const TeacherPage = ({ teacher }) => {
             </div>
           </div>
           <div>
-            <StarRating size="xl" number={"0"} />
+            <StarRating size="xl" number={"0"} r={teacher?.rating} />
             <div className="text-[15px] flex gap-2 font-title">
               Rekomenduoja ... žmonių
               <div>
@@ -127,7 +130,7 @@ const TeacherPage = ({ teacher }) => {
               </div>
             </div>
             {loading ? (<button className=" mt-2 px-4 py-2 border rounded-md border-primary text-primary">Kraunama...</button>): (form ? (
-                  <button onClick={() => toggleForm()} className="px-4 py-2 border border-gray-300 rounded-md text-gray-500">
+                  <button onClick={() => toggleForm()} className="mt-2 px-4 py-2 border border-gray-300 rounded-md text-gray-500">
                     Grįžti atgal
                   </button>
                 ) : (
@@ -153,16 +156,18 @@ const TeacherPage = ({ teacher }) => {
           </div>
         )}
       </main>
-      <div className="border px-10 w-auto mx-10 mt-4 mb-6"></div>
+      <div className={`border px-10 w-auto mx-10 mt-4 ${form ? '': 'mb-6'}`}></div>
+      {!form && 
       <div className="w-full flex flex-wrap gap-y-2 gap-x-10 mx-10 mb-10">
         <FilterParameter parameters={parameters1} filter={filter1} setFilter={setFilter1} type={'Įvertinimai'} active={active} setActive={setActive} />
         <FilterParameter parameters={parameters2} filter={filter2} setFilter={setFilter2} type={'Laikas'}  active={active} setActive={setActive}/>
-      </div>
+      </div>}
+      
       <div className="mb-8 grid gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center grid-flow-row">
         {reviews.length > 0 && !form ? (
           reviews.map((r, index) => 
           <ReviewCase key={index} review={r}></ReviewCase>)
-        ) : loading ? ('') : reviews.length > 0 ? ('') : reviews.length > 0  || form ? ('') : (<div className="w-full ml-10 mt-4">Įvertinimų nėra.</div>)}
+        ) : loading ? ('') : reviews.length > 0 ? ('') : reviews.length > 0  || form ? ('') : (<div className="w-full ml-20">Įvertinimų nėra.</div>)}
       </div>
       {form && <ReviewForm n={teacher?.n} m={teacher?.m} user={session?.user?.email} open={form} />}
     </section>

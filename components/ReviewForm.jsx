@@ -1,5 +1,6 @@
 import { useState} from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+
 const ReviewForm = ({ n, m, user, open }) => {
   const criteria = [
     "Gebėjimas perteikti žinias",
@@ -7,6 +8,7 @@ const ReviewForm = ({ n, m, user, open }) => {
     "Dalyko išmanymas",
   ];
   const router = useRouter();
+  const pathname = usePathname();
   // Initialize state with passed props
   const [jsonData, setJsonData] = useState({
     n, m, user, rec: true,
@@ -71,7 +73,7 @@ const ReviewForm = ({ n, m, user, open }) => {
       if (!res.ok) {
         throw new Error(responseData.message || "Klaida pateikiant įvertinimą");
       }
-  
+      sessionStorage.removeItem(`teacher-${pathname}`)
     } catch (error) {
       console.error("Fetch error:", error);
       alert(error.message || "Serverio klaida");

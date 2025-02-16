@@ -19,13 +19,14 @@ export default function Page() {
     const fetchTeacherData = async () => {
       try {
         const res = await fetch(`/api/url?path=${encodeURIComponent(pathname)}`);
-
+        
         if (!res.ok) {
           throw new Error("Failed to fetch teacher");
         }
 
         const data = await res.json();
         setTeacher(data);
+        console.log('teacher',teacher)
         sessionStorage.setItem(`teacher-${pathname}`, JSON.stringify(data));
       } catch (error) {
         console.error("Fetch failed:", error);
