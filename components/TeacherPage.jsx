@@ -27,8 +27,10 @@ const TeacherPage = ({ teacher }) => {
   const [filter1, setFilter1] = useState(null);
   const [filter2, setFilter2] = useState(null);
   useEffect(() => {
-    if (!session?.user?.email || !teacher?.n || !teacher?.m) return;
-
+    if (!session?.user?.email || !teacher?.n || !teacher?.m){
+      setLoading(false);
+      return;
+    }
     const checkReview = async () => {
       try {
         const res = await fetch(
@@ -129,19 +131,26 @@ const TeacherPage = ({ teacher }) => {
                 <Image width={24} height={24} alt={``} src={`/images/thumbs-up.svg`} />
               </div>
             </div>
-            {loading ? (<button className=" mt-2 px-4 py-2 border rounded-md border-primary text-primary">Kraunama...</button>): (form ? (
-                  <button onClick={() => toggleForm()} className="mt-2 px-4 py-2 border border-gray-300 rounded-md text-gray-500">
-                    Grįžti atgal
-                  </button>
-                ) : (
-                  <button
-                    className="px-4 py-2 border mt-2 rounded-md border-primary text-primary"
-                    onClick={() => toggleForm()}
-                    disabled={alreadyReviewed} // Prevent clicking if already reviewed
-                  >
-                    {alreadyReviewed ? "Jūs jau įvertinote" : "Įvertinti"}
-                  </button>
-                ))}
+        {loading ? (
+          <button className="mt-2 px-4 py-2 border rounded-md border-primary text-primary">
+            Kraunama...
+          </button>
+        ) : form ? (
+          <button
+            onClick={() => toggleForm()}
+            className="mt-2 px-4 py-2 border border-gray-300 rounded-md text-gray-500"
+          >
+            Grįžti atgal
+          </button>
+        ) : (
+          <button
+            className="px-4 py-2 border mt-2 rounded-md border-primary text-primary"
+            onClick={() => toggleForm()}
+            disabled={alreadyReviewed} // Prevent clicking if already reviewed
+          >
+            {alreadyReviewed ? "Jūs jau įvertinote" : "Įvertinti"}
+          </button>
+        )}
             
           </div>
         </div>
