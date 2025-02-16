@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Review from "@/lib/modals/review";
 import Teacher from "@/lib/modals/teacher";
 import connect from '@/lib/mongodb'
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 export async function POST(req) {
     try {
         await connect();

@@ -50,7 +50,7 @@ const TeacherPage = ({ teacher }) => {
     router.refresh()
     checkReview();
     
-  }, [session, teacher]); // Run when session or teacher changes
+  }, [session]); // Run when session or teacher changes
 
   const toggleForm = () => {
     if (!session) {
