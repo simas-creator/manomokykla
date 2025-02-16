@@ -5,7 +5,7 @@ import connect from '@/lib/mongodb'
 import { revalidateTag } from "next/cache";
 export async function POST(req) {
     try {
-        const db = await connect();
+        await connect();
         const body = await req.json();
         let { user, n, m, rec, criterion1, criterion2, criterion3, comment } = body;
         console.log("checking", n)
