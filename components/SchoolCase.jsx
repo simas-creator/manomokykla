@@ -60,7 +60,7 @@ const SchoolCase = ({
     if (!str) return "";
     if(str === `${undefined} ${undefined}` && n === 12) {
       return "Vardas Pavardė"
-    } else if (str === `undefined` && n === 30) {
+    } else if (str === `undefined` && n === 22) {
       return "Atsiliepimas..."
     }
     return str.length > n ? str.slice(0, n) + "..." : str;
@@ -99,7 +99,7 @@ const SchoolCase = ({
                 xmlns="http://www.w3.org/2000/svg"
                 className={`h-5 w-5 ${
                   index < Math.round(rating)
-                    ? "text-yellow-400"
+                    ? "text-orange-400"
                     : "text-gray-300"
                 }`}
                 viewBox="0 0 20 20"
@@ -118,6 +118,9 @@ const SchoolCase = ({
               <div className="flex items-center">
                 {/* Profile Picture */}
                 <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                  {teacher?.imageUrl ? (
+                    <img src={teacher.imageUrl} className="w-7 h-7 object-cover" />
+                  ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-6 w-6 text-gray-500"
@@ -126,6 +129,8 @@ const SchoolCase = ({
                   >
                     <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                   </svg>
+                  )}
+                  
                 </div>
                 <div className="flex flex-col">
                   <p className="ml-2 text-sm text-gray-500">Mokytojas(-a)</p>
@@ -135,7 +140,7 @@ const SchoolCase = ({
 
               {/* Review Text */}
               <div className="text-sm text-gray-600 line-clamp-2">
-                {truncate(`${teachers[index]?.comment}`, 30)}
+                {truncate(`${teacher?.reviews[0]?.comment}`, 22)}
               </div>
             </div> 
           ))}

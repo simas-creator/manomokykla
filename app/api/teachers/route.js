@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import Teacher from '@/lib/modals/teacher';
 import connect from '@/lib/mongodb';
-import School from '@/lib/modals/school';
 import { revalidateTag } from 'next/cache';
 
 export const POST = async (req) => {
@@ -88,9 +87,7 @@ export const POST = async (req) => {
             user,
             status: "pending",
         });
-        if (teacherCount + 1 < 2) {
-            await School.updateOne({ n: n }, { $push: { teachers: teacher } });
-        }
+
         await teacher.save();
         revalidateTag('teachers');
         return NextResponse.json({ message: 'Mokytojas pridetas' }, { status: 200 });

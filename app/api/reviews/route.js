@@ -42,7 +42,7 @@ export async function POST(req) {
       : ((rCount * teacher.rating + parseFloat(ovrR)) / (rCount + 1)).toFixed(1);
 
     const updatedTeacher = await Teacher.findOneAndUpdate({ n, m }, { rating: newR }, { new: true });
-
+    
     // Update school rating
     const teachersInSchool = await Teacher.find({ n });
     if (teachersInSchool.length > 0) {
@@ -63,8 +63,32 @@ export async function POST(req) {
     };
 
     const review = new Review(reviewData);
+
+    const update2 = await Teacher.findOne({ n, m });
+
+    if (update2 && comment) {
+      // Ensure reviews array exists
+      update2.reviews = update2.reviews || [];
+
+      // Count existing reviews
+      const numberOfReviews = update2.reviews.length;
+
+      // Push new review only if less than 2 reviews exist
+      if (numberOfReviews < 2) {
+        update2.reviews.push(review);
+        await update2.save();
+      }
+    }
+
+    if(rec) {
+      await Teacher.findOneAndUpdate({n, m}, {
+        $inc: {rec: 1}
+      }) 
+    }
     revalidateTag(`school-${n}`)
     await review.save();
+
+   
 
     return NextResponse.json({ message: "Įvertinimas išsaugotas sėkmingai!", updatedTeacher }, { status: 200 });
 

@@ -9,7 +9,7 @@ import FilterParameter from "./FilterParameter";
 const TeacherPage = ({ teacher }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [alreadyReviewed, setAlreadyReviewed] = useState(false);
+  const [alreadyReviewed, setAlreadyReviewed] = useState(null);
   const [loading, setLoading] = useState(true);
   const [school, setSchool] = useState(null);
   const [schoolImage, setSchoolImage] = useState(null);
@@ -32,6 +32,7 @@ const TeacherPage = ({ teacher }) => {
       return;
     }
     const checkReview = async () => {
+      setLoading(true);
       try {
         const res = await fetch(
           `/api/reviews/check?user=${session.user.email}&n=${teacher.n}&m=${teacher.m}`
@@ -52,7 +53,7 @@ const TeacherPage = ({ teacher }) => {
     router.refresh()
     checkReview();
     
-  }, [session]); // Run when session or teacher changes
+  }, [session, teacher]);
 
   const toggleForm = () => {
     if (!session) {
@@ -126,31 +127,44 @@ const TeacherPage = ({ teacher }) => {
           <div>
             <StarRating size="xl" number={"0"} r={teacher?.rating} />
             <div className="text-[15px] flex gap-2 font-title">
-              Rekomenduoja ... žmonių
-              <div>
-                <Image width={24} height={24} alt={``} src={`/images/thumbs-up.svg`} />
-              </div>
+
+            {!loading && teacher?.rec !== 0 && (
+              <>
+                <p>
+                  {`Rekomenduoja ${teacher?.rec} ${
+                    teacher?.rec % 10 === 1 && !(teacher?.rec >= 11 && teacher?.rec <= 19) ? "žmogus" : teacher?.rec % 10 === 0 || (teacher?.rec >= 11 && teacher?.rec <= 19) ? 
+                    "žmonių" : "žmonės"
+                  }`}
+                </p>
+                <div>
+                  <Image width={24} height={24} alt="Thumbs up" src="/images/thumbs-up.svg" />
+                </div>
+              </>
+            )}
+
+
+
+             
+              
             </div>
-        {loading ? (
-          <button className="mt-2 px-4 py-2 border rounded-md border-primary text-primary">
-            Kraunama...
-          </button>
-        ) : form ? (
-          <button
-            onClick={() => toggleForm()}
-            className="mt-2 px-4 py-2 border border-gray-300 rounded-md text-gray-500"
-          >
-            Grįžti atgal
-          </button>
-        ) : (
-          <button
-            className="px-4 py-2 border mt-2 rounded-md border-primary text-primary"
-            onClick={() => toggleForm()}
-            disabled={alreadyReviewed} // Prevent clicking if already reviewed
-          >
-            {alreadyReviewed ? "Jūs jau įvertinote" : "Įvertinti"}
-          </button>
-        )}
+            {loading ? (
+              <button className="mt-2 px-4 py-2 border rounded-md border-primary text-primary">
+                Kraunama...
+              </button>
+            ) : alreadyReviewed !== null ? (
+              <button
+                className="px-4 py-2 border mt-2 rounded-md border-primary text-primary"
+                onClick={() => toggleForm()}
+                disabled={alreadyReviewed} 
+              >
+                {alreadyReviewed ? "Jūs jau įvertinote" : "Įvertinti"}
+              </button>
+            ) : (
+              <button className="mt-2 px-4 py-2 border rounded-md border-primary text-primary">
+                Kraunama...
+              </button>
+            )}
+
             
           </div>
         </div>
