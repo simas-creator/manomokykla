@@ -16,7 +16,7 @@ export const POST = async (req) => {
 
         await connect();
 
-        const teacherCount = await Teacher.countDocuments({ n: n });
+        const teacherCount = await Teacher.countDocuments({ n });
 
         switch (subj) {
             case 'Biologija':
@@ -70,8 +70,6 @@ export const POST = async (req) => {
             case 'Dailė':
                 imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/dail.png";
                 break;
-            
-                
             default:
                 imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/profesorius.png";
                 break;
@@ -90,8 +88,7 @@ export const POST = async (req) => {
             user,
             status: "pending",
         });
-
-        if (teacherCount < 2) {
+        if (teacherCount + 1 < 2) {
             await School.updateOne({ n: n }, { $push: { teachers: teacher } });
         }
         await teacher.save();
