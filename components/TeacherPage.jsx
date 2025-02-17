@@ -27,88 +27,40 @@ const TeacherPage = ({ teacher }) => {
   const [filter1, setFilter1] = useState(null);
   const [filter2, setFilter2] = useState(null);
   useEffect(() => {
-    if (!session?.user?.email || !teacher?.n || !teacher?.m){
-      setLoading(false);
-      return;
-    }
-    const checkReview = async () => {
+    if (!teacher?.n || !teacher?.m || !session?.user?.email) return;
+  
+    const fetchData = async () => {
       setLoading(true);
+  
       try {
-        const res = await fetch(
-          `/api/reviews/check?user=${session.user.email}&n=${teacher.n}&m=${teacher.m}`
-        );
-        const data = await res.json();
-
-        if (res.ok && data.exists) {
-          setAlreadyReviewed(true);
-        } else {
-          setAlreadyReviewed(false);
+        const [reviewRes, schoolRes, reviewsRes] = await Promise.all([
+          fetch(`/api/reviews/check?user=${session.user.email}&n=${teacher.n}&m=${teacher.m}`),
+          fetch(`/api/schools/byn?n=${teacher.n}`),
+          fetch(`/api/reviews/view?n=${teacher.n}&m=${teacher.m}`)
+        ]);
+  
+        const [reviewData, schoolData, reviewsData] = await Promise.all([
+          reviewRes.json(),
+          schoolRes.json(),
+          reviewsRes.json()
+        ]);
+  
+        if (reviewRes.ok) setAlreadyReviewed(reviewData.exists);
+        if (schoolRes.ok) {
+          setSchool(schoolData.data);
+          setSchoolImage(schoolData.image);
         }
+        if (reviewsRes.ok) setReviews(reviewsData);
       } catch (error) {
-        console.error("Error checking review:", error);
+        console.log("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
-    router.refresh()
-    checkReview();
-    
-  }, [session, teacher]);
-
-  const toggleForm = () => {
-    if (!session) {
-      router.push('/prisijungti');
-      return;
-    }
-    if (alreadyReviewed) {
-      return;
-    }
-    setForm(!form);
-  };
-
-  useEffect(() => {
-    if (!teacher?.n) return;
-    const fetchSchool = async () => {
-      const res = await fetch(`/api/schools/byn?n=${teacher?.n}`, { next: { revalidate: 3000 } });
-
-      if (!res.ok) {
-        console.log("Fetch failed with status:", res.status);
-        return;
-      }
-
-      const object = await res.json();
-
-      try {
-        const { data, image } = object;
-        setSchool(data);
-        setSchoolImage(image);
-      } catch (error) {
-        console.log("Failed to parse JSON:", error);
-      }
-    };
-    router.refresh()
-    fetchSchool();
-  }, []);
-  useEffect(() => {
-    const fetchReviews = async () => {
-      if(!teacher?.n || !teacher?.m) {
-        return;
-      }
-      const res = await fetch(`/api/reviews/view?n=${teacher?.n}&m=${teacher?.m}`, {
-        method: "GET",
-        headers: {
-          "Content-Type" : "application/json"
-        }
-      }
-      )
-      const data = await res.json();
-      console.log(data)
-      setReviews(data);
-    }
-    router.refresh()
-    fetchReviews();
-    
-  }, [teacher])
+  
+    fetchData();
+  }, [teacher, session]);
+  
   return (
     <section className="">
       <main className="w-full px-10 mt-10 flex flex-1">
@@ -128,7 +80,7 @@ const TeacherPage = ({ teacher }) => {
             <StarRating size="xl" number={"0"} r={teacher?.rating} />
             <div className="text-[15px] flex gap-2 font-title">
 
-            {!loading && teacher?.rec !== 0 && (
+            {!loading && teacher?.rec !== 0 && typeof teacher?.rec === 'number' && (
               <>
                 <p>
                   {`Rekomenduoja ${teacher?.rec} ${
@@ -140,11 +92,7 @@ const TeacherPage = ({ teacher }) => {
                   <Image width={24} height={24} alt="Thumbs up" src="/images/thumbs-up.svg" />
                 </div>
               </>
-            )}
-
-
-
-             
+            )}         
               
             </div>
             {loading ? (
