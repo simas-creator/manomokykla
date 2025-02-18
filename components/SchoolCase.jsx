@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const SchoolCase = ({
   school = {
@@ -53,9 +54,6 @@ const SchoolCase = ({
   useEffect(() => {
     getTeachers(setTeachers, school);
   }, [school.n]);
-  const handleLinkClick = () => {
-  router.push(`/perziureti-mokyklas/${id}-${school.n}`);
-};
   const truncate = useCallback((str, n) => {
     if (!str) return "";
     if(str === `${undefined} ${undefined}` && n === 12) {
@@ -147,11 +145,7 @@ const SchoolCase = ({
         </div>
 
         {/* Button */}
-        <button onClick={() => handleLinkClick()} className="mt-4 bg-primary self-start rounded-md px-5 py-2 text-white font-medium hover:opacity-80">
-          Plačiau
-        
-        </button>
-        
+        <Link prefetch href={`/perziureti-mokyklas/${id}-${school.n}`} className="mt-4 bg-primary self-start rounded-md px-5 py-2 text-white font-medium hover:opacity-80">Plačiau</Link>
       </div>
     </div>
   );
