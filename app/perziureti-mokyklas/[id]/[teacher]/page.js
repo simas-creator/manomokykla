@@ -21,7 +21,7 @@ export default function Page() {
         const res = await fetch(`/api/url?path=${encodeURIComponent(pathname)}`);
         
         if (!res.ok) {
-          throw new Error("Failed to fetch teacher");
+          console.log('ivyko klaida')
         }
 
         const data = await res.json();

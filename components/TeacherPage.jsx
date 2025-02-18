@@ -27,10 +27,11 @@ const TeacherPage = ({ teacher }) => {
   const [filter1, setFilter1] = useState(null);
   const [filter2, setFilter2] = useState(null);
   useEffect(() => {
-    if (!teacher?.n || !teacher?.m || !session?.user?.email) return;
-  
+    if (!teacher?.n || !teacher?.m || !session?.user?.email) {
+      setLoading(false);
+      return;
+    }
     const fetchData = async () => {
-      setLoading(true);
   
       try {
         const [reviewRes, schoolRes, reviewsRes] = await Promise.all([
@@ -53,6 +54,7 @@ const TeacherPage = ({ teacher }) => {
         if (reviewsRes.ok) setReviews(reviewsData);
       } catch (error) {
         console.log("Error fetching data:", error);
+
       } finally {
         setLoading(false);
       }
@@ -60,7 +62,15 @@ const TeacherPage = ({ teacher }) => {
   
     fetchData();
   }, [teacher, session]);
-  
+  const toggleForm = () => {
+    if(!session) {
+      router.push('/prisijungti')
+      return
+    }
+    if(!form) {
+      setForm(true);
+    }
+  }
   return (
     <section className="">
       <main className="w-full px-10 mt-10 flex flex-1">
@@ -99,6 +109,8 @@ const TeacherPage = ({ teacher }) => {
               <button className="mt-2 px-4 py-2 border rounded-md border-primary text-primary">
                 Kraunama...
               </button>
+            ) : form===true ? (
+              <button onClick={() => setForm(false)} className="px-4 py-2 border rounded-md my-2">Grįžti atgal</button>
             ) : alreadyReviewed !== null ? (
               <button
                 className="px-4 py-2 border mt-2 rounded-md border-primary text-primary"
@@ -107,6 +119,8 @@ const TeacherPage = ({ teacher }) => {
               >
                 {alreadyReviewed ? "Jūs jau įvertinote" : "Įvertinti"}
               </button>
+            ) : !session ? (
+              <button onClick={() => toggleForm()} className="px-4 py-2 border mt-2 rounded-md border-primary text-primary">Įvertinti</button>
             ) : (
               <button className="mt-2 px-4 py-2 border rounded-md border-primary text-primary">
                 Kraunama...
