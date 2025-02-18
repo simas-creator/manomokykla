@@ -69,7 +69,7 @@ const SchoolPage = ({School}) => {
   
   return (
     <section>
-        <main className='px-10 mt-10 w-auto flex flex-col'>
+        <main className='px-6 sm:px-10 mt-10 w-auto flex flex-col'>
 
             <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row">
               <div>

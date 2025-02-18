@@ -11,7 +11,7 @@ const ReviewCase = ({review}) => {
 
 
 
-        <div className={`border border-black rounded-xl px-4 ${!comment ? 'h-32 w-64' : 'h-fit w-72'}`}>
+        <div className={`border border-black rounded-xl px-4 ${!comment ? 'h-32 sm:w-64 w-[80%]' : 'h-fit w-[85%] sm:w-72'}`}>
             <div className="flex items-center justify-between pt-3">
                 <div>
                     <StarRating r={rating}/>

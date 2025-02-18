@@ -73,7 +73,7 @@ const TeacherPage = ({ teacher }) => {
   }
   return (
     <section className="">
-      <main className="w-full px-10 mt-10 flex flex-1">
+      <main className="w-full px-6 mt-10 flex flex-1 sm:px-10">
         <div>
           <div className="flex gap-3 flex-col md:flex-row md:items-center flex-wrap">
             <div className="p-3 rounded-full border-2 overflow-hidden w-20 h-20">
@@ -141,9 +141,9 @@ const TeacherPage = ({ teacher }) => {
           </div>
         )}
       </main>
-      <div className={`border px-10 w-auto mx-10 mt-4 ${form ? '': 'mb-6'}`}></div>
+      <div className={`border px-10 w-auto mx-6 sm:mx-10 mt-4 ${form ? '': 'mb-6'}`}></div>
       {!form && 
-      <div className="w-full flex flex-wrap gap-y-2 gap-x-10 mx-10 mb-10">
+      <div className="w-full flex flex-wrap gap-y-2 gap-x-10 mx-6 sm:mx-10 mb-10">
         <FilterParameter parameters={parameters1} filter={filter1} setFilter={setFilter1} type={'Įvertinimai'} active={active} setActive={setActive} />
         <FilterParameter parameters={parameters2} filter={filter2} setFilter={setFilter2} type={'Laikas'}  active={active} setActive={setActive}/>
       </div>}
