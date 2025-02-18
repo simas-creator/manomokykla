@@ -1,7 +1,10 @@
+import { useState } from "react";
 import StarRating from "./StarRating"
+import Popup from "@/components/Popup"
 const ReviewCase = ({review}) => {
     const {criterion1, criterion2, criterion3, user, comment, createdAt, rec} = review
     const rating = (criterion1 + criterion2 + criterion3) / 3;
+    const [open, setOpen] = useState()
     const date = new Date(createdAt);
     const formatedDate = date.toISOString().split("T")[0];
   return (
@@ -29,7 +32,9 @@ const ReviewCase = ({review}) => {
                     {formatedDate}
                 </p>
                 <div className="">
-                    <button className="px-5 py-2 btn btn-primary btn-outline">Išsamiau</button>
+                    <button onClick={() => setOpen(true)} className="px-5 py-2 btn btn-primary btn-outline">Išsamiau</button>
+                    {open && <Popup isOpen={open} setOpen={setOpen} review={review}/>}
+                    
                 </div>
             </div>
         </div>
