@@ -6,16 +6,42 @@ import StarRating from "@/components/StarRating";
 import SearchBar from "@/components/SearchBar";
 import FilterParameter from "./FilterParameter";
 import TeacherForm from "@/components/TeacherForm"
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+const decodeSub = (str) => {
+  const stringMap = {
+    "biologija": "Biologija",
+    "chemija": "Chemija",
+    "daile": "Dailė",
+    "ekonomika": "Ekonomika",
+    "fizika": "Fizika",
+    "geografija": "Geografija",
+    "informacinestechnologijos": "Informacinės technologijos",
+    "istorija": "Istorija",
+    "fizinisugdymas": "Fizinis ugdymas",
+    "lietuviukalbairliteratura": "Lietuvių kalba ir literatūra",
+    "matematika": "Matematika",
+    "muzika": "Muzika",
+    "technologijos": "Technologijos",
+    "anglu": "Anglų",
+    "prancuzu": "Prancūzų",
+    "rusu": "Rusų",
+    "vokieciu": "Vokiečių"
+  };
+  return stringMap[str] || str
+}
 const SchoolPage = ({School}) => {
   const { data: session, status } = useSession()
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const queries = Object.fromEntries(searchParams.entries());
+  console.log(queries[0])
+  console.log(queries);
   const [loading, setLoading] = useState(true);
   const [teachers, setTeachers] = useState([]);
   const [form, setForm] = useState(false);
   const [schoolRating, setSchoolRating] = useState(0);
   const [active, setActive] = useState(false);
-  const [filter, setFilter] = useState(null);
+  const [filter, setFilter] = useState(decodeSub(queries['dalykas']));
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState();
   const subjects = [
@@ -37,6 +63,7 @@ const SchoolPage = ({School}) => {
     "Rusų",
     "Vokiečių"
   ];
+  
   const handleForm = () => {
     if(status !== "authenticated") {
       router.push("/prisijungti")
@@ -51,13 +78,13 @@ const SchoolPage = ({School}) => {
       setLoading(true); // Start loading
       
       try {
-        const response = await fetch(`/api/teachers/${School.n}`);
+        const response = await fetch(`/api/teachers/${School.n}?dalykas=${queries['dalykas']}`);
         if (!response.ok) throw new Error("Failed to fetch teachers");
   
         const obj = await response.json();
         setTeachers(obj.data);
       } catch (error) {
-        console.error("Error fetching teachers:", error);
+        console.log("Error fetching teachers:", error);
       } finally {
         setLoading(false); // Stop loading
       }
@@ -110,7 +137,7 @@ const SchoolPage = ({School}) => {
           <div className="px-6">
               <SearchBar setSearch={setSearch} parameter={"Ieškokite mokytojo"} />
               {School.type === 'Gimnazija' && <div className="lg:max-w-screen-lg pl-6 pr-4 m-auto">
-                <FilterParameter type={"Dalykas"} parameters={subjects} active={active} setActive={setActive} filter={filter} setFilter={setFilter}/>
+                <FilterParameter type={"Dalykas"} parameters={subjects} active={active} setActive={setActive} filter={filter || decodeSub(queries['dalykas'])} setFilter={setFilter}/>
               </div>}
               
         </div>
