@@ -120,7 +120,7 @@ const TeacherForm = ({School}) => {
             type="text"
             id="subject"
             name="subject"
-            onChange={handleData}
+            onChange={(e) => setSubj(e.target.value)}
             className="input input-bordered input-primary w-full"                
             />
         </div>)}

@@ -16,6 +16,8 @@ const SchoolPage = ({School}) => {
   const [schoolRating, setSchoolRating] = useState(0);
   const [active, setActive] = useState(false);
   const [filter, setFilter] = useState(null);
+  const [search, setSearch] = useState('');
+  const [filteredData, setFilteredData] = useState();
   const subjects = [
     "Biologija",
     "Chemija",
@@ -60,12 +62,19 @@ const SchoolPage = ({School}) => {
         setLoading(false); // Stop loading
       }
     }
-  
+    
     getTeachers();
     console.log(teachers)
     setSchoolRating(School.rating);
   }, [School]);
-  
+  useEffect(() => {
+    if(!search) { 
+      setFilteredData(teachers) 
+    } else {
+      setFilteredData(teachers.filter((teacher) => (`${teacher.name.toLowerCase()} ${teacher.surname.toLowerCase()}`).includes(search.toLowerCase())))
+    }
+    
+  }, [search, teachers])
   
   return (
     <section>
@@ -90,7 +99,7 @@ const SchoolPage = ({School}) => {
             </div>
             
             <div className="mt-3 lg:max-w-screen-lg z-10">
-              <button onClick={() => handleForm()} className="w-auto px-4 py-2 border rounded-lg border-primary transition-colors text-primary font-medium hover:text-black text-sm hover:bg-primary">Pridėti mokytoją</button>
+              <button onClick={() => handleForm()} className="w-auto px-4 py-2 border rounded-lg border-primary transition-colors text-primary font-medium hover:text-black text-sm hover:bg-primary">Pridėti {School.type === 'Gimnazija' ? ('mokytoją'): ('dėstytoją')}</button>
             </div>
             
             <div className='border mt-6'></div>
@@ -99,10 +108,11 @@ const SchoolPage = ({School}) => {
         </main>
         {form === false ? (<div>
           <div className="px-6">
-              <SearchBar parameter={"Ieškokite mokytojo"} />
-              <div className="lg:max-w-screen-lg pl-6 pr-4 m-auto">
+              <SearchBar setSearch={setSearch} parameter={"Ieškokite mokytojo"} />
+              {School.type === 'Gimnazija' && <div className="lg:max-w-screen-lg pl-6 pr-4 m-auto">
                 <FilterParameter type={"Dalykas"} parameters={subjects} active={active} setActive={setActive} filter={filter} setFilter={setFilter}/>
-              </div>
+              </div>}
+              
         </div>
         <div>
   {loading ? (
@@ -112,7 +122,7 @@ const SchoolPage = ({School}) => {
   ) : teachers.length > 0 ? (
     <>
       <div className="w-full mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 px-10 justify-items-center mb-6">
-        {teachers.map((teacher, index) => (
+        {filteredData.map((teacher, index) => (
           <TeacherCase key={index} teacher={teacher} />
         ))}
         
@@ -128,11 +138,11 @@ const SchoolPage = ({School}) => {
     </>
   ) : (
     <div className="p-10 w-full flex justify-center items-center flex-col">
-      <div>Mokytojų nerasta.</div>
+      <div>{School.type === 'Gimnazija' ? ('Mokytojų'): ('Dėstytojų')} nerasta.</div>
       
       <div className="w-full px-2 py-8">
         <p>
-          Nematote savo mokytojo?{" "}
+          Nematote savo {School.type === 'Gimnazija' ? ('mokytojo'): ('dėstytojo')} ?{" "}
           <span onClick={() => handleForm()} className="hover:cursor-pointer hover:underline text-primary">
             Pridėti
           </span>

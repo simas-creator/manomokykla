@@ -1,5 +1,5 @@
 
-const SearchBar = ({parameter}) => {
+const SearchBar = ({parameter, setSearch}) => {
   return (
     <div className="p-6 lg:max-w-screen-lg m-auto">
         <div className="relative flex items-center">
@@ -23,6 +23,7 @@ const SearchBar = ({parameter}) => {
             name="search"
             className="h-12 w-full pl-10 pr-6 rounded-full border border-gray-200 bg-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary transition duration-200"
             placeholder={parameter}
+            onChange={(e) => setSearch(e.target.value)}
             />
         </div>
       </div>

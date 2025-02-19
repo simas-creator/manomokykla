@@ -115,7 +115,7 @@ const SchoolCase = ({
             <div key={index} className="flex flex-col items-start gap-2">
               <div className="flex items-center">
                 {/* Profile Picture */}
-                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 border-2 rounded-full flex items-center justify-center overflow-hidden">
                   {teacher?.imageUrl ? (
                     <img src={teacher.imageUrl} className="w-7 h-7 object-cover" />
                   ) : (

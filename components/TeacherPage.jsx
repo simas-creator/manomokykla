@@ -26,6 +26,7 @@ const TeacherPage = ({ teacher }) => {
   const [active, setActive] = useState(false);
   const [filter1, setFilter1] = useState(null);
   const [filter2, setFilter2] = useState(null);
+
   useEffect(() => {
     if (!teacher?.n || !teacher?.m || !session?.user?.email) {
       setLoading(false);
@@ -154,7 +155,7 @@ const TeacherPage = ({ teacher }) => {
           <ReviewCase key={index} review={r}></ReviewCase>)
         ) : loading ? ('') : reviews.length > 0 ? ('') : reviews.length > 0  || form ? ('') : (<div className="w-full ml-20">Įvertinimų nėra.</div>)}
       </div>
-      {form && <ReviewForm n={teacher?.n} m={teacher?.m} user={session?.user?.email} open={form} />}
+      {form && <ReviewForm n={teacher?.n} m={teacher?.m} user={session?.user?.email} open={form} type={school.type} />}
     </section>
   );
 };

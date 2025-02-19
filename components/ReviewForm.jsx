@@ -1,7 +1,7 @@
 import { useState} from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-const ReviewForm = ({ n, m, user, open }) => {
+const ReviewForm = ({ n, m, user, open, type}) => {
   const criteria = [
     "Gebėjimas perteikti žinias",
     "Gebėjimas bendrauti su mokiniais",
@@ -90,7 +90,7 @@ const ReviewForm = ({ n, m, user, open }) => {
         <div className="w-full px-10 mb-8 items-center mx-auto">
           <div className="mx-auto max-w-screen-md mt-4 p-6 bg-white shadow-lg rounded-xl border border-gray-200">
             <h3 className="text-2xl font-semibold mb-8 mt-2 text-center font-title">
-              Įvertinkite mokytoją
+              Įvertinkite {type === 'Gimnazija' ? ('mokytoją') : ('dėstytoją')}
             </h3>
 
             {/* Rating Criteria */}
@@ -116,7 +116,7 @@ const ReviewForm = ({ n, m, user, open }) => {
 
             {/* Recommendation Section */}
             <div className="mt-6">
-              <p className="mb-2 font-medium text-gray-700">Ar rekomenduotum šį mokytoją?</p>
+              <p className="mb-2 font-medium text-gray-700">Ar rekomenduotum šį {type === 'Gimnazija' ? ('mokytoją') : ('dėstytoją')} ?</p>
               <div className="flex gap-3">
                 <div
                   onClick={() => handleRec(true)}

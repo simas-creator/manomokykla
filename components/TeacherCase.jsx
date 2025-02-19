@@ -1,4 +1,5 @@
 'use client'
+import Link from "next/link";
 import { useRouter} from "next/navigation";
 import { useCallback } from "react";
 const TeacherCase = ({
@@ -52,7 +53,7 @@ const TeacherCase = ({
         
       </div>
       <div className="flex justify-end">
-        <button onClick={() => handleClick()} className="btn btn-primary btn-outline">Peržiūrėti</button>
+        <Link prefetch href={fullUrl} className="btn btn-primary btn-outline">Peržiūrėti</Link>
       </div>
     </div>
   );
