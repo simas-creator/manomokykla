@@ -1,5 +1,5 @@
 'use client';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import FilterParameter from '@/components/FilterParameter';
 import SchoolCase from '@/components/SchoolCase';
@@ -16,7 +16,7 @@ const PageContent = () => {
   const types = ["Gimnazija", "Universitetas", "Profesinė mokykla"];
   const best = ["Nuo aukščiausio", "Nuo žemiausio"];
   const [active, setActive] = useState(null);
-
+  const [page, setPage] = useState(1)
   const queriesObject = Object.fromEntries(searchParams.entries());
 
   const decodeLithuanianChars = (str) => {
@@ -44,8 +44,16 @@ const PageContent = () => {
   const [filter1, setFilter1] = useState(decodeLithuanianChars(queriesObject['apskritis']));
   const [filter2, setFilter2] = useState(decodeLithuanianChars(queriesObject['tipas']));
   const [filter3, setFilter3] = useState(decodeLithuanianChars(queriesObject['ivertinimai']));
-
+  const interRef = useRef(null)
   useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if(entries[0].isIntersecting) {
+        console.log('more data is being fetched')
+        fetchData();
+      }
+    }, { threshold: 1.0 }
+      
+    ,)
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -102,8 +110,8 @@ const PageContent = () => {
 
       <div className="grid w-full items-center justify-center">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 p-4 w-full max-w-screen-xl sm:justify-center sm:items-center">
-          {filteredData.map((school) => (
-            <SchoolCase key={`${school.apskritis}-${school.name}`} school={school} />
+          {filteredData.map((school, index) => (
+            <SchoolCase key={`${school.apskritis}-${school.name}`} school={school} ref={index === filteredData.length - 1 ? interRef : null}/>
           ))}
         </div>
       </div>
