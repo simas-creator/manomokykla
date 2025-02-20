@@ -2,10 +2,21 @@ import Image from "next/image"
 import StarRating from "./StarRating";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ReviewForm from "@/components/ReviewForm"
 import ReviewCase from "@/components/ReviewCase"
 import FilterParameter from "./FilterParameter";
+const decodeSub = (str) => {
+  if (!str) return ''; // Return an empty string or a default value
+  const subMap = {
+    'nuoauksciausioivertinimo' : 'Nuo aukščiausio įvertinimo',
+    'nuozemiausioivertinimo' : 'Nuo žemiausio įvertinimo',
+    'nuonaujausio' : 'Nuo naujausio',
+    'nuoseniausio': 'Nuo seniausio'
+  };
+  return subMap[str] || str;
+};
+
 const TeacherPage = ({ teacher }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -15,6 +26,7 @@ const TeacherPage = ({ teacher }) => {
   const [schoolImage, setSchoolImage] = useState(null);
   const [form, setForm] = useState(false);
   const [reviews, setReviews] = useState([])
+  const searchParams = useSearchParams();
   const parameters1 = [
     'Nuo aukščiausio įvertinimo',
     'Nuo žemiausio įvertinimo',
@@ -24,9 +36,9 @@ const TeacherPage = ({ teacher }) => {
     'Nuo seniausio',
   ]
   const [active, setActive] = useState(false);
-  const [filter1, setFilter1] = useState(null);
-  const [filter2, setFilter2] = useState(null);
-
+  const [filter1, setFilter1] = useState(decodeSub(searchParams.get('ivertinimai')));
+  const [filter2, setFilter2] = useState(decodeSub(searchParams.get('laikas')));
+  const pathname = usePathname()
   useEffect(() => {
     if (!teacher?.n || !teacher?.m || !session?.user?.email) {
       setLoading(false);
@@ -38,7 +50,7 @@ const TeacherPage = ({ teacher }) => {
         const [reviewRes, schoolRes, reviewsRes] = await Promise.all([
           fetch(`/api/reviews/check?user=${session.user.email}&n=${teacher.n}&m=${teacher.m}`),
           fetch(`/api/schools/byn?n=${teacher.n}`),
-          fetch(`/api/reviews/view?n=${teacher.n}&m=${teacher.m}`)
+          fetch(`/api/reviews/view?n=${teacher.n}&m=${teacher.m}&ivertinimai=${searchParams.get('ivertinimai')}&laikas=${searchParams.get('laikas')}`)
         ]);
   
         const [reviewData, schoolData, reviewsData] = await Promise.all([
@@ -46,7 +58,7 @@ const TeacherPage = ({ teacher }) => {
           schoolRes.json(),
           reviewsRes.json()
         ]);
-  
+        console.log(reviewsData)
         if (reviewRes.ok) setAlreadyReviewed(reviewData.exists);
         if (schoolRes.ok) {
           setSchool(schoolData.data);
@@ -62,7 +74,7 @@ const TeacherPage = ({ teacher }) => {
     };
   
     fetchData();
-  }, [teacher, session]);
+  }, [teacher, session, searchParams]);
   const toggleForm = () => {
     if(!session) {
       router.push('/prisijungti')
@@ -72,9 +84,30 @@ const TeacherPage = ({ teacher }) => {
       setForm(true);
     }
   }
+  const handleBack = () => {
+    router.push(`${pathname.slice(0, pathname.lastIndexOf('/'))}`)
+  }
   return (
     <section className="">
-      <main className="w-full px-6 mt-10 flex flex-1 sm:px-10">
+      <button
+        onClick={handleBack}
+        className="flex sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-6 h-6 group-hover:-translate-x-1 transition-transform duration-300"
+          >
+            <path
+              fillRule="evenodd"
+              d="M15.707 4.293a1 1 0 010 1.414L10.414 11H20a1 1 0 110 2h-9.586l5.293 5.293a1 1 0 11-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <span className="font-medium">Atgal</span>
+        </button>
+      <main className="w-full px-6 mt-4 sm:mt-10 flex flex-1 sm:px-10">
         <div>
           <div className="flex gap-3 flex-col md:flex-row md:items-center flex-wrap">
             <div className="p-3 rounded-full border-2 overflow-hidden w-20 h-20">

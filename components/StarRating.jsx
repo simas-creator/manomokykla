@@ -9,7 +9,7 @@ const StarRating = ({ r = 0, size = "sm", number = undefined }) => {
   return (
     <div className="flex gap-1 items-center">
       <div className={`pr-1 text-gray-400 font-title ${size === "xl" ? "md:text-2xl text-lg" : "text-lg"}`}>
-        {r.toFixed(1)}
+        {r?.toFixed(1) || `0.0`}
       </div>
       <div className="flex">
         {[...Array(fullStars)].map((_, index) => (

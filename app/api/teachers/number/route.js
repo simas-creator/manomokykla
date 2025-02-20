@@ -1,3 +1,4 @@
+
 import Teacher from "@/lib/modals/teacher";
 import connect from "@/lib/mongodb";
 import { NextResponse } from "next/server";
@@ -23,16 +24,18 @@ const decodeSub = (str) => {
     };
     return stringMap[str] || str
   }
-export const GET = async (req, {params}) => {
+export const GET = async (req) => {
     await connect();
     try {
-        const number = (await params).number;
         const searchParams = req.nextUrl.searchParams;
         const query = Object.fromEntries(searchParams.entries());
         const filter = decodeSub(query['dalykas']);
+        const number = parseInt(query['school']);
         let data;
-        if(filter) {
-            data = await Teacher.find({n, filter})
+        console.log(filter)
+        if(filter && filter !== 'undefined') {
+            data = await Teacher.find({n: number, subject: filter})
+            console.log('hehe')
         } else data = await Teacher.find({n: number});
         if(!data) {
             return NextResponse.json({ message: 'No teacher found' }, { status: 404 });

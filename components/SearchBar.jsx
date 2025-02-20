@@ -1,5 +1,6 @@
 
 const SearchBar = ({parameter, setSearch}) => {
+
   return (
     <div className="p-6 lg:max-w-screen-lg m-auto">
         <div className="relative flex items-center">

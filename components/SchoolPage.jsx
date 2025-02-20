@@ -71,6 +71,9 @@ const SchoolPage = ({School}) => {
     }
     setForm(true);
   }
+  const handleBack = () => {
+    router.push('/perziureti-mokyklas'); // Navigates back to the clean URL (without search params)
+  };
   useEffect(() => {
     if (!School?.n) return;
   
@@ -78,7 +81,7 @@ const SchoolPage = ({School}) => {
       setLoading(true); // Start loading
       
       try {
-        const response = await fetch(`/api/teachers/${School.n}?dalykas=${queries['dalykas']}`);
+        const response = await fetch(`/api/teachers/number?school=${School.n}&dalykas=${queries['dalykas']}`);
         if (!response.ok) throw new Error("Failed to fetch teachers");
   
         const obj = await response.json();
@@ -105,7 +108,25 @@ const SchoolPage = ({School}) => {
   
   return (
     <section>
-        <main className='px-6 sm:px-10 mt-10 w-auto flex flex-col'>
+        <button
+        onClick={handleBack}
+        className="flex sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-6 h-6 group-hover:-translate-x-1 transition-transform duration-300"
+          >
+            <path
+              fillRule="evenodd"
+              d="M15.707 4.293a1 1 0 010 1.414L10.414 11H20a1 1 0 110 2h-9.586l5.293 5.293a1 1 0 11-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <span className="font-medium">Atgal</span>
+        </button>
+        <main className='px-6 sm:px-10 mt-4 sm:mt-10 w-auto flex flex-col'>
 
             <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row">
               <div>
@@ -135,7 +156,7 @@ const SchoolPage = ({School}) => {
         </main>
         {form === false ? (<div>
           <div className="px-6">
-              <SearchBar setSearch={setSearch} parameter={"Ieškokite mokytojo"} />
+              <SearchBar setSearch={setSearch} parameter={`${School.type === 'Gimnazija' ? ('Ieškokite mokytojo') : ('Ieškokite dėstytojo')}`} />
               {School.type === 'Gimnazija' && <div className="lg:max-w-screen-lg pl-6 pr-4 m-auto">
                 <FilterParameter type={"Dalykas"} parameters={subjects} active={active} setActive={setActive} filter={filter || decodeSub(queries['dalykas'])} setFilter={setFilter}/>
               </div>}

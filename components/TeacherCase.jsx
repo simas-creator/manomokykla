@@ -1,12 +1,11 @@
 'use client'
 import Link from "next/link";
-import { useRouter} from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useCallback } from "react";
 const TeacherCase = ({
  teacher
 }) => {
-  const router = useRouter();
-  const url = window.location.href;
+
   const {rating, name, surname, subject, imageUrl} = teacher;
   const replaceLithuanianChars = useCallback((str) => {
       const charMap = {
@@ -24,11 +23,8 @@ const TeacherCase = ({
       .toLowerCase(); // Convert to lowercase
       
     }, []);
-  const fullUrl = `${url}/${replaceLithuanianChars(`${name}-${surname}`).toLowerCase()}-${teacher.m}`
-  const handleClick = () => {
-    router.push(`${fullUrl}`)
-    
-  }
+  const pathname = usePathname()
+  const fullUrl = `${pathname}/${replaceLithuanianChars(`${name}-${surname}`).toLowerCase()}-${teacher.m}`
   const truncate = (text, n) => {
     return text?.length > n ? text.slice(0, n - 1) + '...' : text;
   }
@@ -47,7 +43,7 @@ const TeacherCase = ({
         </h6>
         <p className="text-sm text-gray-600">{truncate(subject, 17)}</p>
         <div className='flex gap-1 items-center'>
-          <p>{rating.toFixed(1)}</p>
+          <p>{rating?.toFixed(1) || `0.0`}</p>
           <div className='mask mask-star-2 h-5 w-5 bg-orange-400'></div>
         </div>
         

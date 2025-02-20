@@ -78,7 +78,7 @@ export const POST = async (req) => {
         const teacher = new Teacher({
             name: first,
             surname,
-            rating: 0,
+            rating: '0.0',
             reviews: [],
             subject: subj,
             imageUrl,

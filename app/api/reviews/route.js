@@ -39,14 +39,15 @@ export async function POST(req) {
 
     const newR = rCount === 0 
       ? parseFloat(ovrR) 
-      : ((rCount * teacher.rating + parseFloat(ovrR)) / (rCount + 1)).toFixed(1);
+      : ((rCount * parseFloat(teacher.rating) + parseFloat(ovrR)) / (rCount + 1)).toFixed(1);
 
     const updatedTeacher = await Teacher.findOneAndUpdate({ n, m }, { rating: newR }, { new: true });
     
     // Update school rating
     const teachersInSchool = await Teacher.find({ n });
-    if (teachersInSchool.length > 0) {
-      const schoolR = (teachersInSchool.reduce((sum, t) => sum + parseFloat(t.rating), 0) / teachersInSchool.length).toFixed(1);
+    const filtered = teachersInSchool.filter((teacher) => teacher.rating > 0.0)
+    if (filtered.length > 0) {
+      const schoolR = (filtered.reduce((sum, t) => sum + parseFloat(t.rating), 0) / filtered.length).toFixed(1);
       await School.findOneAndUpdate({ n }, { rating: schoolR });
     }
 
