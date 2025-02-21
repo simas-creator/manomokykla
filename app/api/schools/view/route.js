@@ -2,7 +2,6 @@ import connect from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import School from "@/lib/modals/school";
 
-// Decode Lithuanian characters in query parameters
 const decodeLithuanianChars = (str) => {
   const wordMap = {
     "alytaus": "Alytaus",
@@ -26,54 +25,48 @@ const decodeLithuanianChars = (str) => {
 
 export const GET = async (req) => {
   const searchParams = req.nextUrl.searchParams;
-  
-  // Convert searchParams to an object and decode values
   const queries = Object.fromEntries([...searchParams]);
-  
-  // Decode Lithuanian characters in query parameters
-  const decodedQueries = {};
   let filter = {};
+  let page = parseInt(queries.pages) || 1; 
+  const limit = 6; 
+  const skip = (page - 1) * limit; 
+
+  const ivertinimai = queries.ivertinimai; 
+  delete queries.ivertinimai;
+
   for (let key in queries) {
-    if(key === 'ivertinimai') {
-      filter[key] = queries[key];
-      continue;
-    }
-    const decodedKey = decodeLithuanianChars(key);  // Decode the key
+    if (key === "pages") continue; 
+
+    const decodedKey = decodeLithuanianChars(key);
     const decodedValue = decodeLithuanianChars(queries[key]);
-    decodedQueries[decodedKey] = decodedValue;  // Store the new key-value pair
-  } 
-  
+    filter[decodedKey] = decodedValue;
+  }
+
+  console.log("Filter:", filter);
+  console.log("Sorting:", ivertinimai);
+
   try {
     await connect();
-    
-    let schools;
-    if (Object.keys(decodedQueries).length > 0) {
-      schools = await School.find(decodedQueries)
-      schools.sort((a, b) => a.name.localeCompare(b.name));
-    } else {
-      schools = await School.find();
-      schools.sort((a, b) => a.name.localeCompare(b.name));
-    }
 
-    if(Object.keys(filter).length > 0) {
-      for(let key in filter) {
-        if(filter[key] === 'nuoauksciausio') {
-          schools = schools.sort((a, b) => b.rating - a.rating)
-        } if(filter[key] === 'nuozemiausio') {
-          schools = schools.sort((a, b) => a.rating - b.rating)
-        }
-      }
-    }
-    
+    let schoolsQuery = School.find(filter)
+
+    if (ivertinimai === 'nuoauksciausio') {
+      schoolsQuery = schoolsQuery.sort({ rating: -1 }).skip(skip).limit(limit);
+    } else if (ivertinimai === 'nuozemiausio') {
+      schoolsQuery = schoolsQuery.sort({ rating: 1 }).skip(skip).limit(limit);
+    } else schoolsQuery = schoolsQuery.sort({name: -1}).skip(skip).limit(limit);
+    const schools = await schoolsQuery;
+    console.log(schools)
     return new NextResponse(JSON.stringify(schools), {
       status: 200,
       headers: {
-        "Cache-Control": "s-maxage=3600, stale-while-revalidate", 
+        "Cache-Control": "s-maxage=3600, stale-while-revalidate",
         "x-next-cache-tags": "schools"
       },
     });
+    
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
-    return NextResponse.json({ error: "Error connecting to MongoDB" }, { status: 500 });
+    console.log("Error fetching schools:", error);
+    return NextResponse.json({ error: "Error fetching schools" }, { status: 500 });
   }
 };

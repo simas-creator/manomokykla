@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const SchoolCase = ({
@@ -7,9 +6,8 @@ const SchoolCase = ({
     name: "",
     rating: 0.0,
     imgUrl: "",
-  }
+  }, ref
 }) => {
-  const router = useRouter();
   const rating = school.rating;
   const [teachers, setTeachers] = useState([]);
   const getTeachers = useCallback(async () => {
@@ -64,7 +62,7 @@ const SchoolCase = ({
     return str.length > n ? str.slice(0, n) + "..." : str;
   }, [])
   return (
-    <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg h-auto bg-white rounded-lg shadow-md border border-gray-200 flex flex-col">
+    <div ref={ref} className="w-full max-w-sm sm:max-w-md lg:max-w-lg h-auto bg-white rounded-lg shadow-md border border-gray-200 flex flex-col">
       {/* Image Section */}
       <div className="w-full h-36 overflow-hidden">
         <img

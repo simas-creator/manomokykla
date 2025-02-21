@@ -45,40 +45,54 @@ const PageContent = () => {
   const [filter2, setFilter2] = useState(decodeLithuanianChars(queriesObject['tipas']));
   const [filter3, setFilter3] = useState(decodeLithuanianChars(queriesObject['ivertinimai']));
   const interRef = useRef(null)
+  const fetchData = async () => {
+    if(loading) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/schools/view?${searchParams}&pages=${page}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+  
+      if (!res.ok) {
+        console.log("Error fetching data:", res.statusText);
+        setData([]);
+        return;
+      }
+  
+      const result = await res.json();
+      console.log(result)
+      setData(prevData => [...prevData, ...result]);
+
+      setPage(prev => prev + 1)
+    } catch (error) {
+      console.log("Fetch error:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      if(entries[0].isIntersecting) {
-        console.log('more data is being fetched')
-        fetchData();
-      }
-    }, { threshold: 1.0 }
-      
-    ,)
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/schools/view?${searchParams}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-
-        if (!res.ok) {
-          console.log("Error fetching data:", res.statusText);
-          setData([]);
-          return;
-        }
-
-        const result = await res.json();
-        setData(result);
-      } catch (error) {
-        console.log("Fetch error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
+    setData([]);
+    setPage(1);
     fetchData();
-  }, [searchParams]);
+  }, []);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          console.log("More data is being fetched");
+          fetchData(); 
+        }
+      },
+      { threshold: 1.0 }
+    );
+  
+    if (interRef.current) {
+      observer.observe(interRef.current);
+    }
+  
+    return () => observer.disconnect();
+  }, [data]);
 
   useEffect(() => {
     if (!search) {
