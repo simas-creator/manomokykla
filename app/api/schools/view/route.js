@@ -27,36 +27,36 @@ export const GET = async (req) => {
   const searchParams = req.nextUrl.searchParams;
   const queries = Object.fromEntries([...searchParams]);
   let filter = {};
-  let page = parseInt(queries.pages) || 1; 
-  const limit = 6; 
-  const skip = (page - 1) * limit; 
+  let page = parseInt(queries.pages) || 1;
+  const limit = 6;
+  const skip = (page - 1) * limit;
 
-  const ivertinimai = queries.ivertinimai; 
+  const ivertinimai = queries.ivertinimai;
   delete queries.ivertinimai;
 
   for (let key in queries) {
-    if (key === "pages") continue; 
+    if (key === "pages") continue;
 
     const decodedKey = decodeLithuanianChars(key);
     const decodedValue = decodeLithuanianChars(queries[key]);
     filter[decodedKey] = decodedValue;
   }
 
-  console.log("Filter:", filter);
-  console.log("Sorting:", ivertinimai);
-
   try {
     await connect();
 
-    let schoolsQuery = School.find(filter)
+    let schoolsQuery = School.find(filter);
 
     if (ivertinimai === 'nuoauksciausio') {
       schoolsQuery = schoolsQuery.sort({ rating: -1 }).skip(skip).limit(limit);
     } else if (ivertinimai === 'nuozemiausio') {
       schoolsQuery = schoolsQuery.sort({ rating: 1 }).skip(skip).limit(limit);
-    } else schoolsQuery = schoolsQuery.sort({name: -1}).skip(skip).limit(limit);
+    } else {
+      schoolsQuery = schoolsQuery.sort({ name: 1 }).skip(skip).limit(limit);
+    }
+
     const schools = await schoolsQuery;
-    console.log(schools)
+
     return new NextResponse(JSON.stringify(schools), {
       status: 200,
       headers: {
@@ -64,9 +64,9 @@ export const GET = async (req) => {
         "x-next-cache-tags": "schools"
       },
     });
-    
+
   } catch (error) {
-    console.log("Error fetching schools:", error);
+    console.error("Error fetching schools:", error);
     return NextResponse.json({ error: "Error fetching schools" }, { status: 500 });
   }
 };
