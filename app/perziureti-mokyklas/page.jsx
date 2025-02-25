@@ -109,13 +109,13 @@ const PageContent = () => {
   const filteredData = search
     ? data.filter((school) => school.name.toLowerCase().includes(search.toLowerCase()))
     : data;
-
+  
   return (
     <div className='w-full'>
       <SearchBar parameter={"Ieškokite mokyklos"} setSearch={setSearch} />
       
       <div className='w-full'>
-        <div className='grid grid-rows-2 sm:grid-rows-1 grid-cols-2 lg:max-w-screen-lg lg:px-10 lg:m-auto sm:grid-cols-3 gap-4 px-10 justify-items-center my-4 lg:mt-2 lg:mb-4'>
+        <div className='grid grid-rows-3 sm:grid-rows-1 grid-cols-1 lg:max-w-screen-lg lg:px-10 lg:m-auto sm:grid-cols-3 gap-4 px-10 sm:justify-items-center my-4 lg:mt-2 lg:mb-4'>
           <FilterParameter active={active} setActive={setActive} parameters={parameters} type={"Apskritis"} filter={filter1} setFilter={setFilter1} />
           <FilterParameter active={active} setActive={setActive} parameters={types} type={"Tipas"} filter={filter2} setFilter={setFilter2} />
           <FilterParameter active={active} setActive={setActive} parameters={best} type={"Įvertinimai"} filter={filter3} setFilter={setFilter3} />

@@ -39,35 +39,50 @@ const TeacherPage = ({ teacher }) => {
   const [filter1, setFilter1] = useState(decodeSub(searchParams.get('ivertinimai')));
   const [filter2, setFilter2] = useState(decodeSub(searchParams.get('laikas')));
   const pathname = usePathname()
+  const toggleForm = () => {
+    if(status === "loading") {
+      return;
+    }
+    if(status === 'unauthenticated') {
+      router.push('/prisijungti')
+      return;
+    }
+    if(alreadyReviewed) {
+      return;
+    }
+    setForm(!form)
+  }
   useEffect(() => {
-    if (!teacher?.n || !teacher?.m || !session?.user?.email) {
+    if (!teacher?.n || !teacher?.m) {
       setLoading(false);
       return;
     }
     const fetchData = async () => {
-  
       try {
+        const reviewCheckPromise = session?.user?.email
+          ? fetch(`/api/reviews/check?user=${session.user.email}&n=${teacher.n}&m=${teacher.m}`)
+          : Promise.resolve({ ok: false });
+  
         const [reviewRes, schoolRes, reviewsRes] = await Promise.all([
-          fetch(`/api/reviews/check?user=${session.user.email}&n=${teacher.n}&m=${teacher.m}`),
+          reviewCheckPromise,
           fetch(`/api/schools/byn?n=${teacher.n}`),
           fetch(`/api/reviews/view?n=${teacher.n}&m=${teacher.m}&ivertinimai=${searchParams.get('ivertinimai')}&laikas=${searchParams.get('laikas')}`)
         ]);
   
         const [reviewData, schoolData, reviewsData] = await Promise.all([
-          reviewRes.json(),
+          reviewRes.ok ? reviewRes.json() : { exists: false },
           schoolRes.json(),
           reviewsRes.json()
         ]);
-        console.log(reviewsData)
+  
         if (reviewRes.ok) setAlreadyReviewed(reviewData.exists);
         if (schoolRes.ok) {
           setSchool(schoolData.data);
           setSchoolImage(schoolData.image);
         }
-        if (reviewsRes.ok) setReviews(reviewsData);
+        if (reviewsRes.ok) setReviews(reviewsData); // ✅ Fetch reviews even if not authenticated
       } catch (error) {
         console.log("Error fetching data:", error);
-
       } finally {
         setLoading(false);
       }
@@ -75,15 +90,7 @@ const TeacherPage = ({ teacher }) => {
   
     fetchData();
   }, [teacher, session, searchParams]);
-  const toggleForm = () => {
-    if(!session) {
-      router.push('/prisijungti')
-      return
-    }
-    if(!form) {
-      setForm(true);
-    }
-  }
+  
   const handleBack = () => {
     router.push(`${pathname.slice(0, pathname.lastIndexOf('/'))}`)
   }
@@ -177,16 +184,16 @@ const TeacherPage = ({ teacher }) => {
       </main>
       <div className={`border px-10 w-auto mx-6 sm:mx-10 mt-4 ${form ? '': 'mb-6'}`}></div>
       {!form && 
-      <div className="w-full flex flex-wrap gap-y-2 gap-x-10 mx-6 sm:mx-10 mb-10">
+      <div className=" flex-col bsm:flex-row w-full flex flex-wrap gap-y-2 gap-x-10 mx-6 sm:mx-10 mb-10">
         <FilterParameter parameters={parameters1} filter={filter1} setFilter={setFilter1} type={'Įvertinimai'} active={active} setActive={setActive} />
         <FilterParameter parameters={parameters2} filter={filter2} setFilter={setFilter2} type={'Laikas'}  active={active} setActive={setActive}/>
       </div>}
       
       <div className="mb-8 grid gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center grid-flow-row">
-        {reviews.length > 0 && !form ? (
+        {!form && status !== 'loading' &&
           reviews.map((r, index) => 
           <ReviewCase key={index} review={r}></ReviewCase>)
-        ) : loading ? ('') : reviews.length > 0 ? ('') : reviews.length > 0  || form ? ('') : (<div className="w-full ml-20">Įvertinimų nėra.</div>)}
+        }
       </div>
       {form && <ReviewForm n={teacher?.n} m={teacher?.m} user={session?.user?.email} open={form} type={school.type} />}
     </section>

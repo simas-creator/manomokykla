@@ -11,7 +11,7 @@ export async function POST(req) {
     let { user, n, m, rec, criterion1, criterion2, criterion3, comment } = body;
 
     console.log("Checking teacher:", n);
-
+    console.log(user)
     // Parse values correctly
     n = parseInt(n);
     m = parseInt(m);
