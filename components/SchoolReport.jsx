@@ -32,15 +32,18 @@ const Report = ({ object, setReport }) => {
 
     setError(null);
     setLoading(true);
-    setJsonData((prev) => ({...prev, school: object?.n, user: session?.user?.email}));
-    
+    const reportData = {
+      ...jsonData,
+      school: object?.n,
+      user: session?.user?.email,
+    }
     try {
         const res = await fetch('/api/report/schools', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(jsonData),
+            body: JSON.stringify(reportData),
         })
     } catch (error) {
         console.log('error', error)

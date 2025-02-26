@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ReviewForm from "@/components/ReviewForm"
 import ReviewCase from "@/components/ReviewCase"
 import FilterParameter from "./FilterParameter";
-import Report from "@/components/TeacherReport";
+import TeacherReport from "@/components/TeacherReport";
 const decodeSub = (str) => {
   if (!str) return ''; // Return an empty string or a default value
   const subMap = {
@@ -164,7 +164,7 @@ const TeacherPage = ({ teacher }) => {
         </div>
         <div className="border mx-6 sm:mx-10 mt-4"></div>
         <div className="px-6 sm:px-8 mb-8">
-          <Report object={teacher} setReport={setReport}/>
+          <TeacherReport object={teacher} setReport={setReport}/>
         </div>
       </div>
       

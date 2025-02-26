@@ -1,9 +1,8 @@
-
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const Report = ({ object, setReport }) => {
+const TeacherReport = ({ object, setReport }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [form, setForm] = useState(false);
@@ -32,24 +31,38 @@ const Report = ({ object, setReport }) => {
 
     setError(null);
     setLoading(true);
-    setJsonData((prev) => ({...prev, school: object?.n, teacher: object?.m, user: session?.user?.email}));
-    
+
+    // Create a new object instead of relying on state update
+    const reportData = {
+      ...jsonData,
+      school: object?.n,
+      teacher: object?.m,
+      user: session?.user?.email,
+    };
+
+    console.log("Sending data:", reportData);
+
     try {
-        const res = await fetch('/api/report/teachers', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(jsonData),
-        })
+      const res = await fetch("/api/report/teachers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reportData), // Use the new object
+      });
+
+      const result = await res.json();
+      console.log("Server response:", result);
 
     } catch (error) {
-        console.log('error', error)
+      console.log(error, "error")
+      setError("Įvyko klaida siunčiant pranešimą.");
     } finally {
-        setReport(false);
-        setLoading(false)
+      setReport(false);
+      setLoading(false);
     }
-  }
+  };
+
   const handleChange = (e) => {
     setJsonData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -81,4 +94,4 @@ const Report = ({ object, setReport }) => {
   );
 };
 
-export default Report
+export default TeacherReport;

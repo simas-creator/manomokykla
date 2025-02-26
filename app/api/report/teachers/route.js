@@ -1,4 +1,4 @@
-import TeacherReport from "@/lib/modals/TeacherReport";
+import TeacherReport from "@/lib/modals/teacherReport";
 import connect from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 export const POST = async (req) => {
