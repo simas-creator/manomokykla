@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import Report from "@/components/Report";
 const SchoolCase = ({
   school = {
     name: "",
@@ -64,7 +63,6 @@ const SchoolCase = ({
   return (
     <div ref={ref} className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg h-auto bg-white rounded-lg shadow-md border border-gray-200 flex flex-col">
       {/* Image Section */}
-      <Report object={school}/>
       <div className="w-full h-36 overflow-hidden">
         <img
           src={school.imgUrl}

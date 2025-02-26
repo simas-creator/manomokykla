@@ -7,6 +7,7 @@ import SearchBar from "@/components/SearchBar";
 import FilterParameter from "./FilterParameter";
 import TeacherForm from "@/components/TeacherForm"
 import { useRouter, useSearchParams } from "next/navigation";
+import Report from '@/components/SchoolReport';
 const decodeSub = (str) => {
   const stringMap = {
     "biologija": "Biologija",
@@ -34,11 +35,10 @@ const SchoolPage = ({School}) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queries = Object.fromEntries(searchParams.entries());
-  console.log(queries[0])
-  console.log(queries);
   const [loading, setLoading] = useState(true);
   const [teachers, setTeachers] = useState([]);
   const [form, setForm] = useState(false);
+  const [report, setReport] = useState(false);
   const [schoolRating, setSchoolRating] = useState(0);
   const [active, setActive] = useState(false);
   const [filter, setFilter] = useState(decodeSub(queries['dalykas']));
@@ -72,13 +72,13 @@ const SchoolPage = ({School}) => {
     setForm(true);
   }
   const handleBack = () => {
-    router.push('/perziureti-mokyklas'); // Navigates back to the clean URL (without search params)
+    router.push('/perziureti-mokyklas'); 
   };
   useEffect(() => {
     if (!School?.n) return;
   
     async function getTeachers() {
-      setLoading(true); // Start loading
+      setLoading(true);
       
       try {
         const response = await fetch(`/api/teachers/number?school=${School.n}&dalykas=${queries['dalykas']}`);
@@ -89,7 +89,7 @@ const SchoolPage = ({School}) => {
       } catch (error) {
         console.log("Error fetching teachers:", error);
       } finally {
-        setLoading(false); // Stop loading
+        setLoading(false); 
       }
     }
     
@@ -105,7 +105,71 @@ const SchoolPage = ({School}) => {
     }
     
   }, [search, teachers])
-  
+  const handleReport = () => {
+    if(status === 'loading') {
+      return;
+    }
+    if(!session) {
+      router.push('/prisijungti')
+      return
+    }
+    setReport(true);
+  }
+  if(report) {
+    return (
+      <>
+    <button
+      onClick={handleBack}
+      className="flex sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="w-6 h-6 group-hover:-translate-x-1 transition-transform duration-300"
+        >
+          <path
+            fillRule="evenodd"
+            d="M15.707 4.293a1 1 0 010 1.414L10.414 11H20a1 1 0 110 2h-9.586l5.293 5.293a1 1 0 11-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"
+            clipRule="evenodd"
+          />
+        </svg>
+        <span className="font-medium">Atgal</span>
+      </button>
+      <main className='px-6 sm:px-10 mt-4 sm:mt-10 w-auto flex flex-col'>
+
+          <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row">
+            <div>
+              {console.log(School)}
+              <img 
+              src={School.imgUrl}
+              className="w-full h-56 bsm:h-20 bsm:w-20 bsm:opacity-100 bsm:rounded-lg object-cover bsm:border-2 border-2"
+              />
+            </div>
+            <div className="flex flex-col z-10">
+              <h1 className='font-title text-xl font-medium md:text-3xl'>{School.name}</h1>
+              <div className="flex gap-2 mt-2">
+                <StarRating r={schoolRating} size="xl" />
+              </div>
+              
+            </div>
+            
+          </div>
+          
+          <div className="mt-3 w-full z-10 flex justify-between relative">
+            <button
+            onClick={() => setReport(false)} 
+            className="flex items-center gap-2 border px-4 py-2 rounded-md  transition-colors" >
+              Grįžti atgal
+            </button>
+          </div>
+          
+          <div className='border mt-6'></div>
+          <Report object={School} setReport={setReport} />
+
+      </main>
+      </>)
+  }
   return (
     <section>
         <button
@@ -133,7 +197,7 @@ const SchoolPage = ({School}) => {
                 {console.log(School)}
                 <img 
                 src={School.imgUrl}
-                className="h-32 w-32 bsm:h-20 bsm:w-20 bsm:opacity-100 bsm:rounded-lg object-cover bsm:border-2 border-2"
+                className="w-full h-56 bsm:h-20 bsm:w-20 bsm:opacity-100 bsm:rounded-lg object-cover bsm:border-2 border-2"
                 />
               </div>
               <div className="flex flex-col z-10">
@@ -146,14 +210,21 @@ const SchoolPage = ({School}) => {
               
             </div>
             
-            <div className="mt-3 lg:max-w-screen-lg z-10">
+            <div className="mt-3 w-full z-10 flex justify-between relative">
               <button onClick={() => handleForm()} className="w-auto px-4 py-2 border rounded-lg border-primary transition-colors text-primary font-medium hover:text-black text-sm hover:bg-primary">Pridėti {School.type === 'Gimnazija' ? ('mokytoją'): ('dėstytoją')}</button>
+              <button
+              onClick={() => handleReport()} 
+              className="flex text-sm items-center gap-2 border px-2 py-1 border-red-400 text-red-400 rounded-md hover:bg-red-400 hover:text-white transition-colors" >
+                Pranešti
+                <img src="/images/flag-country-svgrepo-com.svg" className="w-6 h-6" alt="" />
+              </button>
             </div>
             
             <div className='border mt-6'></div>
             
 
         </main>
+
         {form === false ? (<div>
           <div className="px-6">
               <SearchBar setSearch={setSearch} parameter={`${School.type === 'Gimnazija' ? ('Ieškokite mokytojo') : ('Ieškokite dėstytojo')}`} />

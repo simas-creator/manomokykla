@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ReviewForm from "@/components/ReviewForm"
 import ReviewCase from "@/components/ReviewCase"
 import FilterParameter from "./FilterParameter";
+import Report from "@/components/TeacherReport";
 const decodeSub = (str) => {
   if (!str) return ''; // Return an empty string or a default value
   const subMap = {
@@ -25,6 +26,7 @@ const TeacherPage = ({ teacher }) => {
   const [school, setSchool] = useState(null);
   const [schoolImage, setSchoolImage] = useState(null);
   const [form, setForm] = useState(false);
+  const [report, setReport] = useState(false);
   const [reviews, setReviews] = useState([])
   const searchParams = useSearchParams();
   const parameters1 = [
@@ -94,6 +96,80 @@ const TeacherPage = ({ teacher }) => {
   const handleBack = () => {
     router.push(`${pathname.slice(0, pathname.lastIndexOf('/'))}`)
   }
+  const handleReport = () => {
+    if(status === 'loading') {
+      return;
+    }
+    if(!session) {
+      router.push('/prisijungti')
+      return
+    }
+    setReport(true);
+  }
+  if(report) {
+    return (
+      <div>
+          <button
+            onClick={handleBack}
+            className="flex sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-6 h-6 group-hover:-translate-x-1 transition-transform duration-300"
+              >
+            <path
+              fillRule="evenodd"
+              d="M15.707 4.293a1 1 0 010 1.414L10.414 11H20a1 1 0 110 2h-9.586l5.293 5.293a1 1 0 11-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <span className="font-medium">Atgal</span>
+        </button>
+        <div className="px-6 sm:px-10 mt-4">
+        <div className="flex gap-3 flex-col md:flex-row md:items-center flex-wrap">
+            <div className="p-3 rounded-full border-2 overflow-hidden w-20 h-20">
+              <img src={teacher?.imageUrl} alt="" />
+            </div>
+            <div>
+              <h1 className="md:text-3xl font-medium font-title text-xl">
+                {teacher?.name} {teacher?.surname}
+              </h1>
+              <h3 className="text-gray-500 font-title">{teacher?.subject}</h3>
+            </div>
+          </div>
+          <div>
+            <StarRating size="xl" number={"0"} r={teacher?.rating} />
+            <div className="text-[15px] flex gap-2 font-title">
+
+            {!loading && teacher?.rec !== 0 && typeof teacher?.rec === 'number' && (
+              <>
+                <p>
+                  {`Rekomenduoja ${teacher?.rec} ${
+                    teacher?.rec % 10 === 1 && !(teacher?.rec >= 11 && teacher?.rec <= 19) ? "žmogus" : teacher?.rec % 10 === 0 || (teacher?.rec >= 11 && teacher?.rec <= 19) ? 
+                    "žmonių" : "žmonės"
+                  }`}
+                </p>
+                <div>
+                  <Image width={24} height={24} alt="Thumbs up" src="/images/thumbs-up.svg" />
+                </div>
+              </>
+            )}         
+              </div>
+            </div>
+            <button className="px-4 py-2 border rounded-md mt-2" onClick={() => setReport(false)}>Grįžti atgal</button>
+            
+
+        </div>
+        <div className="border mx-6 sm:mx-10 mt-4"></div>
+        <div className="px-6 sm:px-8 mb-8">
+          <Report object={teacher} setReport={setReport}/>
+        </div>
+      </div>
+      
+    )
+  }
   return (
     <section className="">
       <button
@@ -115,7 +191,7 @@ const TeacherPage = ({ teacher }) => {
           <span className="font-medium">Atgal</span>
         </button>
       <main className="w-full px-6 mt-4 sm:mt-10 flex flex-1 sm:px-10">
-        <div>
+        <div className="w-full">
           <div className="flex gap-3 flex-col md:flex-row md:items-center flex-wrap">
             <div className="p-3 rounded-full border-2 overflow-hidden w-20 h-20">
               <img src={teacher?.imageUrl} alt="" />
@@ -146,6 +222,7 @@ const TeacherPage = ({ teacher }) => {
             )}         
               
             </div>
+            <div className="flex justify-between w-full items-center">
             {loading ? (
               <button className="mt-2 px-4 py-2 border rounded-md border-primary text-primary">
                 Kraunama...
@@ -167,6 +244,14 @@ const TeacherPage = ({ teacher }) => {
                 Kraunama...
               </button>
             )}
+              <button
+                onClick={() => handleReport()} 
+                className="flex text-sm items-center gap-2 border px-2 py-1 border-red-400 text-red-400 rounded-md hover:bg-red-400 hover:text-white transition-colors" >
+                  Pranešti
+                <img src="/images/flag-country-svgrepo-com.svg" className="w-6 h-6" alt="" />
+              </button>
+            </div>
+            
 
             
           </div>
