@@ -47,12 +47,10 @@ export const GET = async (req) => {
 
     let schoolsQuery = School.find(filter);
 
-    if (ivertinimai === 'nuoauksciausio') {
-      schoolsQuery = schoolsQuery.sort({ rating: -1 }).skip(skip).limit(limit);
-    } else if (ivertinimai === 'nuozemiausio') {
+    if (ivertinimai === 'nuozemiausio') {
       schoolsQuery = schoolsQuery.sort({ rating: 1 }).skip(skip).limit(limit);
     } else {
-      schoolsQuery = schoolsQuery.sort({ name: 1 }).skip(skip).limit(limit);
+      schoolsQuery = schoolsQuery.sort({ rating: -1 }).skip(skip).limit(limit);
     }
 
     const schools = await schoolsQuery;

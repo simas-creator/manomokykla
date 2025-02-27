@@ -1,6 +1,6 @@
 import Image from "next/image"
 import StarRating from "./StarRating";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ReviewForm from "@/components/ReviewForm"
@@ -17,10 +17,24 @@ const decodeSub = (str) => {
   };
   return subMap[str] || str;
 };
-
+const checkIfReported = async (object, session) => {
+  const response = await fetch(`/api/report/teachers/check?school=${object.n}&teacher=${object.m}&user=${session.user.email}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  })
+  const data = await response.json();
+  if(data.exists) {
+    return true;
+  } else {
+    return false;
+  }
+}
 const TeacherPage = ({ teacher }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const showReport = useRef(false);
   const [alreadyReviewed, setAlreadyReviewed] = useState(null);
   const [loading, setLoading] = useState(true);
   const [school, setSchool] = useState(null);
@@ -54,6 +68,16 @@ const TeacherPage = ({ teacher }) => {
     }
     setForm(!form)
   }
+  useEffect(()=> {
+    if(status === 'loading') {
+      return;
+    }
+    if(!session) {
+      showReport.current = true;
+      return;
+    }
+    showReport.current = checkIfReported(teacher, session);
+  }, [session])
   useEffect(() => {
     if (!teacher?.n || !teacher?.m) {
       setLoading(false);
@@ -244,12 +268,14 @@ const TeacherPage = ({ teacher }) => {
                 Kraunama...
               </button>
             )}
-              <button
+            {showReport.current === true && 
+            <button
                 onClick={() => handleReport()} 
                 className="flex text-sm items-center gap-2 border px-2 py-1 border-red-400 text-red-400 rounded-md hover:bg-red-400 hover:text-white transition-colors" >
                   Pranešti
                 <img src="/images/flag-country-svgrepo-com.svg" className="w-6 h-6" alt="" />
-              </button>
+              </button>}
+              
             </div>
             
 

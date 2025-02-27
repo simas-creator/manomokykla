@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react"
 import TeacherCase from "@/components/TeacherCase";
 import StarRating from "@/components/StarRating";
@@ -30,10 +30,25 @@ const decodeSub = (str) => {
   };
   return stringMap[str] || str
 }
+const checkIfReported = async (object, session) => {
+  const response = await fetch(`/api/report/schools/check?school=${object.n}&user=${session.user.email}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  })
+  const data = await response.json();
+  if(data.exists) {
+    return true;
+  } else {
+    return false;
+  }
+}
 const SchoolPage = ({School}) => {
   const { data: session, status } = useSession()
   const router = useRouter();
   const searchParams = useSearchParams();
+  const reportShow = useRef(false)
   const queries = Object.fromEntries(searchParams.entries());
   const [loading, setLoading] = useState(true);
   const [teachers, setTeachers] = useState([]);
@@ -105,6 +120,16 @@ const SchoolPage = ({School}) => {
     }
     
   }, [search, teachers])
+  useEffect(() => {
+    if(status === 'loading') {
+      return;
+    }
+    if(!session) {
+      reportShow.current = true;
+      return;
+    }
+    reportShow.current = checkIfReported(School, session);
+  }, [session])
   const handleReport = () => {
     if(status === 'loading') {
       return;
@@ -136,36 +161,38 @@ const SchoolPage = ({School}) => {
         </svg>
         <span className="font-medium">Atgal</span>
       </button>
-      <main className='px-6 sm:px-10 mt-4 sm:mt-10 w-auto flex flex-col'>
+      <main className='mt-4 sm:mt-10 w-auto flex flex-col'>
 
-          <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row">
-            <div>
-              {console.log(School)}
-              <img 
-              src={School.imgUrl}
-              className="w-full h-56 bsm:h-20 bsm:w-20 bsm:opacity-100 bsm:rounded-lg object-cover bsm:border-2 border-2"
-              />
-            </div>
-            <div className="flex flex-col z-10">
-              <h1 className='font-title text-xl font-medium md:text-3xl'>{School.name}</h1>
-              <div className="flex gap-2 mt-2">
-                <StarRating r={schoolRating} size="xl" />
-              </div>
-              
-            </div>
-            
-          </div>
+      <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row bsm:px-6 sm:px-10">
+        <div className="h-36  w-full bsm:w-auto overflow-clip relative border-b bsm:border-b-0 bsm:h-20">
+          <img 
+            src={School.imgUrl}
+            className="w-full h-64 bsm:h-20 bsm:w-20 bsm:opacity-100 object-cover bsm:rounded-lg bsm:border-2 border-2"
+          />
           
-          <div className="mt-3 w-full z-10 flex justify-between relative">
+          <div className="bsm:hidden absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-black/10 to-transparent"></div>
+        </div>
+        <div className="flex flex-col z-10 px-6 bsm:px-0">
+          <h1 className='font-title text-xl font-medium md:text-3xl'>{School.name}</h1>
+          <div className="flex gap-2 mt-2">
+            <StarRating r={schoolRating} size="xl" />
+          </div>
+        </div>
+      </div>
+
+          
+          <div className="mt-3 w-full z-10 flex justify-between relative px-6 sm:px-10">
             <button
             onClick={() => setReport(false)} 
-            className="flex items-center gap-2 border px-4 py-2 rounded-md  transition-colors" >
+            className="flex items-center gap-2 border px-4 py-2 text-sm rounded-md  transition-colors" >
               Grįžti atgal
             </button>
           </div>
           
           <div className='border mt-6'></div>
-          <Report object={School} setReport={setReport} />
+          <div className="px-6 sm:px-10 mb-8">
+            <Report object={School} setReport={setReport} />
+          </div>
 
       </main>
       </>)
@@ -190,34 +217,34 @@ const SchoolPage = ({School}) => {
           </svg>
           <span className="font-medium">Atgal</span>
         </button>
-        <main className='px-6 sm:px-10 mt-4 sm:mt-10 w-auto flex flex-col'>
+        <main className='mt-4 sm:mt-10 w-auto flex flex-col'>
 
-            <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row">
-              <div>
-                {console.log(School)}
-                <img 
+            <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row bsm:px-6 sm:px-10">
+            <div className="h-36  w-full bsm:w-auto overflow-clip relative border-b bsm:border-b-0 bsm:h-20">
+              <img 
                 src={School.imgUrl}
-                className="w-full h-56 bsm:h-20 bsm:w-20 bsm:opacity-100 bsm:rounded-lg object-cover bsm:border-2 border-2"
-                />
-              </div>
-              <div className="flex flex-col z-10">
-                <h1 className='font-title text-xl font-medium md:text-3xl'>{School.name}</h1>
-                <div className="flex gap-2 mt-2">
-                  <StarRating r={schoolRating} size="xl" />
-                </div>
-                
-              </div>
+                className="w-full h-64 bsm:h-20 bsm:w-20 bsm:opacity-100 object-cover bsm:rounded-lg bsm:border-2 border-2"
+              />
               
+              <div className="bsm:hidden absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-black/10 to-transparent"></div>
             </div>
-            
-            <div className="mt-3 w-full z-10 flex justify-between relative">
+            <div className="flex flex-col z-10 px-6 bsm:px-0">
+              <h1 className='font-title text-xl font-medium md:text-3xl'>{School.name}</h1>
+              <div className="flex gap-2 mt-2">
+                <StarRating r={schoolRating} size="xl" />
+              </div>
+            </div>
+          </div>
+            <div className="mt-3 w-full z-10 flex justify-between relative px-6 sm:px-10">
               <button onClick={() => handleForm()} className="w-auto px-4 py-2 border rounded-lg border-primary transition-colors text-primary font-medium hover:text-black text-sm hover:bg-primary">Pridėti {School.type === 'Gimnazija' ? ('mokytoją'): ('dėstytoją')}</button>
+              {reportShow.current ===true && 
               <button
               onClick={() => handleReport()} 
               className="flex text-sm items-center gap-2 border px-2 py-1 border-red-400 text-red-400 rounded-md hover:bg-red-400 hover:text-white transition-colors" >
                 Pranešti
                 <img src="/images/flag-country-svgrepo-com.svg" className="w-6 h-6" alt="" />
-              </button>
+              </button>}
+              
             </div>
             
             <div className='border mt-6'></div>
