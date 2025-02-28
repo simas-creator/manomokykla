@@ -81,7 +81,7 @@ const TeacherForm = ({School}) => {
       }
   return (
     <form className="max-w-lg mx-auto p-4 border-2 rounded-lg space-y-4 my-5 font-title">
-        <div className="flex gap-10">
+        <div className="flex gap-4 sm:gap-10 flex-col sm:flex-row">
             <div className="space-y-2">
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Vardas*
@@ -91,7 +91,7 @@ const TeacherForm = ({School}) => {
                 id="name"
                 name="first"
                 onChange={handleData}
-                className="input input-bordered input-primary w-full max-w-xs"
+                className="input input-bordered input-primary w-full"
             />
             </div>
             <div className="space-y-2">
@@ -103,12 +103,12 @@ const TeacherForm = ({School}) => {
                 id="surname"
                 name="surname"
                 onChange={handleData}
-                className="input input-bordered input-primary w-full max-w-xs"                        
+                className="input input-bordered input-primary w-full"                        
             />
             </div>
         </div>
         {School.type === 'Gimnazija' ? 
-        (<div className="space-y-2">
+        (<div className="space-y-2 pt-4">
             <CustomSelect action={setSubj}  name={"Dalykas"} parameters={subjects} subj={subj}/>
         </div>) : 
         (<div className="space-y-2">

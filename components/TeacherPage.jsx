@@ -45,14 +45,12 @@ const TeacherPage = ({ teacher }) => {
   const parameters1 = [
     'Nuo aukščiausio įvertinimo',
     'Nuo žemiausio įvertinimo',
-  ]
-  const parameters2 = [
     'Nuo naujausio',
     'Nuo seniausio',
   ]
+
   const [active, setActive] = useState(false);
   const [filter1, setFilter1] = useState(decodeSub(searchParams.get('ivertinimai')));
-  const [filter2, setFilter2] = useState(decodeSub(searchParams.get('laikas')));
   const pathname = usePathname()
   const toggleForm = () => {
     if(status === "loading") {
@@ -105,7 +103,7 @@ const TeacherPage = ({ teacher }) => {
         const [reviewRes, schoolRes, reviewsRes] = await Promise.all([
           reviewCheckPromise,
           fetch(`/api/schools/byn?n=${teacher.n}`),
-          fetch(`/api/reviews/view?n=${teacher.n}&m=${teacher.m}&ivertinimai=${searchParams.get('ivertinimai')}&laikas=${searchParams.get('laikas')}`)
+          fetch(`/api/reviews/view?n=${teacher.n}&m=${teacher.m}&ivertinimai=${searchParams.get('ivertinimai')}`)
         ]);
   
         const [reviewData, schoolData, reviewsData] = await Promise.all([
@@ -310,7 +308,6 @@ const TeacherPage = ({ teacher }) => {
       {!form && 
       <div className=" flex-col bsm:flex-row w-full flex flex-wrap gap-y-2 gap-x-10 mx-6 sm:mx-10 mb-10">
         <FilterParameter parameters={parameters1} filter={filter1} setFilter={setFilter1} type={'Įvertinimai'} active={active} setActive={setActive} />
-        <FilterParameter parameters={parameters2} filter={filter2} setFilter={setFilter2} type={'Laikas'}  active={active} setActive={setActive}/>
       </div>}
       
       <div className="mb-8 grid gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center grid-flow-row">

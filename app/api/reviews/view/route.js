@@ -9,7 +9,6 @@ export async function GET(req) {
         const n = parseInt(searchParams.get("n"));
         const m = parseInt(searchParams.get("m"));
         const filter1 = searchParams.get('ivertinimai');
-        const filter2 = searchParams.get('laikas');
 
         let reviews = await Review.find({ n, m });
 
@@ -28,10 +27,10 @@ export async function GET(req) {
             }
 
             // Sort by date (Secondary if filter2 is set)
-            if (filter2 === 'nuonaujausio') {
+            if (filter1 === 'nuonaujausio') {
                 return dateB - dateA;
             } 
-            if (filter2 === 'nuoseniausio') {
+            if (filter1 === 'nuoseniausio') {
                 return dateA - dateB;
             }
 

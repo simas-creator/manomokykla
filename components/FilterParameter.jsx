@@ -51,7 +51,7 @@ const FilterParameter = ({ parameters, type, active, setActive, filter, setFilte
       <div className="relative">
         <button
           onClick={toggleDropdown}
-          className="flex items-center justify-between min-w-min px-6 py-2 border-2 border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-100 focus:outline-none transition duration-200"
+          className={`flex items-center justify-between min-w-min px-6 py-2 border-2 border-gray-300 rounded-lg text-gray-700 ${filter ? ('bg-primary hover:bg-opacity-80 text-white') : ('bg-white hover:bg-gray-100')}  focus:outline-none transition duration-200`}
         >
           <span>{filter || type}</span>
 
@@ -72,7 +72,7 @@ const FilterParameter = ({ parameters, type, active, setActive, filter, setFilte
         </button>
 
         {isOpen && (
-          <div className="absolute z-10 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden max-h-48 overflow-y-auto">
+          <div className={`absolute z-10 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden max-h-48 overflow-y-auto`}>
             <div
               className="text-sm text-red-400 hover:cursor-pointer pl-4 w-full py-2 hover:bg-gray-100"
               onClick={handleRemove}
