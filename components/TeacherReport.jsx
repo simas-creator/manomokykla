@@ -60,6 +60,7 @@ const TeacherReport = ({ object, setReport }) => {
     } finally {
       setReport(false);
       setLoading(false);
+      window.location.reload()
     }
   };
 

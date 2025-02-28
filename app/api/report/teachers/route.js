@@ -1,5 +1,6 @@
 import TeacherReport from "@/lib/modals/teacherReport";
 import connect from "@/lib/mongodb";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 export const POST = async (req) => {
     try {
@@ -14,6 +15,7 @@ export const POST = async (req) => {
         message,
     });
     console.log(report)
+    revalidateTag(`school-${school.n}`);
     await report.save();
     return NextResponse.json({message: 'report submitted', report}, {status: 200})
     } catch (error) {

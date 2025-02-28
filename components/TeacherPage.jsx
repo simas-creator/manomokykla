@@ -18,29 +18,28 @@ const decodeSub = (str) => {
   return subMap[str] || str;
 };
 const checkIfReported = async (object, session) => {
-  const response = await fetch(`/api/report/teachers/check?school=${object.n}&teacher=${object.m}&user=${session.user.email}`, {
+  const response = await fetch(`/api/report/teachers/check?school=${object?.n}&teacher=${object?.m}&user=${session?.user?.email}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
     },
   })
   const data = await response.json();
-  if(data.exists) {
+  if(data.exists === true) {
     return true;
-  } else {
-    return false;
-  }
+  } else 
+   return false;
 }
 const TeacherPage = ({ teacher }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const showReport = useRef(false);
   const [alreadyReviewed, setAlreadyReviewed] = useState(null);
   const [loading, setLoading] = useState(true);
   const [school, setSchool] = useState(null);
   const [schoolImage, setSchoolImage] = useState(null);
   const [form, setForm] = useState(false);
   const [report, setReport] = useState(false);
+  const [showReport, setShowReport] = useState(false);
   const [reviews, setReviews] = useState([])
   const searchParams = useSearchParams();
   const parameters1 = [
@@ -72,17 +71,31 @@ const TeacherPage = ({ teacher }) => {
     if(status === 'loading') {
       return;
     }
-    if(!session) {
-      showReport.current = true;
+    if(session === 'unauthenticated') {
+      showReport(true)
       return;
     }
-    showReport.current = checkIfReported(teacher, session);
-  }, [session])
+    const fetchReportStatus = async () => {
+      if(!teacher?.n || !teacher?.m) {
+        return
+      }
+    
+      const isReported = await checkIfReported(teacher, session);
+      console.log(isReported)
+      if(isReported) {
+        setShowReport(false);
+      } else {
+        setShowReport(true);
+      }
+    };
+    fetchReportStatus();
+  }, [session, teacher])
   useEffect(() => {
     if (!teacher?.n || !teacher?.m) {
       setLoading(false);
       return;
     }
+
     const fetchData = async () => {
       try {
         const reviewCheckPromise = session?.user?.email
@@ -268,7 +281,7 @@ const TeacherPage = ({ teacher }) => {
                 Kraunama...
               </button>
             )}
-            {showReport.current === true && 
+            {showReport === true &&
             <button
                 onClick={() => handleReport()} 
                 className="flex text-sm items-center gap-2 border px-2 py-1 border-red-400 text-red-400 rounded-md hover:bg-red-400 hover:text-white transition-colors" >
@@ -287,7 +300,7 @@ const TeacherPage = ({ teacher }) => {
         </div>
         {schoolImage && (
           <div className="absolute end-0 top-[63px]">
-            <div className="border-2 w-20 h-20">
+            <div className="border-2 w-28 h-28 md:w-20 md:h-20">
               <img className="w-full h-full object-cover" src={schoolImage} alt="" />
             </div>
           </div>

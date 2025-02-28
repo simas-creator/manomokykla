@@ -10,6 +10,8 @@ export const GET = async (req) => {
         const report = await SchoolReport.findOne({user, school: n});
         if(report) {
             return NextResponse.json({exists: true, message: 'You have already reported this school'}, {status: 200})
+        } else {
+            return NextResponse.json({exists: false, message: 'You have not reported this school'}, {status: 200})
         }
     } catch (error) {
         console.log('error', error)

@@ -10,7 +10,9 @@ export const GET = async (req) => {
         const m = parseInt(searchParams.get('teacher'))
         const report = await TeacherReport.findOne({user, school: n, teacher: m});
         if(report) {
-            return NextResponse.json({exists: true, message: 'You have already reported this school'}, {status: 200})
+            return NextResponse.json({exists: true, message: 'You have already reported this school', report}, {status: 200})
+        } else {
+            return NextResponse.json({exists: false, message: 'You have not reported this school'}, {status: 200})
         }
     } catch (error) {
         console.log('error', error)

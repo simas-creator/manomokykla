@@ -37,7 +37,11 @@ const checkIfReported = async (object, session) => {
       'Content-Type': 'application/json'
     },
   })
+  if(!response.ok) {
+    return false;
+  }
   const data = await response.json();
+
   if(data.exists) {
     return true;
   } else {
@@ -47,6 +51,7 @@ const checkIfReported = async (object, session) => {
 const SchoolPage = ({School}) => {
   const { data: session, status } = useSession()
   const router = useRouter();
+  const [showReport, setShowReport] = useState(false);
   const searchParams = useSearchParams();
   const reportShow = useRef(false)
   const queries = Object.fromEntries(searchParams.entries());
@@ -125,11 +130,19 @@ const SchoolPage = ({School}) => {
       return;
     }
     if(!session) {
-      reportShow.current = true;
+      setShowReport(true);
       return;
     }
-    reportShow.current = checkIfReported(School, session);
-  }, [session])
+    const fetchIfReported = async () => {
+      const res = await checkIfReported(School, session);
+      if(res === true) {
+        setShowReport(false);
+      } else {
+        setShowReport(true);
+      }
+    }
+    fetchIfReported();
+  }, [session, School])
   const handleReport = () => {
     if(status === 'loading') {
       return;
@@ -226,7 +239,7 @@ const SchoolPage = ({School}) => {
                 className="w-full h-64 bsm:h-20 bsm:w-20 bsm:opacity-100 object-cover bsm:rounded-lg bsm:border-2 border-2"
               />
               
-              <div className="bsm:hidden absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-black/10 to-transparent"></div>
+              <div className="bsm:hidden absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white/100 to-transparent"></div>
             </div>
             <div className="flex flex-col z-10 px-6 bsm:px-0">
               <h1 className='font-title text-xl font-medium md:text-3xl'>{School.name}</h1>
@@ -237,7 +250,7 @@ const SchoolPage = ({School}) => {
           </div>
             <div className="mt-3 w-full z-10 flex justify-between relative px-6 sm:px-10">
               <button onClick={() => handleForm()} className="w-auto px-4 py-2 border rounded-lg border-primary transition-colors text-primary font-medium hover:text-black text-sm hover:bg-primary">Pridėti {School.type === 'Gimnazija' ? ('mokytoją'): ('dėstytoją')}</button>
-              {reportShow.current ===true && 
+              {showReport === true && 
               <button
               onClick={() => handleReport()} 
               className="flex text-sm items-center gap-2 border px-2 py-1 border-red-400 text-red-400 rounded-md hover:bg-red-400 hover:text-white transition-colors" >
