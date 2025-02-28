@@ -177,14 +177,14 @@ const SchoolPage = ({School}) => {
       <main className='mt-4 sm:mt-10 w-auto flex flex-col'>
 
       <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row bsm:px-6 sm:px-10">
-        <div className="h-36  w-full bsm:w-auto overflow-clip relative border-b bsm:border-b-0 bsm:h-20">
-          <img 
-            src={School.imgUrl}
-            className="w-full h-64 bsm:h-20 bsm:w-20 bsm:opacity-100 object-cover bsm:rounded-lg bsm:border-2 border-2"
-          />
-          
-          <div className="bsm:hidden absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-black/10 to-transparent"></div>
-        </div>
+      <div className="h-36  w-full bsm:w-auto overflow-clip relative border-b bsm:border-b-0 bsm:h-20">
+              <img 
+                src={School.imgUrl}
+                className="w-full h-64 bsm:h-20 bsm:w-20 bsm:opacity-100 object-cover bsm:rounded-lg bsm:border-2 border-2"
+              />
+              
+              <div className="bsm:hidden absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white/100 to-transparent"></div>
+            </div>
         <div className="flex flex-col z-10 px-6 bsm:px-0">
           <h1 className='font-title text-xl font-medium md:text-3xl'>{School.name}</h1>
           <div className="flex gap-2 mt-2">

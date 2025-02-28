@@ -50,12 +50,13 @@ export async function POST(req) {
       const schoolR = (filtered.reduce((sum, t) => sum + parseFloat(t.rating), 0) / filtered.length).toFixed(1);
       await School.findOneAndUpdate({ n }, { rating: schoolR });
     }
-
+    console.log('our count', rCount)
     // Save the new review
     const reviewData = {
       user,
       n,
       m,
+      r: rCount,
       rec,
       criterion1,
       criterion2,
