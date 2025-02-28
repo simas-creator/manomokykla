@@ -3,20 +3,24 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
-
+import { useSearchParams } from "next/navigation";
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
   const [error, setError] = useState("");
   const router = useRouter();
-
+  const searchParams = useSearchParams();
   useEffect(() => {
     // Redirect to dashboard if the user is already logged in
     if (session) {
       router.push("/skydelis");
     }
   }, [session, router]);
-
+  useEffect(() => {
+    if(searchParams.get('error') === 'prisiregistruokite') {
+      setError("Prieš prisijungiant, prašome prisiregistruoti");
+    }
+  }, [searchParams])
   const submit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -49,7 +53,8 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto ring-primary ring bg-white shadow-sm rounded-lg p-6 mt-10">
+    <div className="mx-4">
+<div className="max-w-md mx-auto ring-primary ring bg-white shadow-sm rounded-lg p-6 mt-10">
       <h1 className="font-semibold text-3xl mt-5 font-title">Prisijungti</h1>
       <p className="text-slate-500 mt-2 mb-4">Nurodykite reikiamus duomenis</p>
       <form onSubmit={(e) => submit(e)}>
@@ -95,6 +100,8 @@ const Login = () => {
         </button>
       </section>
     </div>
+    </div>
+    
   );
 };
 

@@ -17,12 +17,11 @@ const Register = () => {
         setError(""); // Clear any previous errors
 
         const formData = new FormData(e.target);
-        const name = formData.get("firstName");
-        const last = formData.get("lastName");
+        const username = formData.get("username");
         const email = formData.get("email");
         const password = formData.get("password");
 
-        if (!name || !last || !email || !password) {
+        if (!username || !email || !password) {
             setError("Visi laukai turi būti užpildyti");
             setLoading(false); // Reset loading state
             return;
@@ -36,7 +35,7 @@ const Register = () => {
             const res = await fetch("/api/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, last, email, password }),
+                body: JSON.stringify({ username, email, password }),
             });
 
             if (!res.ok) {
@@ -62,28 +61,21 @@ const Register = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto bg-white shadow-md ring ring-primary rounded-lg p-6 mt-10">
+        <div className="mx-4">
+<div className="max-w-md mx-auto bg-white shadow-md ring ring-primary rounded-lg p-6 mt-10">
             <h1 className="font-semibold text-3xl mt-5 font-title">Registracija</h1>
             <p className="text-gray-500 mt-2 mb-4">Nurodykite reikiamus duomenis</p>
             <form onSubmit={(e) => submit(e)}>
-                <div className="flex gap-4">
-                    <div>
-                        <label htmlFor="name" className="font-title">Vardas</label>
+
+                    <div className="">
+                        <label htmlFor="username" className="font-title">Vartotojo vardas</label>
                         <input
-                            name="firstName"
+                            name="username"
                             type="text"
-                            className="input input-bordered input-primary w-full max-w-xs"
+                            className="input input-bordered input-primary w-full"
                         />
                     </div>
-                    <div>
-                        <label htmlFor="last" className="font-title">Pavardė</label>
-                        <input
-                            name="lastName"
-                            type="text"
-                            className="input input-bordered input-primary w-full max-w-xs"
-                        />
-                    </div>
-                </div>
+
                 <div className="mt-2 flex-col flex">
                     <label htmlFor="email" className="font-title">El. paštas</label>
                     <input
@@ -118,6 +110,10 @@ const Register = () => {
                 </p>
             </form>
         </div>
+        </div>
+        
+
+        
     );
 };
 

@@ -7,8 +7,8 @@ import bcrypt from 'bcrypt';
 export async function POST(req) {
     await connect();
     try {
-        const { name, last, email, password } = await req.json();
-        if (!name || !last || !email || !password) {
+        const { username, email, password } = await req.json();
+        if (!username || !email || !password) {
             return NextResponse.json({ success: false, error: "Visi laukai turi būti užpildyti" }, { status: 400 });
         }
 
@@ -18,7 +18,7 @@ export async function POST(req) {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, last, email: email.toLowerCase(), password: hashedPassword });
+        const newUser = new User({ username, email: email.toLowerCase(), password: hashedPassword });
         await newUser.save();
 
         return NextResponse.json({ success: true, message: "Registracija sėkminga" });

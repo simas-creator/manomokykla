@@ -13,7 +13,7 @@ export async function middleware(req) {
     return NextResponse.redirect(new URL("/prisijungti", req.url));
   }
   
-  if(token && pathname === "/prisijungti") {
+  if(token && pathname === "/prisijungti" || token && pathname === "/registracija") {
     return NextResponse.redirect(new URL("/skydelis", req.url));
   }
   const headers = new Headers(req.headers);
