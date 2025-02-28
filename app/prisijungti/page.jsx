@@ -112,4 +112,4 @@ const Page = () => {
     </Suspense>
   );
 }
-export default Login;
+export default Page;
