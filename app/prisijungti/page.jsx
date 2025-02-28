@@ -1,6 +1,6 @@
 'use client';
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
@@ -105,4 +105,11 @@ const Login = () => {
   );
 };
 
+const Page = () => {
+  return (
+    <Suspense fallback="">
+      <Login />
+    </Suspense>
+  );
+}
 export default Login;
