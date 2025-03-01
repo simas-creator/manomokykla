@@ -88,8 +88,8 @@ const SchoolPage = ({School}) => {
   
   const handleForm = () => {
     if(status !== "authenticated") {
-      router.push("/prisijungti")
-      return
+      setLogin(true);
+      return;
     }
     setForm(true);
   }
