@@ -7,6 +7,20 @@ import ReviewForm from "@/components/ReviewForm"
 import ReviewCase from "@/components/ReviewCase"
 import FilterParameter from "./FilterParameter";
 import TeacherReport from "@/components/TeacherReport";
+import LoginRegister from "./LoginRegister";
+const getReviewText = (length) => {
+  if (length % 10 === 1 && (length < 11 || length > 19)) {
+    return `atsiliepimas`; // 1, 21, 31, 41, etc.
+  } else if (
+    length % 10 >= 2 &&
+    length % 10 <= 9 &&
+    (length < 11 || length > 19)
+  ) {
+    return "atsiliepimai"; // 2-9, 22-29, 32-39, etc.
+  } else {
+    return "atsiliepimų"; // 0, 10-19, 20, 30, 40, etc.
+  }
+};
 const decodeSub = (str) => {
   if (!str) return ''; // Return an empty string or a default value
   const subMap = {
@@ -41,6 +55,8 @@ const TeacherPage = ({ teacher }) => {
   const [report, setReport] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [reviews, setReviews] = useState([])
+  const [showLogin, setShowLogin] = useState(false);
+  const [length, setLength] = useState(0);
   const searchParams = useSearchParams();
   const parameters1 = [
     'Nuo aukščiausio įvertinimo',
@@ -57,7 +73,7 @@ const TeacherPage = ({ teacher }) => {
       return;
     }
     if(status === 'unauthenticated') {
-      router.push('/prisijungti')
+      setShowLogin(true)
       return;
     }
     if(alreadyReviewed) {
@@ -117,7 +133,10 @@ const TeacherPage = ({ teacher }) => {
           setSchool(schoolData.data);
           setSchoolImage(schoolData.image);
         }
-        if (reviewsRes.ok) setReviews(reviewsData); // ✅ Fetch reviews even if not authenticated
+        if (reviewsRes.ok) {
+          setReviews(reviewsData);
+          setLength(reviewsData.length)
+        } 
       } catch (error) {
         console.log("Error fetching data:", error);
       } finally {
@@ -136,7 +155,7 @@ const TeacherPage = ({ teacher }) => {
       return;
     }
     if(!session) {
-      router.push('/prisijungti')
+      setShowLogin(true);
       return
     }
     setReport(true);
@@ -171,6 +190,7 @@ const TeacherPage = ({ teacher }) => {
               <h1 className="md:text-3xl font-medium font-title text-xl">
                 {teacher?.name} {teacher?.surname}
               </h1>
+              {length !== 0 && <p className="font-title text-gray-500">{length} {getReviewText(length)}</p>}
               <h3 className="text-gray-500 font-title">{teacher?.subject}</h3>
             </div>
           </div>
@@ -181,9 +201,9 @@ const TeacherPage = ({ teacher }) => {
             {!loading && teacher?.rec !== 0 && typeof teacher?.rec === 'number' && (
               <>
                 <p>
-                  {`Rekomenduoja ${teacher?.rec} ${
-                    teacher?.rec % 10 === 1 && !(teacher?.rec >= 11 && teacher?.rec <= 19) ? "žmogus" : teacher?.rec % 10 === 0 || (teacher?.rec >= 11 && teacher?.rec <= 19) ? 
-                    "žmonių" : "žmonės"
+                  {`Rekomenduoja ${(length / teacher?.rec * 100).toFixed(0)}% ${
+                    (length / teacher?.rec * 100).toFixed(0) % 10 === 1 && !((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? "mokinys" : (length / teacher?.rec * 100).toFixed(0) % 10 === 0 || ((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? 
+                    "mokinių" : "mokiniai"
                   }`}
                 </p>
                 <div>
@@ -197,16 +217,24 @@ const TeacherPage = ({ teacher }) => {
             
 
         </div>
-        <div className="border mx-6 sm:mx-10 mt-4"></div>
+        <div className="border mt-4"></div>
         <div className="px-6 sm:px-8 mb-8">
           <TeacherReport object={teacher} setReport={setReport}/>
         </div>
+        {schoolImage && (
+          <div className="absolute end-0 top-[63px]">
+            <div className="border-2 w-28 h-28 md:w-20 md:h-20">
+              <img className="w-full h-full object-cover" src={schoolImage} alt="" />
+            </div>
+          </div>
+        )}
       </div>
       
     )
   }
   return (
     <section className="">
+      {showLogin === true && <LoginRegister setLogin={setShowLogin} login={showLogin}/>}
       <button
         onClick={handleBack}
         className="flex sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
@@ -235,6 +263,7 @@ const TeacherPage = ({ teacher }) => {
               <h1 className="md:text-3xl font-medium font-title text-xl">
                 {teacher?.name} {teacher?.surname}
               </h1>
+              {length !== 0 && <p className="font-title">{length} {getReviewText(length)}</p>}
               <h3 className="text-gray-500 font-title">{teacher?.subject}</h3>
             </div>
           </div>
@@ -245,9 +274,10 @@ const TeacherPage = ({ teacher }) => {
             {!loading && teacher?.rec !== 0 && typeof teacher?.rec === 'number' && (
               <>
                 <p>
-                  {`Rekomenduoja ${teacher?.rec} ${
-                    teacher?.rec % 10 === 1 && !(teacher?.rec >= 11 && teacher?.rec <= 19) ? "žmogus" : teacher?.rec % 10 === 0 || (teacher?.rec >= 11 && teacher?.rec <= 19) ? 
-                    "žmonių" : "žmonės"
+                  {`Rekomenduoja ${(length / teacher?.rec * 100).toFixed(0)}% 
+                  ${
+                    (length / teacher?.rec * 100).toFixed(0) % 10 === 1 && !((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? "mokinys" : (length / teacher?.rec * 100).toFixed(0) % 10 === 0 || ((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? 
+                    "mokinių" : "mokiniai"
                   }`}
                 </p>
                 <div>
@@ -304,9 +334,9 @@ const TeacherPage = ({ teacher }) => {
           </div>
         )}
       </main>
-      <div className={`border px-10 w-auto mx-6 sm:mx-10 mt-4 ${form ? '': 'mb-6'}`}></div>
+      <div className={`border mt-4 ${form ? '': 'mb-6'}`}></div>
       {!form && 
-      <div className=" flex-col bsm:flex-row w-full flex flex-wrap gap-y-2 gap-x-10 mx-6 sm:mx-10 mb-10">
+      <div className=" px-6 sm:px-10 mb-10">
         <FilterParameter parameters={parameters1} filter={filter1} setFilter={setFilter1} type={'Įvertinimai'} active={active} setActive={setActive} />
       </div>}
       
