@@ -8,6 +8,7 @@ import FilterParameter from "./FilterParameter";
 import TeacherForm from "@/components/TeacherForm"
 import { useRouter, useSearchParams } from "next/navigation";
 import Report from '@/components/SchoolReport';
+import LoginRegister from "@/components/LoginRegister";
 const decodeSub = (str) => {
   const stringMap = {
     "biologija": "Biologija",
@@ -64,6 +65,7 @@ const SchoolPage = ({School}) => {
   const [filter, setFilter] = useState(decodeSub(queries['dalykas']));
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState();
+  const [login, setLogin] = useState(false);
   const subjects = [
     "Biologija",
     "Chemija",
@@ -148,7 +150,7 @@ const SchoolPage = ({School}) => {
       return;
     }
     if(!session) {
-      router.push('/prisijungti')
+      setLogin(true);
       return
     }
     setReport(true);
@@ -156,6 +158,7 @@ const SchoolPage = ({School}) => {
   if(report) {
     return (
       <>
+
     <button
       onClick={handleBack}
       className="flex sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
@@ -213,6 +216,7 @@ const SchoolPage = ({School}) => {
   }
   return (
     <section>
+      {login && <LoginRegister setLogin={setLogin} login={login} />}
         <button
         onClick={handleBack}
         className="flex sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
