@@ -48,7 +48,7 @@ const TeacherReport = ({ object, setReport }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(reportData), // Use the new object
+        body: JSON.stringify(reportData),
       });
 
       const result = await res.json();

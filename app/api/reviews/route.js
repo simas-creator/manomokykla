@@ -8,10 +8,9 @@ export async function POST(req) {
   try {
     await connect();
     const body = await req.json();
-    let { user, n, m, rec, criterion1, criterion2, criterion3, comment } = body;
+    let { user, n, m, rec, criterion1, criterion2, criterion3, comment, anonymous} = body;
 
-    console.log("Checking teacher:", n);
-    console.log(user)
+    console.log('checking anonymous, ', anonymous, 'checking user, ', user)
     // Parse values correctly
     n = parseInt(n);
     m = parseInt(m);
@@ -60,7 +59,8 @@ export async function POST(req) {
       criterion1,
       criterion2,
       criterion3,
-      ...(comment?.trim() && { comment })
+      ...(comment?.trim() && { comment }),
+      anonymous
     };
 
     const review = new Review(reviewData);

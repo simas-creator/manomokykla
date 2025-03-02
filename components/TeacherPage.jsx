@@ -48,6 +48,7 @@ const TeacherPage = ({ teacher }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [alreadyReviewed, setAlreadyReviewed] = useState(null);
+  const [u, setU] = useState('')
   const [loading, setLoading] = useState(true);
   const [school, setSchool] = useState(null);
   const [schoolImage, setSchoolImage] = useState(null);
@@ -103,6 +104,18 @@ const TeacherPage = ({ teacher }) => {
       }
     };
     fetchReportStatus();
+    const checkUsername = async (email) => {
+      const response = await fetch('/api/reviews/username?email=' + email);
+      let data;
+      if(response.ok) {
+        data = await response.json();
+      } else return;
+      if(data) {
+        setU(data);
+      }
+    }
+    checkUsername(session?.user?.email);
+    console.log(u)
   }, [session, teacher])
   useEffect(() => {
     if (!teacher?.n || !teacher?.m) {
@@ -255,7 +268,7 @@ const TeacherPage = ({ teacher }) => {
         </button>
       <main className="w-full px-6 mt-4 sm:mt-10 flex flex-1 sm:px-10">
         <div className="w-full">
-          <div className="flex gap-3 flex-col md:flex-row md:items-center flex-wrap">
+          <div className="flex gap-3 flex-col md:flex-row md:items-center flex-wrap md:mb-2">
             <div className="p-3 rounded-full border-2 overflow-hidden w-20 h-20">
               <img src={teacher?.imageUrl} alt="" />
             </div>
@@ -263,7 +276,7 @@ const TeacherPage = ({ teacher }) => {
               <h1 className="md:text-3xl font-medium font-title text-xl">
                 {teacher?.name} {teacher?.surname}
               </h1>
-              {length !== 0 && <p className="font-title">{length} {getReviewText(length)}</p>}
+              {length !== 0 && <p className="font-title"><span className="text-primary font-medium">{length}</span> {getReviewText(length)}</p>}
               <h3 className="text-gray-500 font-title">{teacher?.subject}</h3>
             </div>
           </div>
@@ -274,11 +287,11 @@ const TeacherPage = ({ teacher }) => {
             {!loading && teacher?.rec !== 0 && typeof teacher?.rec === 'number' && (
               <>
                 <p>
-                  {`Rekomenduoja ${(length / teacher?.rec * 100).toFixed(0)}% 
-                  ${
-                    (length / teacher?.rec * 100).toFixed(0) % 10 === 1 && !((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? "mokinys" : (length / teacher?.rec * 100).toFixed(0) % 10 === 0 || ((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? 
-                    "mokinių" : "mokiniai"
-                  }`}
+                  Rekomenduoja <span className="font-medium text-primary">{(length / teacher?.rec * 100).toFixed(0)}%</span>
+                  {
+                    (length / teacher?.rec * 100).toFixed(0) % 10 === 1 && !((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? " mokinys" : (length / teacher?.rec * 100).toFixed(0) % 10 === 0 || ((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? 
+                    " mokinių" : " mokiniai"
+                  }
                 </p>
                 <div>
                   <Image width={24} height={24} alt="Thumbs up" src="/images/thumbs-up.svg" />
@@ -340,13 +353,13 @@ const TeacherPage = ({ teacher }) => {
         <FilterParameter parameters={parameters1} filter={filter1} setFilter={setFilter1} type={'Įvertinimai'} active={active} setActive={setActive} />
       </div>}
       
-      <div className="mb-8 grid gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center grid-flow-row">
+      <div className="mb-8 px-6 w-full grid gap-y-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 justify-items-center grid-flow-row">
         {!form && status !== 'loading' &&
           reviews.map((r, index) => 
           <ReviewCase key={index} review={r}></ReviewCase>)
         }
       </div>
-      {form && <ReviewForm n={teacher?.n} m={teacher?.m} user={session?.user?.email} open={form} type={school.type} />}
+      {form && <ReviewForm n={teacher?.n} m={teacher?.m} user={u} open={form} type={school.type} />}
     </section>
   );
 };

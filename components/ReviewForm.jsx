@@ -2,6 +2,7 @@ import { useState} from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 const ReviewForm = ({ n, m, user, open, type}) => {
+  const [anonymous, setAnonymous] = useState(false);
   const criteria = [
     "Gebėjimas perteikti žinias",
     "Gebėjimas bendrauti su mokiniais",
@@ -25,7 +26,13 @@ const ReviewForm = ({ n, m, user, open, type}) => {
       [criterion]: value,
     }));
   };
-
+  const toggleAnonymous = () => {
+    setAnonymous(!anonymous)
+    setJsonData((prev) => ({
+      ...prev, anonymous: !anonymous
+    }))
+    console.log(jsonData)
+  }
   // Handles recommendation selection
   const handleRec = (value) => {
     setRec(value);
@@ -46,18 +53,17 @@ const ReviewForm = ({ n, m, user, open, type}) => {
   // Handles form submission
   const handleSubmit = async () => {
     const data = {
-      user,
+      user: user.username,
       n,
       m,
       rec: jsonData.rec,
       criterion1: jsonData["Gebėjimas perteikti žinias"],
       criterion2: jsonData["Gebėjimas bendrauti su mokiniais"],
       criterion3: jsonData["Dalyko išmanymas"],
-      comment: jsonData.comment.trim() || undefined, // Only send comment if it's not empty
+      comment: jsonData.comment.trim() || undefined,
+      anonymous: jsonData.anonymous || false
     };
-  
-    console.log("Sending data:", data);
-  
+    console.log(data)
     try {
       const res = await fetch("/api/reviews", {
         method: "POST",
@@ -139,13 +145,25 @@ const ReviewForm = ({ n, m, user, open, type}) => {
 
             {/* Comment Section */}
             <div className="mt-6">
-              <p className="mb-2 font-medium text-gray-700">Komentaras (neprivaloma)</p>
+              <p className="mb-2 font-medium text-gray-700">Komentaras <span className="text-gray-500">(neprivaloma)</span></p>
               <textarea
                 className="focus:border-primary focus:outline-none w-full min-h-24 border border-gray-300 rounded-md p-3 text-sm transition-shadow resize-none"
                 placeholder="Parašykite savo atsiliepimą..."
                 value={jsonData.comment}
                 onChange={handleComment}
               ></textarea>
+            </div>
+            {/*anonymous section*/}
+            <div className="flex flex-wrap flex-col gap-2 mt-3">
+              <p className="font-medium text-gray-700">Slėpti vartotojo vardą</p>
+              <button
+                className={`rounded-sm w-6 h-6 flex transition-all items-center justify-center border border-black hover:border-primary ${
+                  anonymous ? "border-primary" : ""
+                }`}
+                onClick={toggleAnonymous}
+              >
+                {anonymous && <img className="transition-all w-4 h-4" src="/images/check.svg" alt="Checked" />}
+              </button>
             </div>
 
             {/* Submit Button */}

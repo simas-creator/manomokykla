@@ -8,10 +8,7 @@ const ReviewCase = ({review}) => {
     const date = new Date(createdAt);
     const formatedDate = date.toISOString().split("T")[0];
   return (
-
-
-
-        <div className={`border border-black rounded-xl px-4 ${!comment ? 'h-32 sm:w-64 w-[80%]' : 'h-fit w-[85%] sm:w-72'}`}>
+        <div className={`border border-black rounded-xl px-4 ${!comment ? 'h-fit sm:w-78  w-fit max-w-md' : 'max-w-md h-fit w-fit sm:w-90'}`}>
             <div className="flex items-center justify-between pt-3">
                 <div>
                     <StarRating r={rating}/>
@@ -23,14 +20,19 @@ const ReviewCase = ({review}) => {
                 </div>)}
             </div>
             {comment &&
-             <div className="line-clamp-3 mt-3">
+             <div className="line-clamp-3 mt-3 text-lg">
                 {comment}
             </div>}
             
-            <div className="pt-4 pb-4 flex justify-between items-center">
+            <div className="pt-4 pb-4 flex justify-between items-center flex-wrap gap-6">
+                <div>
+                {review?.anonymous === false && <p className="text-sm text-gray-600">{review?.user}</p>}
                 <p className="text-gray-400">
                     {formatedDate}
                 </p>
+                
+                </div>
+                
                 <div className="">
                     <button onClick={() => setOpen(true)} className="px-5 py-2 btn btn-primary btn-outline">Išsamiau</button>
                     {open && <Popup isOpen={open} setOpen={setOpen} review={review}/>}
