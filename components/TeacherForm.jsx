@@ -17,7 +17,7 @@ const TeacherForm = ({School}) => {
       "Geografija",
       "Informacinės technologijos",
       "Istorija",
-      "Fizinis ugdymas",
+      "Fizinis ugdymas (kūno kultūra)",
       "Lietuvių kalba ir literatūra",
       "Matematika",
       "Muzika",

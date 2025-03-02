@@ -122,7 +122,7 @@ const ReviewForm = ({ n, m, user, open, type}) => {
 
             {/* Recommendation Section */}
             <div className="mt-6">
-              <p className="mb-2 font-medium text-gray-700">Ar rekomenduotum šį {type === 'Gimnazija' ? ('mokytoją') : ('dėstytoją')} ?</p>
+              <p className="mb-2 font-medium text-gray-700">Ar rekomenduoji šį {type === 'Gimnazija' ? ('mokytoją') : ('dėstytoją')} kitiems?</p>
               <div className="flex gap-3">
                 <div
                   onClick={() => handleRec(true)}

@@ -194,8 +194,8 @@ const TeacherPage = ({ teacher }) => {
           </svg>
           <span className="font-medium">Atgal</span>
         </button>
-        <div className="px-6 sm:px-10 mt-4">
-        <div className="flex gap-3 flex-col md:flex-row md:items-center flex-wrap">
+        <div className="px-6 sm:px-10 mt-4 sm:mt-10">
+        <div className="flex gap-3 md:mb-2 flex-col md:flex-row md:items-center flex-wrap">
             <div className="p-3 rounded-full border-2 overflow-hidden w-20 h-20">
               <img src={teacher?.imageUrl} alt="" />
             </div>
@@ -203,7 +203,7 @@ const TeacherPage = ({ teacher }) => {
               <h1 className="md:text-3xl font-medium font-title text-xl">
                 {teacher?.name} {teacher?.surname}
               </h1>
-              {length !== 0 && <p className="font-title text-gray-500">{length} {getReviewText(length)}</p>}
+              {length !== 0 && <p className="font-title text-gray-500"><span className="text-primary font-medium">{length}</span> <span className="text-gray-800">{getReviewText(length)}</span></p>}
               <h3 className="text-gray-500 font-title">{teacher?.subject}</h3>
             </div>
           </div>
@@ -214,10 +214,10 @@ const TeacherPage = ({ teacher }) => {
             {!loading && teacher?.rec !== 0 && typeof teacher?.rec === 'number' && (
               <>
                 <p>
-                  {`Rekomenduoja ${(length / teacher?.rec * 100).toFixed(0)}% ${
+                  Rekomenduoja <span className="text-primary font-medium">{(length / teacher?.rec * 100).toFixed(0)}%</span> {
                     (length / teacher?.rec * 100).toFixed(0) % 10 === 1 && !((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? "mokinys" : (length / teacher?.rec * 100).toFixed(0) % 10 === 0 || ((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? 
                     "mokinių" : "mokiniai"
-                  }`}
+                  }
                 </p>
                 <div>
                   <Image width={24} height={24} alt="Thumbs up" src="/images/thumbs-up.svg" />
@@ -276,7 +276,7 @@ const TeacherPage = ({ teacher }) => {
               <h1 className="md:text-3xl font-medium font-title text-xl">
                 {teacher?.name} {teacher?.surname}
               </h1>
-              {length !== 0 && <p className="font-title"><span className="text-primary font-medium">{length}</span> {getReviewText(length)}</p>}
+              {length !== 0 && <p className="font-title"><span className="text-primary font-medium">{length }</span> {getReviewText(length)}</p>}
               <h3 className="text-gray-500 font-title">{teacher?.subject}</h3>
             </div>
           </div>
@@ -284,7 +284,7 @@ const TeacherPage = ({ teacher }) => {
             <StarRating size="xl" number={"0"} r={teacher?.rating} />
             <div className="text-[15px] flex gap-2 font-title">
 
-            {!loading && teacher?.rec !== 0 && typeof teacher?.rec === 'number' && (
+            {!loading && teacher?.rec !== 0 && typeof teacher?.rec === 'number' && length !== 0 && (
               <>
                 <p>
                   Rekomenduoja <span className="font-medium text-primary">{(length / teacher?.rec * 100).toFixed(0)}%</span>

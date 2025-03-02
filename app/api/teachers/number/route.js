@@ -12,7 +12,7 @@ const decodeSub = (str) => {
       "geografija": "Geografija",
       "informacinestechnologijos": "Informacinės technologijos",
       "istorija": "Istorija",
-      "fizinisugdymas": "Fizinis ugdymas",
+      "fizinisugdymas": "Fizinis ugdymas (kūno kultūra)",
       "lietuviukalbairliteratura": "Lietuvių kalba ir literatūra",
       "matematika": "Matematika",
       "muzika": "Muzika",

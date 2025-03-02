@@ -45,7 +45,7 @@ export const POST = async (req) => {
             case 'Istorija':
                 imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/istorija.png";
                 break;
-            case 'Fizinis ugdymas': 
+            case 'Fizinis ugdymas (kūno kultūra)': 
                 imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/fizinisugdymas.png";
                 break;
             case 'Geografija':
