@@ -8,6 +8,7 @@ import ReviewCase from "@/components/ReviewCase"
 import FilterParameter from "./FilterParameter";
 import TeacherReport from "@/components/TeacherReport";
 import LoginRegister from "./LoginRegister";
+import EditReview from '@/components/EditReview'
 const getReviewText = (length) => {
   if (length % 10 === 1 && (length < 11 || length > 19)) {
     return `atsiliepimas`; // 1, 21, 31, 41, etc.
@@ -58,6 +59,8 @@ const TeacherPage = ({ teacher }) => {
   const [reviews, setReviews] = useState([])
   const [showLogin, setShowLogin] = useState(false);
   const [length, setLength] = useState(0);
+  const [edit, setEdit] = useState(false);
+  const [individualReview, setIndividualReview] = useState('')
   const searchParams = useSearchParams();
   const parameters1 = [
     'Nuo aukščiausio įvertinimo',
@@ -140,7 +143,7 @@ const TeacherPage = ({ teacher }) => {
           schoolRes.json(),
           reviewsRes.json()
         ]);
-  
+        setIndividualReview(reviewData?.data)
         if (reviewRes.ok) setAlreadyReviewed(reviewData.exists);
         if (schoolRes.ok) {
           setSchool(schoolData.data);
@@ -172,6 +175,9 @@ const TeacherPage = ({ teacher }) => {
       return
     }
     setReport(true);
+  }
+  const toggleEdit = () => {
+    setEdit(!edit);
   }
   if(report) {
     return (
@@ -248,6 +254,7 @@ const TeacherPage = ({ teacher }) => {
   return (
     <section className="">
       {showLogin === true && <LoginRegister setLogin={setShowLogin} login={showLogin}/>}
+      {edit === true && <EditReview setOpen={setEdit} open={edit} review={individualReview}/>}
       <button
         onClick={handleBack}
         className="flex sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
@@ -280,7 +287,7 @@ const TeacherPage = ({ teacher }) => {
               <h3 className="text-gray-500 font-title">{teacher?.subject}</h3>
             </div>
           </div>
-          <div>
+          <div className="">
             <StarRating size="xl" number={"0"} r={teacher?.rating} />
             <div className="text-[15px] flex gap-2 font-title">
 
@@ -300,7 +307,7 @@ const TeacherPage = ({ teacher }) => {
             )}         
               
             </div>
-            <div className="flex justify-between w-full items-center">
+            <div className="flex w-full items-end justify-between">
             {loading ? (
               <button className="mt-2 px-4 py-2 border rounded-md border-primary text-primary">
                 Kraunama...
@@ -308,13 +315,20 @@ const TeacherPage = ({ teacher }) => {
             ) : form===true ? (
               <button onClick={() => setForm(false)} className="px-4 py-2 border rounded-md my-2">Grįžti atgal</button>
             ) : alreadyReviewed !== null ? (
+              <div className="flex flex-col items-start gap-2">
               <button
-                className="px-4 py-2 border mt-2 rounded-md border-primary text-primary"
+                className={`px-4 py-2 border mt-2 rounded-md  ${alreadyReviewed ? 'text-gray-600 border-gray-400' : 'text-primary border-primary'} `}
                 onClick={() => toggleForm()}
                 disabled={alreadyReviewed} 
               >
                 {alreadyReviewed ? "Jūs jau įvertinote" : "Įvertinti"}
               </button>
+              {alreadyReviewed && 
+              <button onClick={toggleEdit} className="border-primary border text-primary px-4 py-2 rounded-md hover:bg-primary hover:text-white">
+              Redaguoti įvertinimą
+            </button>}              
+              </div>
+              
             ) : !session ? (
               <button onClick={() => toggleForm()} className="px-4 py-2 border mt-2 rounded-md border-primary text-primary">Įvertinti</button>
             ) : (
@@ -322,15 +336,16 @@ const TeacherPage = ({ teacher }) => {
                 Kraunama...
               </button>
             )}
-            {showReport === true &&
-            <button
-                onClick={() => handleReport()} 
-                className="flex text-sm items-center gap-2 border px-2 py-1 border-red-400 text-red-400 rounded-md hover:bg-red-400 hover:text-white transition-colors" >
-                  Pranešti
-                <img src="/images/flag-country-svgrepo-com.svg" className="w-6 h-6" alt="" />
-              </button>}
-              
+
+              {showReport === true &&
+              <button
+                  onClick={() => handleReport()} 
+                  className=" flex text-sm items-center gap-2 border px-2 py-1 border-red-400 text-red-400 rounded-md hover:bg-red-400 hover:text-white transition-colors" >
+                    Pranešti
+                  <img src="/images/flag-country-svgrepo-com.svg" className="w-6 h-6" alt="" />
+                </button>}
             </div>
+            
             
 
             
@@ -347,7 +362,7 @@ const TeacherPage = ({ teacher }) => {
           </div>
         )}
       </main>
-      <div className={`border mt-4 ${form ? '': 'mb-6'}`}></div>
+      <div className={`relative border mt-4 ${form ? '': 'mb-6'}`}></div>
       {!form && 
       <div className=" px-6 sm:px-10 mb-10">
         <FilterParameter parameters={parameters1} filter={filter1} setFilter={setFilter1} type={'Įvertinimai'} active={active} setActive={setActive} />

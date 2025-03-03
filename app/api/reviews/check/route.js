@@ -17,7 +17,7 @@ export async function GET(req) {
     }
     const alreadyExist = await Review.findOne({ user: block.username, n, m });
     console.log(alreadyExist, ' exists??')
-    return NextResponse.json({ exists: !!alreadyExist});
+    return NextResponse.json({ exists: !!alreadyExist, data: alreadyExist});
   } catch (error) {
     console.error("Error checking review:", error);
     return NextResponse.json({ exists: false, message: "Server error" }, { status: 500 });

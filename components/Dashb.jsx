@@ -17,7 +17,7 @@ const Dashb = () => {
       const {schools, reviews, teachers, reviewsNames} = data;
       const total = reviews.reduce((acc, review) => 
       acc + (review.criterion1 + review.criterion2 + review.criterion3) /3, 0);
-      const avg = total / reviews?.length
+      const avg = total / reviews?.length || 0
       setA(avg)
       setS(schools);
       setT(teachers)
@@ -137,15 +137,16 @@ const Dashb = () => {
             </div>
           </div>
         </section>
-      </main>
-      <div className='bg-white h-20 justify-center items-center flex'>
+
         <button
           onClick={() => signOut()}
           className="bg-primary text-white px-4 py-2 rounded-lg hover:opacity-80 transition"
         >
           Atsijungti
         </button>
-      </div>
+
+      </main>
+      
     </div>
   );
 };
