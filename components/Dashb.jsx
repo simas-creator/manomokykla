@@ -1,13 +1,30 @@
 import { useEffect, useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-
+import EditReview from '@/components/EditReview'
 const Dashb = () => {
   const [s, setS] = useState()
   const [r, setR] = useState()
   const [t, setT] = useState()
   const [a, setA] = useState()
+  const [open, setOpen] = useState(false)
+  const [reviewData, setReviewData] = useState()
   const [teacherNames, setTeacherNames] = useState({});
   const { data: session } = useSession();
+  useEffect(() => {
+    if (open) {
+        document.documentElement.style.overflow = "hidden";
+        document.body.style.overflow = "hidden";
+    } else {
+        document.documentElement.style.overflow = "";  // Restore scrolling
+        document.body.style.overflow = "";
+    }
+
+    return () => {
+        document.documentElement.style.overflow = "";
+        document.body.style.overflow = "";
+    };
+}, [open]);
+
   useEffect(() => {
     if (!session?.user?.email) return;
     const getData = async (email) => {
@@ -26,9 +43,18 @@ const Dashb = () => {
     }
     getData(session?.user?.email);
   }, [session])
+  const toggleEdit = (review) => {
+    setOpen(true)
+    setReviewData(review)
+  }
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <>
+    <div className=''>
+      {open && <EditReview review={reviewData} setOpen={setOpen}/>}
 
+      </div>
+    <div className="min-h-screen w-full bg-gray-100 flex flex-col justify-center">
+      
       {/* Main Content */}
       <main className="flex-1 p-4 md:p-8">
         <header className="mb-8">
@@ -52,6 +78,7 @@ const Dashb = () => {
 
         {/* My Ratings Section */}
         <section className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          
           <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-2xl font-bold mb-4">Mano įvertinimai</h2>
             <div className="overflow-x-auto">
@@ -70,7 +97,7 @@ const Dashb = () => {
                       </td>
                       <td className='px-4'>
                         <div className='flex items-center'>
-                          <button className="hover:text-primary text-gray-500 hover:underline">Redaguoti</button>
+                          <button onClick={() => toggleEdit(review)} className="hover:text-primary text-gray-500 hover:underline">Redaguoti</button>
                           <button className="hover:text-red-500 text-red-400 ml-2">
                             <svg xmlns="http://www.w3.org/2000/svg"  fill="#ef4444" viewBox="0 0 24 24" width="24px" height="24px"><path d="M 10 2 L 9 3 L 4 3 L 4 5 L 5 5 L 5 20 C 5 20.522222 5.1913289 21.05461 5.5683594 21.431641 C 5.9453899 21.808671 6.4777778 22 7 22 L 17 22 C 17.522222 22 18.05461 21.808671 18.431641 21.431641 C 18.808671 21.05461 19 20.522222 19 20 L 19 5 L 20 5 L 20 3 L 15 3 L 14 2 L 10 2 z M 7 5 L 17 5 L 17 20 L 7 20 L 7 5 z M 9 7 L 9 18 L 11 18 L 11 7 L 9 7 z M 13 7 L 13 18 L 15 18 L 15 7 L 13 7 z"/></svg>
                           </button>
@@ -148,6 +175,7 @@ const Dashb = () => {
       </main>
       
     </div>
+    </>
   );
 };
 
