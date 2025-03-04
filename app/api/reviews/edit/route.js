@@ -3,7 +3,7 @@ import Review from '@/lib/modals/review';
 import connect from "@/lib/mongodb";
 import School from '@/lib/modals/school';
 import Teacher from '@/lib/modals/teacher';
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 export async function PATCH(req) {
     try {
         await connect();
@@ -45,7 +45,7 @@ export async function PATCH(req) {
 
         school.rating = avgR;
         school.save();
-
+        revalidateTag(`teachers`)
         // Extract criteria
         const [criterion1, criterion2, criterion3] = criteria;
 
