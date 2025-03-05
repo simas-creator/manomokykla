@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import LoadingSpinner from "@/components/LoadingSpinner"
 const EditReview = ({ setOpen, open, review }) => {
     const { criterion1, criterion2, criterion3, comment, n, m, r } = review;
     const [criteria, setCriteria] = useState([criterion1, criterion2, criterion3]);
@@ -7,7 +7,7 @@ const EditReview = ({ setOpen, open, review }) => {
     const [loading, setLoading] = useState(false);
     const [changes, setChanges] = useState(false);
     const [error, setError] = useState("");
-
+    const [deleting, setDeleting] = useState(false);
 
     const handleRating = (i, index) => {
         const updatedCriteria = [...criteria];
@@ -82,17 +82,39 @@ const EditReview = ({ setOpen, open, review }) => {
             setLoading(false);
         }
     };
-
+    const deleteReview = async () => {
+        setDeleting(true)
+        try {
+            const res = await fetch(`/api/reviews/delete?n=${n}&m=${m}&r=${r}`, {
+                method: 'DELETE'
+            })
+            if(!res.ok) {
+                setDeleting(false);
+                setError("Įvyko klaida")
+                return;
+            }
+        } catch (error) {
+           console.log(error, 'error') 
+        } finally {
+            setDeleting(false)
+            setOpen(false)
+            window.location.reload()
+        }
+    }
     return (
         <div className="fixed inset-0 z-20 flex justify-center items-center backdrop-blur-sm">
-            <div className="w-[80%] rounded-md sm:max-w-lg h-fit bg-white border shadow-xl relative p-8">
+            <div className="w-[90%] bsm:w-[80%] rounded-md sm:max-w-lg h-fit overflow-hidden  bg-white border shadow-xl relative p-8">
+                {deleting && <div className=" gap-4 justify-center text-3xl font-bold flex items-center absolute inset-0 w-auto p-6 z-20 backdrop-blur-xl h-full">
+                    Trinama...
+                    <LoadingSpinner></LoadingSpinner>
+                    </div>}
                 <button 
                     onClick={() => setOpen(false)} 
                     className="absolute top-2 right-2 text-xl font-bold text-gray-500 hover:text-gray-800"
                 >
                     ✖
                 </button>
-                <h3 className="text-2xl font-title text-center mb-6 font-bold">Redaguoti įvertinimą</h3>
+                <h3 className="text-2xl font-title text-center mb-6 font-bold">Mano įvertinimas</h3>
                 <form onSubmit={submitForm} className="flex flex-col">
                     <div>
                         <div className="flex flex-col gap-6">
@@ -124,10 +146,14 @@ const EditReview = ({ setOpen, open, review }) => {
                     <textarea
                         defaultValue={comment}
                         onChange={handleChange}
-                        className="text-sm rounded-md resize-none border-primary border pt-2 px-4 outline-none h-fit max-h-32"
+                        className="text-sm rounded-md resize-none border border-gray-700 pt-2 px-4 outline-none h-fit max-h-32"
                     ></textarea>
 
-                    <div className="flex justify-end pt-4">
+                    <div className="flex justify-between pt-4">
+                        <button 
+                        type="delete"
+                        onClick={() => deleteReview()}
+                        className="px-4 py-2 border-red-400 border rounded-md text-red-400 hover:text-white hover:bg-red-400">Pašalinti</button>
                         <button
                             type="submit"
                             disabled={loading}

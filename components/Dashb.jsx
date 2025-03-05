@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import EditReview from '@/components/EditReview'
+import LoadingSpinner from './LoadingSpinner';
 const Dashb = () => {
   const [s, setS] = useState()
   const [r, setR] = useState()
   const [t, setT] = useState()
   const [a, setA] = useState()
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false)
   const [reviewData, setReviewData] = useState()
   const [teacherNames, setTeacherNames] = useState({});
@@ -35,13 +37,23 @@ const Dashb = () => {
       const total = reviews.reduce((acc, review) => 
       acc + (review.criterion1 + review.criterion2 + review.criterion3) /3, 0);
       const avg = total / reviews?.length || 0
+      if(!schools) {
+        setS(false)
+      } else setS(schools);
+  
+      if(!teachers) {
+        setT(false)
+      } else setT(teachers)
+
       setA(avg)
-      setS(schools);
-      setT(teachers)
-      setR(reviews)
+      
+      if(!reviews) {
+        setR(false)
+      } else setR(reviews)
       setTeacherNames(reviewsNames)
     }
     getData(session?.user?.email);
+    setLoading(false)
   }, [session])
   const toggleEdit = (review) => {
     setOpen(true)
@@ -61,17 +73,23 @@ const Dashb = () => {
           <h2 className="text-2xl md:text-3xl font-semibold">
             {session.user.email || session.user.name}
           </h2>
-          <p className="text-gray-600">Jūsų įvertinimų apžvalga.</p>
+          <p className="text-gray-600">Jūsų veiklos apžvalga.</p>
         </header>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-xl font-semibold">Iš viso įvertinimų</h3>
+            {r !== false && !r && <div className='w-full flex mt-2'>
+              <LoadingSpinner></LoadingSpinner>
+              </div>}
             <p className="text-4xl font-bold text-primary">{r?.length}</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-xl font-semibold">Vidutinis įvertinimas</h3>
+            {!a && r !== false && <div className='w-full flex mt-2'>
+              <LoadingSpinner></LoadingSpinner>
+              </div>}
             <p className="text-4xl font-bold text-primary">{a?.toFixed(2)}</p>
           </div>
         </div>
@@ -108,6 +126,11 @@ const Dashb = () => {
                   ))}
                 </tbody>
               </table>
+              {!r && r !== false && 
+              <div className='w-full flex h-24'>
+                  <LoadingSpinner></LoadingSpinner>
+              </div>
+                    }
             </div>
           </div>
           <div className='w-full bg-white rounded-lg shadow p-6'>
@@ -134,6 +157,11 @@ const Dashb = () => {
                     ))}
                 </tbody>
               </table>
+              {!t && t !== false && 
+              <div className='w-full flex h-24'>
+                  <LoadingSpinner></LoadingSpinner>
+              </div>
+                    }
             </div>
           </div>
           <div className='bg-white p-6 rounded-lg shadow w-full'>
@@ -161,6 +189,11 @@ const Dashb = () => {
                             
                 </tbody>
               </table>
+              {!s && s !== false && 
+              <div className='w-full flex h-24'>
+                  <LoadingSpinner></LoadingSpinner>
+              </div>
+                    }
             </div>
           </div>
         </section>

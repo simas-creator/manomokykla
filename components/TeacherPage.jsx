@@ -48,6 +48,7 @@ const checkIfReported = async (object, session) => {
 const TeacherPage = ({ teacher }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [rec, setRec] = useState(0)
   const [alreadyReviewed, setAlreadyReviewed] = useState(null);
   const [u, setU] = useState('')
   const [loading, setLoading] = useState(true);
@@ -151,7 +152,13 @@ const TeacherPage = ({ teacher }) => {
         }
         if (reviewsRes.ok) {
           setReviews(reviewsData);
-          setLength(reviewsData.length)
+
+          const recommendedCount = reviews.filter(r => r.rec === true).length;
+          const recommendationPercentage = reviews.length > 0 
+              ? (recommendedCount / reviews.length) * 100 
+              : 0;
+          
+          setRec(recommendationPercentage);
         } 
       } catch (error) {
         console.log("Error fetching data:", error);
@@ -217,11 +224,12 @@ const TeacherPage = ({ teacher }) => {
             <StarRating size="xl" number={"0"} r={teacher?.rating} />
             <div className="text-[15px] flex gap-2 font-title">
 
-            {!loading && teacher?.rec !== 0 && typeof teacher?.rec === 'number' && (
+            {!loading && reviews.length > 0 && !isNaN(rec) && rec > 0 && 
+(
               <>
                 <p>
-                  Rekomenduoja <span className="text-primary font-medium">{(length / teacher?.rec * 100).toFixed(0)}%</span> {
-                    (length / teacher?.rec * 100).toFixed(0) % 10 === 1 && !((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? "mokinys" : (length / teacher?.rec * 100).toFixed(0) % 10 === 0 || ((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? 
+                  Rekomenduoja <span className="text-primary font-medium">{(rec).toFixed(0)}%</span> {
+                    (rec).toFixed(0) % 10 === 1 && !((rec).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? "mokinys" : (length / teacher?.rec * 100).toFixed(0) % 10 === 0 || ((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? 
                     "mokinių" : "mokiniai"
                   }
                 </p>
@@ -291,20 +299,20 @@ const TeacherPage = ({ teacher }) => {
             <StarRating size="xl" number={"0"} r={teacher?.rating} />
             <div className="text-[15px] flex gap-2 font-title">
 
-            {!loading && teacher?.rec !== 0 && typeof teacher?.rec === 'number' && length !== 0 && (
+            {!loading && reviews.length > 0 && !isNaN(rec) && rec > 0 && 
+(
               <>
                 <p>
-                  Rekomenduoja <span className="font-medium text-primary">{(length / teacher?.rec * 100).toFixed(0)}%</span>
-                  {
-                    (length / teacher?.rec * 100).toFixed(0) % 10 === 1 && !((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? " mokinys" : (length / teacher?.rec * 100).toFixed(0) % 10 === 0 || ((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? 
-                    " mokinių" : " mokiniai"
+                  Rekomenduoja <span className="text-primary font-medium">{(rec).toFixed(0)}%</span> {
+                    (rec).toFixed(0) % 10 === 1 && !((rec).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? "mokinys" : (length / teacher?.rec * 100).toFixed(0) % 10 === 0 || ((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? 
+                    "mokinių" : "mokiniai"
                   }
                 </p>
                 <div>
                   <Image width={24} height={24} alt="Thumbs up" src="/images/thumbs-up.svg" />
                 </div>
               </>
-            )}         
+            )}           
               
             </div>
             <div className="flex w-full items-end justify-between">

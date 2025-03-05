@@ -2,10 +2,10 @@ import { useState } from "react";
 import StarRating from "./StarRating"
 import Popup from "@/components/Popup"
 const ReviewCase = ({review}) => {
-    const {criterion1, criterion2, criterion3, user, comment, createdAt, rec} = review
+    const {criterion1, criterion2, criterion3, user, comment, updatedAt, rec} = review
     const rating = (criterion1 + criterion2 + criterion3) / 3;
     const [open, setOpen] = useState()
-    const date = new Date(createdAt);
+    const date = new Date(updatedAt);
     const formatedDate = date.toISOString().split("T")[0];
   return (
         <div className={`border border-black rounded-xl px-4 ${!comment ? 'h-fit sm:w-78  w-fit max-w-md' : 'max-w-md h-fit w-fit sm:w-90'}`}>

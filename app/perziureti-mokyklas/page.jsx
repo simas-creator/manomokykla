@@ -4,7 +4,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import FilterParameter from '@/components/FilterParameter';
 import SchoolCase from '@/components/SchoolCase';
 import SearchBar from '@/components/SearchBar';
-
+import LoadingSpinner from '@/components/LoadingSpinner';
 const decodeLithuanianChars = (str) => {
   const wordMap = new Map([
     ["alytaus", "Alytaus"],
@@ -123,7 +123,6 @@ const PageContent = () => {
       </div>
 
       <div className='flex justify-center items-center relative'>
-        {loading && data.length === 0 && hasMore===true &&  <p className='absolute top-2'>Kraunama...</p>}
         {!loading && filteredData.length === 0 && <p className='mt-4'>Atsiprašome, bet nieko neradome.</p>}
       </div>
       
@@ -132,10 +131,9 @@ const PageContent = () => {
           {filteredData.map((school) => (
             <SchoolCase key={`${school.apskritis}-${school.name}`} school={school}/>
           ))}
-          
         </div>
         <div ref={interRef} className="text-center" style={{ visibility: hasMore ? "visible" : "hidden" }}>
-            {hasMore ? "" : ""}
+            {hasMore ? <LoadingSpinner/> : ''}
           </div>
       </div>
     </div>

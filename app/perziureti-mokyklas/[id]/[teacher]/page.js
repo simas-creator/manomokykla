@@ -8,13 +8,6 @@ export default function Page() {
   const [teacher, setTeacher] = useState(null);
 
   useEffect(() => {
-    console.log('url', pathname)
-
-    const cachedTeacher = sessionStorage.getItem(`teacher-${pathname}`);
-    if (cachedTeacher) {
-      setTeacher(JSON.parse(cachedTeacher));
-      return;
-    }
 
     const fetchTeacherData = async () => {
       try {
@@ -26,10 +19,8 @@ export default function Page() {
 
         const data = await res.json();
         setTeacher(data);
-        console.log('teacher',teacher)
-        sessionStorage.setItem(`teacher-${pathname}`, JSON.stringify(data));
       } catch (error) {
-        console.error("Fetch failed:", error);
+        console.log("Fetch failed:", error);
       }
     };
 

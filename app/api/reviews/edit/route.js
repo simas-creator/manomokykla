@@ -3,7 +3,7 @@ import Review from '@/lib/modals/review';
 import connect from "@/lib/mongodb";
 import School from '@/lib/modals/school';
 import Teacher from '@/lib/modals/teacher';
-import { revalidateTag } from "next/cache";
+import { revalidateTag, revalidatePath} from "next/cache";
 export async function PATCH(req) {
     try {
         await connect();
@@ -24,9 +24,17 @@ export async function PATCH(req) {
         const numN = Number(n);
         const numM = Number(m);
         const numR = Number(r);
+        const [criterion1, criterion2, criterion3] = criteria;
+
+        // Update the review
+        const review = await Review.findOneAndUpdate(
+            { n: numN, m: numM, r: numR },
+            { comment, criterion1, criterion2, criterion3 },
+            { new: true }
+        );
 
         const school = await School.findOne({ n: numN });
-        const teachers = await Teacher.find({ n: numN });
+        
         const teacher = await Teacher.findOne({n: numN, m: numM})
         const reviews = await Review.find({n: numN, m: numM})
         
@@ -34,39 +42,36 @@ export async function PATCH(req) {
             const one = r.criterion1
             const two = r.criterion2
             const three = r.criterion3
-            const avg = (one + two + three) /3;
+            const avg = (one + two + three) / 3;
             return acc + avg
         }, 0) / reviews.length;
         teacher.rating = teacherRating;
+        console.log('our teacher rating', teacherRating)
         await teacher.save();
+        const teachers = await Teacher.find({ n: numN });
         const avgR = teachers.reduce((acc, t) => {
             return acc + t.rating;
         }, 0) / teachers.length;
-
+        console.log(avgR, 'our avg school reting')
         school.rating = avgR;
-        school.save();
-        revalidateTag(`teachers`)
-        // Extract criteria
-        const [criterion1, criterion2, criterion3] = criteria;
-
-        // Update the review
-        const review = await Review.findOneAndUpdate(
-            { n: numN, m: numM, r: numR },
-            { comment, criterion1, criterion2, criterion3 },
-            { new: true } // Return the updated document
-        );
+        await school.save();
+        
 
         if (!review) {
             return NextResponse.json({ message: "Review not found" }, { status: 404 });
         }
 
+        revalidateTag(`teachers`)
+        revalidateTag(`teacher-${n}-${m}`)
+        revalidateTag(`school-${n}`);
+        revalidatePath(`/perziureti-mokyklas/-${n}/-${m}`)
         return NextResponse.json(
             { message: "Success", updatedReview: review },
             { status: 200 }
         );
 
     } catch (error) {
-        console.error("Error processing PATCH request:", error);
+        console.log("Error processing PATCH request:", error);
         return NextResponse.json({ message: "Server error" }, { status: 500 });
     }
 }
