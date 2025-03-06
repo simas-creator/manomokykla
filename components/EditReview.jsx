@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner"
 const EditReview = ({ setOpen, open, review }) => {
-    const { criterion1, criterion2, criterion3, comment, n, m, r } = review;
+    const { criterion1, criterion2, criterion3, comment, n, m, r} = review;
     const [criteria, setCriteria] = useState([criterion1, criterion2, criterion3]);
-    const [jsonData, setJsonData] = useState({ criteria: [criterion1, criterion2, criterion3], comment });
+    const [jsonData, setJsonData] = useState({ criteria: [criterion1, criterion2, criterion3], comment, rec: review.rec });
     const [loading, setLoading] = useState(false);
     const [changes, setChanges] = useState(false);
     const [error, setError] = useState("");
     const [deleting, setDeleting] = useState(false);
-
+    const recRef = useRef(review.rec)
+    const [rec, setRec] = useState(review.rec)
     const handleRating = (i, index) => {
         const updatedCriteria = [...criteria];
         updatedCriteria[index] = i;
@@ -51,7 +52,17 @@ const EditReview = ({ setOpen, open, review }) => {
             window.scrollTo(0, scrollY);
         };
     }, [open]);
-
+    const handleRec = (value) => {
+        if(value === rec) {
+            setChanges(false)
+        } else setChanges(true);
+        setRec(value);
+        setJsonData((prev) => ({
+            ...prev,
+            rec: value,
+        }));
+        console.log(jsonData)
+    };
 
     const submitForm = async (e) => {
         e.preventDefault();
@@ -148,7 +159,28 @@ const EditReview = ({ setOpen, open, review }) => {
                         onChange={handleChange}
                         className="text-sm rounded-md resize-none border border-gray-700 pt-2 px-4 outline-none h-fit max-h-32"
                     ></textarea>
-
+                    <div className="mt-3">
+                        <p className="mb-2 font-medium text-gray-700">Ar rekomenduoji šį mokytoją kitiems?</p>
+                        <div className="flex gap-3">
+                        <div
+                            onClick={() => handleRec(false)}
+                            className={`text-gray-700 text-sm px-5 py-2 border-2 border-gray-300 hover:bg-red-500 hover:text-white transition-colors duration-200 w-16 text-center rounded-md cursor-pointer ${
+                                !rec ? "bg-red-500 text-white border-red-500" : ""
+                            }`}
+                            >
+                            Ne
+                            </div>
+                            <div
+                            onClick={() => handleRec(true)}
+                            className={`text-gray-700 text-sm px-5 py-2 border-2 border-gray-300 hover:bg-primary hover:text-white transition-colors duration-200 w-16 text-center rounded-md cursor-pointer ${
+                                rec ? "bg-primary text-white border-primary" : ""
+                            }`}
+                            >
+                            Taip
+                            </div>
+                            
+                        </div>
+                    </div>
                     <div className="flex justify-between pt-4">
                         <button 
                         type="delete"
@@ -162,6 +194,7 @@ const EditReview = ({ setOpen, open, review }) => {
                             {loading ? "Kraunama..." : "Išsaugoti"}
                         </button>
                     </div>
+                    
                     {error && <p className="text-red-400">{error}</p>}
                 </form>
             </div>

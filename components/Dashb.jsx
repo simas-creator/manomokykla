@@ -87,7 +87,7 @@ const Dashb = () => {
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-xl font-semibold">Vidutinis įvertinimas</h3>
-            {!a && r !== false && <div className='w-full flex mt-2'>
+            {!r && r !== false && <div className='w-full flex mt-2'>
               <LoadingSpinner></LoadingSpinner>
               </div>}
             <p className="text-4xl font-bold text-primary">{a?.toFixed(2)}</p>

@@ -121,12 +121,15 @@ const TeacherPage = ({ teacher }) => {
     checkUsername(session?.user?.email);
     console.log(u)
   }, [session, teacher])
+
+  const prevReviewRef = useRef(null);
+
   useEffect(() => {
     if (!teacher?.n || !teacher?.m) {
       setLoading(false);
       return;
     }
-
+  
     const fetchData = async () => {
       try {
         const reviewCheckPromise = session?.user?.email
@@ -144,7 +147,12 @@ const TeacherPage = ({ teacher }) => {
           schoolRes.json(),
           reviewsRes.json()
         ]);
-        setIndividualReview(reviewData?.data)
+  
+        if (reviewRes.ok && reviewData?.data !== prevReviewRef.current) {
+          prevReviewRef.current = reviewData?.data;
+          setIndividualReview(reviewData?.data);
+        }
+  
         if (reviewRes.ok) setAlreadyReviewed(reviewData.exists);
         if (schoolRes.ok) {
           setSchool(schoolData.data);
@@ -152,14 +160,9 @@ const TeacherPage = ({ teacher }) => {
         }
         if (reviewsRes.ok) {
           setReviews(reviewsData);
-
-          const recommendedCount = reviews.filter(r => r.rec === true).length;
-          const recommendationPercentage = reviews.length > 0 
-              ? (recommendedCount / reviews.length) * 100 
-              : 0;
-          
-          setRec(recommendationPercentage);
-        } 
+          const recommendedCount = reviewsData.filter(r => r.rec === true).length;
+          setRec(reviewsData.length > 0 ? (recommendedCount / reviewsData.length) * 100 : 0);
+        }
       } catch (error) {
         console.log("Error fetching data:", error);
       } finally {
@@ -168,7 +171,8 @@ const TeacherPage = ({ teacher }) => {
     };
   
     fetchData();
-  }, [teacher, session, searchParams]);
+  }, [teacher, session, searchParams, prevReviewRef]); // ✅ Now it's safe
+  
   
   const handleBack = () => {
     router.push(`${pathname.slice(0, pathname.lastIndexOf('/'))}`)
@@ -376,7 +380,7 @@ const TeacherPage = ({ teacher }) => {
         <FilterParameter parameters={parameters1} filter={filter1} setFilter={setFilter1} type={'Įvertinimai'} active={active} setActive={setActive} />
       </div>}
       
-      <div className="mb-8 px-6 w-full grid gap-y-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 justify-items-center grid-flow-row">
+      <div className="mb-8 px-6 w-full grid gap-y-6 grid-flow-row bsm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 justify-items-center ">
         {!form && status !== 'loading' &&
           reviews.map((r, index) => 
           <ReviewCase key={index} review={r}></ReviewCase>)

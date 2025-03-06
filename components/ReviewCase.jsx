@@ -8,7 +8,7 @@ const ReviewCase = ({review}) => {
     const date = new Date(updatedAt);
     const formatedDate = date.toISOString().split("T")[0];
   return (
-        <div className={`border border-black rounded-xl px-4 ${!comment ? 'h-fit sm:w-78  w-fit max-w-md' : 'max-w-md h-fit w-fit sm:w-90'}`}>
+        <div className={`border border-black rounded-xl px-4 ${!comment ? 'h-fit sm:w-78 w-[80%] bsm:w-fit max-w-md' : 'max-w-md h-fit w-[85%] sm:w-fit sm:w-90'}`}>
             <div className="flex items-center justify-between pt-3">
                 <div>
                     <StarRating r={rating}/>

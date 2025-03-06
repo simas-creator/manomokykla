@@ -14,7 +14,7 @@ export async function PATCH(req) {
         const m = searchParams.get('m');
         const r = searchParams.get('r');
 
-        const { criteria, comment } = body;
+        const { criteria, comment, rec } = body;
 
         if (!n || !m || !r || !criteria || criteria.length !== 3) {
             return NextResponse.json({ message: "Invalid request parameters" }, { status: 400 });
@@ -29,7 +29,7 @@ export async function PATCH(req) {
         // Update the review
         const review = await Review.findOneAndUpdate(
             { n: numN, m: numM, r: numR },
-            { comment, criterion1, criterion2, criterion3 },
+            { comment, criterion1, criterion2, criterion3, rec },
             { new: true }
         );
 
