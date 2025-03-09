@@ -12,6 +12,7 @@ export async function GET(req) {
 
         ///fetch reviews
         const block = await User.findOne({email})
+        const role = block.role;
         const username = block.username;
         const reviews = await Review.find({user: username})
         let reviewsNames = {}
@@ -29,7 +30,7 @@ export async function GET(req) {
 
         ///fetch teachers
         const teachers = await Teacher.find({user: email})
-        return NextResponse.json({data: {reviews, schools, teachers, reviewsNames}}, {status: 200})
+        return NextResponse.json({data: {reviews, schools, teachers, reviewsNames, role}}, {status: 200})
     } catch (error) {
         console.log(error, 'error')
         return NextResponse.json({message: 'failed to fetch'}, {status: 500})
