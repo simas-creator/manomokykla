@@ -1,7 +1,36 @@
 import EditReview from '@/components/EditReview'
 import LoadingSpinner from './LoadingSpinner';
 import SearchBar from './SearchBar';
+import { useEffect, useState } from 'react';
 const Dashb = ({admin, setAdmin}) => {
+  const [schools, setSchools] = useState([])
+  const [teachers, setTeachers] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [pchools, setPchools] = useState([]);
+  const [peachers, setPeachers] = useState([]);
+  const [peviews, setPeviews] = useState([]);
+  
+  useEffect(() => {
+    const getAllData = async () => {
+      try {
+        const res = await fetch('/api/dashboard/admin', {
+          method: 'GET'
+        })
+        const data = await res.json();
+        console.log(data)
+        setSchools(data.allSchools)
+        setTeachers(data.allTeachers)
+        setReviews(data.allReviews)
+        setPchools(data.pSchools)
+        setPeachers(data.pTeachers)
+        setPeviews(data.pReviews)
+      } catch (error) {
+        console.log('eerorr, ', error)
+      }
+      
+    }
+    getAllData()
+  }, [])
   return (
     <div>
         <div className='p-4 bg-primary pb-20 md:p-8'>
@@ -26,13 +55,21 @@ const Dashb = ({admin, setAdmin}) => {
                     <div className='border-b'>
                       <SearchBar parameter={'Ieškoti'}></SearchBar>
                     </div>
-                    <div>
-
+                    <div className=''>
+                      {
+                        schools.length > 0 && 
+                          schools.map((s, index) => (
+                          <div key={index} className="p-2 border-b">
+                            <p>{s.name}</p> {/* Adjust this to match your data structure */}
+                          </div>
+                        ))
+                        
+                      }
                     </div>
                   </div>
                 </div>
 
-                {/*Mokymo istaigos */}
+                {/*Mokytojai */}
                 <div className='w-full'>
                   <p className='text-white font-title p-4 text-center text-lg'>Mokymo įstaigos</p>
                   <div className='bg-white h-[350px] w-[90%] m-auto rounded-xl shadow max-w-lg'>
