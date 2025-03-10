@@ -34,7 +34,7 @@ const Dashb = ({admin, setAdmin}) => {
   return (
     <div>
         <div className='p-4 bg-primary pb-20 md:p-8'>
-          <div className='flex justify-end'>
+          <div className=''>
             <div>
                 <button className={`${admin === true ? 'bg-white text-black px-2 py-1' : 'bg-black text-gray-300 px-2 py-2 rounded-md'}`} onClick={() => setAdmin(false)}>
                   Mokinys
@@ -71,24 +71,60 @@ const Dashb = ({admin, setAdmin}) => {
 
                 {/*Mokytojai */}
                 <div className='w-full'>
-                  <p className='text-white font-title p-4 text-center text-lg'>Mokymo įstaigos</p>
+                  <p className='text-white font-title p-4 text-center text-lg'>Mokytojai</p>
                   <div className='bg-white h-[350px] w-[90%] m-auto rounded-xl shadow max-w-lg'>
                     <div className='border-b'>
                       <SearchBar parameter={'Ieškoti'}></SearchBar>
                     </div>
                     <div>
-
+                    {
+                        teachers.length > 0 && 
+                          teachers.map((s, index) => (
+                          <div key={index} className="p-2 border-b">
+                            <p>{s.name}</p> {/* Adjust this to match your data structure */}
+                          </div>
+                        ))
+                        
+                      }
                     </div>
                   </div>
                 </div>
-                {/*Mokymo istaigos */}
+                {/*Įvertinimai */}
                 <div className='w-full'>
-                  <p className='text-white font-title p-4 text-center text-lg'>Mokymo įstaigos</p>
+                  <p className='text-white font-title p-4 text-center text-lg'>Įvertinimai</p>
                   <div className='bg-white h-[350px] w-[90%] m-auto rounded-xl shadow max-w-lg'>
-                    <div className='border-b'>
+                    <div>
                       <SearchBar parameter={'Ieškoti'}></SearchBar>
                     </div>
                     <div>
+                    <table className="table-fixed w-full border-collapse">
+                      <thead className="border-b">
+                        <tr>
+                          <th className="p-3 w-1/2 text-left">Komentaras</th>
+                          <th className="p-3 w-1/2 text-center">Bendras įvertinimas</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {reviews.length > 0 &&
+                          reviews.map((r, index) => (
+                            <tr key={index} className="border-b hover:bg-primary hover:text-white cursor-pointer">
+                              <td className="w-1/2 p-2 pl-3 truncate">{r.comment.slice(0, 70) + "..."}</td>
+                              <td className="w-auto p-2 text-center flex justify-center items-center gap-1">
+                                {((r.criterion1 + r.criterion2 + r.criterion3) / 3).toFixed(1)}
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 24 24"
+                                  fill="orange"
+                                  width="18"
+                                  height="18"
+                                >
+                                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.86L12 17.77l-6.18 3.23L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                </svg>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
 
                     </div>
                   </div>

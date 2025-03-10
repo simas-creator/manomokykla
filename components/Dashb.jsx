@@ -80,14 +80,8 @@ const Dashb = () => {
         
         {/* Main Content */}
         <main className="flex-1 p-4 md:p-8">
-          <header className="mb-8 flex justify-between">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-semibold">
-                {session.user.email || session.user.name}
-              </h2>
-              <p className="text-gray-600">Jūsų veiklos apžvalga.</p> 
-            </div>
-            <div>
+          <header className="mb-8 flex justify-between flex-col gap-4">
+          <div>
               <button className={`${admin === true ? 'bg-white text-black px-2 py-1' : 'bg-black text-gray-300 px-2 py-2 rounded-md'}`} onClick={() => setAdmin(false)}>
                 Mokinys
               </button>
@@ -95,6 +89,13 @@ const Dashb = () => {
                 Admin
               </button>
             </div>
+            <div>
+              <h2 className="text-2xl md:text-3xl font-semibold">
+                {session.user.email || session.user.name}
+              </h2>
+              <p className="text-gray-600">Jūsų veiklos apžvalga.</p> 
+            </div>
+            
             
           </header>
   
