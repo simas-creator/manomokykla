@@ -13,29 +13,42 @@ export async function GET() {
         const schoolReports = await SchoolReport.find({});
         const teacherReports = await TeacherReport.find({});
 
-        
-        
-
         const teacherNames = {};
         const teacherPromises = teacherReports.map(async (report) => {
             const teacher = await Teacher.findOne({n: report.school, m: report.teacher})
             const school = await School.findOne({n: report.school});
-            teacherNames[`${report.school}-${report.teacher}`] = `${teacher.name} ${teacher.surname} - ${school.name}`
+            
+            // Check if teacher and school exist before accessing properties
+            if (teacher && school) {
+                teacherNames[`${report.school}-${report.teacher}`] = `${teacher.name} ${teacher.surname} - ${school.name}`
+            } else {
+                // Provide a fallback for missing data
+                teacherNames[`${report.school}-${report.teacher}`] = "Unknown teacher or school"
+            }
         })
         await Promise.all(teacherPromises)
         
+
         const reviewsPromises = pReviews.map(async (review) => {
             const {n, m} = review;
             const teacher = await Teacher.findOne({n, m});
             const school = await School.findOne({n});
-            teacherNames[`${n}-${m}`] = `${teacher.name} ${teacher.surname} - ${school.name}`
+            
+            if (teacher && school) {
+                teacherNames[`${n}-${m}`] = `${teacher.name} ${teacher.surname} - ${school.name}`
+            } else {
+                teacherNames[`${n}-${m}`] = "Unknown teacher or school"
+            }
         })
         await Promise.all(reviewsPromises)
-
-        const schoolNames = {};
+        const schoolNames={}
         const schoolPromises = schoolReports.map(async (report) => {
             const school = await School.findOne({n: report.school})
-            schoolNames[report.school] = school.name
+            if (school) {
+                schoolNames[report.school] = school.name
+            } else {
+                schoolNames[report.school] = "Unknown school"
+            }
         })
         await Promise.all(schoolPromises)
         return NextResponse.json({

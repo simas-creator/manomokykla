@@ -23,7 +23,7 @@ const Dashb = ({admin, setAdmin}) => {
   const [reviewsNames, setReviewsNames] = useState({});
   const [teacherNames, setTeacherNames] = useState({})
   const [schoolNames, setSchoolNames] = useState({})
-
+  const [openTeacher, setOpenTeacher] = useState(false);
   const [openSchool, setOpenSchool] = useState(false);
   const [toggleSchool, setToggleSchool] = useState({})
   useEffect(() => {
@@ -51,12 +51,12 @@ const Dashb = ({admin, setAdmin}) => {
       }
     }
     getAllData()
-  }, [])
+  }, [open, openTeacher, openSchool])
   const editReview = (r) => {
     setOpen(true)
     setToggleReview(r)
   }
-  const [openTeacher, setOpenTeacher] = useState(false);
+
   const editTeacher = (t) => {
     setOpenTeacher(true)
     setToggleTeacher(t)
@@ -120,7 +120,7 @@ const Dashb = ({admin, setAdmin}) => {
                       <p className='w-1/2 text-center font-medium'>Mokykla</p>
                       <p className='w-1/2 text-center font-medium'>Tipas</p>
                     </div>
-                      {loading && <LoadingSpinner></LoadingSpinner>}
+                      
                       {
                         pchools?.length > 0 && 
                           pchools.map((s, index) => (
@@ -131,6 +131,7 @@ const Dashb = ({admin, setAdmin}) => {
                         ))
                         
                       }
+                      {pchools?.length === 0 && <p className='text-center p-10'>Duomenų nerasta.</p>}
                     </div>
                     )}
                     
@@ -154,7 +155,7 @@ const Dashb = ({admin, setAdmin}) => {
                       <p className='w-1/2 text-center font-medium'>Mokykla</p>
                       <p></p>
                     </div>
-                    {loading && <LoadingSpinner></LoadingSpinner>}
+                    
                     {
                         peachers?.length > 0 && 
                           peachers.map((s, index) => (
@@ -165,7 +166,7 @@ const Dashb = ({admin, setAdmin}) => {
                         ))
                         
                       }
-                      {peachers?.length === 0 && <p>Duomenų nerasta.</p>}
+                      {peachers?.length === 0 && <p className='text-center p-10'>Duomenų nerasta.</p>}
                     </div>
                     ) }
                     
@@ -207,9 +208,10 @@ const Dashb = ({admin, setAdmin}) => {
                               </td>
                             </tr>
                           ))}
+                           
                       </tbody>
                     </table>
-
+                    {peviews?.length === 0 && <p className='text-center p-10'>Duomenų nerasta.</p>}
                     </div>
                   </div>
                 </div>
@@ -245,7 +247,7 @@ const Dashb = ({admin, setAdmin}) => {
                 ))
                 
               }
-              {schoolReports?.length === 0 && <p>Duomenų nerasta.</p>}
+              {schoolReports?.length === 0 && <p className='text-center p-10'>Duomenų nerasta.</p>}
             </div>
           </div>
         </div>
