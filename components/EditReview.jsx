@@ -84,8 +84,8 @@ const EditReview = ({ setOpen, open, review, admin }) => {
             if (!response.ok) {
                 throw new Error("Klaida išsaugant duomenis");
             }
+            window.location.reload()
 
-            window.location.reload();
         } catch (error) {
             console.error("Error updating review:", error);
             setError("Nepavyko išsaugoti. Bandykite dar kartą.");

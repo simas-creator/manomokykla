@@ -36,42 +36,50 @@ const Dashb = () => {
     };
 }, [open]);
 
-  useEffect(() => {
-    if (!session?.user?.email) return;
-    const getData = async (email) => {
-      const response = await fetch(`/api/dashboard?email=${email}`)
-      const block = await response.json()
-      const {data} = block
-      const {schools, reviews, teachers, reviewsNames, role} = data;
-      setRole(role)
-      const total = reviews.reduce((acc, review) => 
-      acc + (review.criterion1 + review.criterion2 + review.criterion3) /3, 0);
-      const avg = total / reviews?.length || 0
-      if(!schools) {
-        setS(false)
-      } else setS(schools);
-  
-      if(!teachers) {
-        setT(false)
-      } else setT(teachers)
+useEffect(() => {
+  if (!session?.user?.email) return;
 
-      setA(avg)
-      
-      if(!reviews) {
-        setR(false)
-      } else setR(reviews)
-      setTeacherNames(reviewsNames)
-    }
-    getData(session?.user?.email);
-    setLoading(false)
-  }, [session])
+  const getData = async (email) => {
+    const response = await fetch(`/api/dashboard?email=${email}`);
+    const block = await response.json();
+    const { data } = block;
+    const { schools, reviews, teachers, reviewsNames, role } = data;
+    
+    setRole(role);
+    setAdmin(role === 'admin');
+
+    const total = reviews.reduce(
+      (acc, review) => acc + (review.criterion1 + review.criterion2 + review.criterion3) / 3,
+      0
+    );
+    const avg = total / reviews?.length || 0;
+
+    setS(schools || false);
+    setT(teachers || false);
+    setA(avg);
+    setR(reviews || false);
+    setTeacherNames(reviewsNames);
+
+    setLoading(false);
+  };
+
+  getData(session?.user?.email);
+}, [session]);
+
+
   const toggleEdit = (review) => {
     setOpen(true)
     setReviewData(review)
   }
-  if(admin === false) {
+  if(loading) {
     return (
-      <>
+      <div className='flex w-full justify-center p-20'>Kraunama...</div> 
+    )
+  }
+  return admin === true ? (
+    <AdminDash admin={admin} setAdmin={setAdmin}/>
+  ) : (
+<>
       <div className=''>
         {open && <EditReview review={reviewData} setOpen={setOpen}/>}
   
@@ -231,13 +239,7 @@ const Dashb = () => {
         
       </div>
       </>
-    );
-  }
-  if(admin === true) {
-    return (
-      <AdminDash admin={admin} setAdmin={setAdmin}/>
-    )
-  }
+  )
   
 };
 
