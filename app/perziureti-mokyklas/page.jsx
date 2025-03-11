@@ -128,7 +128,7 @@ const PageContent = () => {
       
       <div className="grid w-full items-center justify-center">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 p-4 w-full max-w-screen-xl sm:justify-center sm:items-center">
-          {filteredData.map((school) => (
+          {filteredData.filter((s, i) => s.status === 'ok').map((school) => (
             <SchoolCase key={`${school.apskritis}-${school.name}`} school={school}/>
           ))}
         </div>

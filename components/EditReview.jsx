@@ -68,12 +68,18 @@ const EditReview = ({ setOpen, open, review, admin }) => {
         e.preventDefault();
         setLoading(true);
 
-        if (!changes) {
+        if (!changes && !admin) {
             setError("Nieko nepakeitei:D");
             setLoading(false);
-            return;
+            retunr
         } else setError("");
 
+        if(admin) {
+            const res = await fetch(`/api/reviews/status?s=ok&n=${n}&m=${m}&r=${r}`, {
+                method: 'PATCH'
+            })
+
+        }
         try {
             const response = await fetch(`/api/reviews/edit?n=${n}&m=${m}&r=${r}`, {
                 method: "PATCH",
@@ -84,13 +90,14 @@ const EditReview = ({ setOpen, open, review, admin }) => {
             if (!response.ok) {
                 throw new Error("Klaida išsaugant duomenis");
             }
-            window.location.reload()
 
         } catch (error) {
             console.error("Error updating review:", error);
             setError("Nepavyko išsaugoti. Bandykite dar kartą.");
         } finally {
             setLoading(false);
+            window.location.reload()
+
         }
     };
     const deleteReview = async () => {
@@ -191,7 +198,7 @@ const EditReview = ({ setOpen, open, review, admin }) => {
                             disabled={loading}
                             className="px-4 py-2 border border-primary text-primary rounded-md hover:bg-primary hover:text-white"
                         >
-                            {loading ? "Kraunama..." : "Išsaugoti"}
+                            {loading ? "Kraunama..." : admin === true ? 'Patvirtinti' : "Išsaugoti"}
                         </button>
                     </div>
                     
