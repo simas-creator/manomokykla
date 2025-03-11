@@ -54,7 +54,7 @@ export async function POST(req) {
       user,
       n,
       m,
-      r: rCount,
+      r: rCount + 1,
       rec,
       criterion1,
       criterion2,

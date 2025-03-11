@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner"
-const EditReview = ({ setOpen, open, review }) => {
+const EditReview = ({ setOpen, open, review, admin }) => {
     const { criterion1, criterion2, criterion3, comment, n, m, r} = review;
     const [criteria, setCriteria] = useState([criterion1, criterion2, criterion3]);
     const [jsonData, setJsonData] = useState({ criteria: [criterion1, criterion2, criterion3], comment, rec: review.rec });
@@ -125,7 +125,7 @@ const EditReview = ({ setOpen, open, review }) => {
                 >
                     ✖
                 </button>
-                <h3 className="text-2xl font-title text-center mb-6 font-bold">Mano įvertinimas</h3>
+                <h3 className="text-2xl font-title text-center mb-6 font-bold">{admin === true ? 'Mokinio įvertinimas' : 'Mano įvertinimas'}</h3>
                 <form onSubmit={submitForm} className="flex flex-col">
                     <div>
                         <div className="flex flex-col gap-6">
@@ -160,7 +160,7 @@ const EditReview = ({ setOpen, open, review }) => {
                         className="text-sm rounded-md resize-none border border-gray-700 pt-2 px-4 outline-none h-fit max-h-32"
                     ></textarea>
                     <div className="mt-3">
-                        <p className="mb-2 font-medium text-gray-700">Ar rekomenduoji šį mokytoją kitiems?</p>
+                        <p className="mb-2 font-medium text-gray-700">{admin === true ? 'Rekomendacija' : 'Ar rekomenduoji šį mokytoją kitiems?'}</p>
                         <div className="flex gap-3">
                         <div
                             onClick={() => handleRec(false)}

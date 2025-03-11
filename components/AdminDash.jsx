@@ -9,7 +9,8 @@ const Dashb = ({admin, setAdmin}) => {
   const [pchools, setPchools] = useState([]);
   const [peachers, setPeachers] = useState([]);
   const [peviews, setPeviews] = useState([]);
-  
+  const [toggleReview, setToggleReview] = useState({})
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     const getAllData = async () => {
       try {
@@ -31,8 +32,13 @@ const Dashb = ({admin, setAdmin}) => {
     }
     getAllData()
   }, [])
+  const editReview = (r) => {
+    setOpen(true)
+    setToggleReview(r)
+  }
   return (
     <div>
+        
         <div className='p-4 bg-primary pb-20 md:p-8'>
           <div className=''>
             <div>
@@ -44,14 +50,65 @@ const Dashb = ({admin, setAdmin}) => {
                 </button>
             </div>
           </div>
+          {/*Laukia patvirtinimo */}
+        <section className='bg-black mt-8 rounded-xl collapse collapse-arrow mb-4'>
+        <input type="checkbox" className="peer absolute h-fit" />
+          <div className="flex justify-between items-center p-4 rounded-t-xl cursor-pointer">
+            <h3 className="text-2xl md:text-2xl text-white font-title p-2">Laukia patvirtinimo</h3>
+            <svg
+              className="w-6 h-6 text-white transition-transform duration-300 peer-checked:rotate-180"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+          
+          <div className='collapse-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+              {/*Mokymo istaigos */}
+            <div className='w-full mt-3'>
+              <p className='text-white font-title p-4 text-center text-lg'>Mokymo įstaigos</p>
+                <div className='bg-white h-[350px] w-[90%] m-auto overflow-auto rounded-xl shadow max-w-lg'>
+                    {
+                      pchools &&
+                      pchools.map((p, index) => (
+                        <div key={index} className='h-14 border flex items-center p-4 justify-between'>
+                          <p className='w-1/2 truncate'>{p.name}</p>
+                          <button>Peržiūrėti</button>
+                        </div>
+                      ))
+                    }
+                </div>
+            </div>
+
+            {/*Mokytojai */}
+            <div className='w-full mt-3'>
+              <p className='text-white font-title p-4 text-center text-lg'>Mokytojai</p>
+                <div className='bg-white h-[350px] w-[90%] m-auto rounded-xl shadow max-w-lg'>
+      
+                </div>
+            </div>
+
+            {/*Įvertinimai */}
+            <div className='w-full mt-3 mb-8'>
+              <p className='text-white font-title p-4 text-center text-lg'>Įvertinimai</p>
+                <div className='bg-white h-[350px] w-[90%] m-auto rounded-xl shadow max-w-lg'>
+      
+                </div>
+            </div>
+          </div>
+          
+        </section>
           {/*Duomenys */}
           <p className='text-white font-title text-[34px] md:text-[48px] font-medium text-center p-2 md:p-6'>Duomenys</p>
-              <section className='grid grid-col-1 md:grid-cols-2 lg:grid-cols-3'>
+              <section className='flex items-center flex-col md:flex-row gap-x-10 justify-center'>
 
                 {/*Mokymo istaigos */}
-                <div className='w-full'>
+                <div className='max-w-lg w-[85%]'>
                   <p className='text-white font-title p-4 text-center text-lg'>Mokymo įstaigos</p>
-                  <div className='bg-white h-[350px] w-[90%] m-auto rounded-xl shadow max-w-lg'>
+                  <div className='bg-white h-[350px] m-auto rounded-xl shadow max-w-lg'>
                     <div className='border-b'>
                       <SearchBar parameter={'Ieškoti'}></SearchBar>
                     </div>
@@ -59,8 +116,8 @@ const Dashb = ({admin, setAdmin}) => {
                       {
                         schools.length > 0 && 
                           schools.map((s, index) => (
-                          <div key={index} className="p-2 border-b">
-                            <p>{s.name}</p> {/* Adjust this to match your data structure */}
+                          <div key={index} className="p-2 border-b ">
+                            <p className='truncate'>{s.name}</p> {/* Adjust this to match your data structure */}
                           </div>
                         ))
                         
@@ -70,9 +127,9 @@ const Dashb = ({admin, setAdmin}) => {
                 </div>
 
                 {/*Mokytojai */}
-                <div className='w-full'>
+                <div className='max-w-lg w-[85%]'>
                   <p className='text-white font-title p-4 text-center text-lg'>Mokytojai</p>
-                  <div className='bg-white h-[350px] w-[90%] m-auto rounded-xl shadow max-w-lg'>
+                  <div className='bg-white h-[350px] m-auto rounded-xl shadow'>
                     <div className='border-b'>
                       <SearchBar parameter={'Ieškoti'}></SearchBar>
                     </div>
@@ -90,9 +147,10 @@ const Dashb = ({admin, setAdmin}) => {
                   </div>
                 </div>
                 {/*Įvertinimai */}
-                <div className='w-full'>
+                <div className='max-w-lg w-[85%]'>
                   <p className='text-white font-title p-4 text-center text-lg'>Įvertinimai</p>
-                  <div className='bg-white h-[350px] w-[90%] m-auto rounded-xl shadow max-w-lg'>
+                  <div className='bg-white h-[350px] m-auto rounded-xl shadow relative'>
+                  {toggleReview && open && <EditReview admin={true} review={toggleReview} open={open} setOpen={setOpen}></EditReview>}
                     <div>
                       <SearchBar parameter={'Ieškoti'}></SearchBar>
                     </div>
@@ -107,7 +165,7 @@ const Dashb = ({admin, setAdmin}) => {
                       <tbody>
                         {reviews.length > 0 &&
                           reviews.map((r, index) => (
-                            <tr key={index} className="border-b hover:bg-primary hover:text-white cursor-pointer">
+                            <tr onClick={() => editReview(r)} key={index} className="border-b hover:bg-gray-50 cursor-pointer">
                               <td className="w-1/2 p-2 pl-3 truncate">{r.comment.slice(0, 70) + "..."}</td>
                               <td className="w-auto p-2 text-center flex justify-center items-center gap-1">
                                 {((r.criterion1 + r.criterion2 + r.criterion3) / 3).toFixed(1)}
@@ -132,36 +190,7 @@ const Dashb = ({admin, setAdmin}) => {
               </section>
           </div>
 
-        {/*Laukia patvirtinimo */}
-        <section className='bg-black pb-16 pt-8'>
-          <h3 className='text-[34px] md:text-[48px] text-center text-white font-title p-2 md:p-6'>Laukia patvirtinimo</h3>
-          <div className=' grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-              {/*Mokymo istaigos */}
-            <div className='w-full mt-3'>
-              <p className='text-white font-title p-4 text-center text-lg'>Mokymo įstaigos</p>
-                <div className='bg-white h-[350px] w-[90%] m-auto rounded-xl shadow max-w-lg'>
-      
-                </div>
-            </div>
-
-            {/*Mokytojai */}
-            <div className='w-full mt-3'>
-              <p className='text-white font-title p-4 text-center text-lg'>Mokytojai</p>
-                <div className='bg-white h-[350px] w-[90%] m-auto rounded-xl shadow max-w-lg'>
-      
-                </div>
-            </div>
-
-            {/*Įvertinimai */}
-            <div className='w-full mt-3'>
-              <p className='text-white font-title p-4 text-center text-lg'>Įvertinimai</p>
-                <div className='bg-white h-[350px] w-[90%] m-auto rounded-xl shadow max-w-lg'>
-      
-                </div>
-            </div>
-          </div>
-          
-        </section>
+        
     </div>
     
   );
