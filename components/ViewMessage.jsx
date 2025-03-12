@@ -1,5 +1,24 @@
 import Link from "next/link"
 const ViewMessage = ({type, object, message, name, setOpen}) => {
+    const vanishMessage = async () => {
+        try {
+            let res;
+            if(type === 'school') {
+                res = await fetch(`/api/report/schools/delete?user=${object.user}&n=${object.school}`, {
+                    method: 'DELETE'
+                })
+            } else {
+                res = await fetch(`/api/report/teachers/delete?user=${object.user}&n=${object.school}&m=${object.teacher}`, {
+                    method: 'DELETE'
+                })
+            }
+        } catch (error) {
+            console.log(error, 'errror')
+        } finally {
+            window.location.reload()
+        }
+        
+    }
   return (
     <div className="w-full h-[350px] bg-white relative p-8 flex flex-col justify-between">
         <button onClick={() => setOpen(false)} 
@@ -26,6 +45,11 @@ const ViewMessage = ({type, object, message, name, setOpen}) => {
                     <Link href={`/perziureti-mokyklas/-${object.school}/-${object.teacher}`} className="mb-1 truncate text-primary hover:underline">{name[`${object.school}-${object.teacher}`]}</Link>
                 )}
             </div>
+            <button onClick={vanishMessage}>
+                <img src="/images/trash.svg" alt="" />
+            </button>
+                
+            
             </div>
             
             <p className="px-4 mt-4 text-2xl font-medium">Žinutė:</p>

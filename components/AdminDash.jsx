@@ -4,6 +4,7 @@ import SearchBar from './SearchBar';
 import { useEffect, useState } from 'react';
 import Confirm from '@/components/Confirm'
 import ViewMessage from '@/components/ViewMessage'
+import Link from 'next/link';
 const Dashb = ({admin, setAdmin}) => {
   const [loading, setLoading] = useState(true);
   const [pchools, setPchools] = useState([]);
@@ -12,22 +13,14 @@ const Dashb = ({admin, setAdmin}) => {
   const [toggleReview, setToggleReview] = useState({})
   const [open, setOpen] = useState(false);
   const [confirmation, setConfirmation] = useState(false);
-  const [messages, setMessages] = useState(false);
-  const [schoolReports, setSchoolReports] = useState([])
-  const [teacherReports, setTeacherReports] = useState([])
 
   const [toggleTeacher, setToggleTeacher] = useState({})
 
   const [teacherNames, setTeacherNames] = useState({})
-  const [schoolNames, setSchoolNames] = useState({})
   const [openTeacher, setOpenTeacher] = useState(false);
   const [openSchool, setOpenSchool] = useState(false);
   const [toggleSchool, setToggleSchool] = useState({})
 
-  const [teacherMessage, setTeacherMessage] = useState(false);
-  const [schoolMessage, setSchoolMessage] = useState(false);
-  const [toggleTeacherMessage, setToggleTeacherMessage] = useState({})
-  const [toggleSchoolMessage, setToggleSchoolMessage] = useState({})
 
   useEffect(() => {
 
@@ -43,10 +36,7 @@ const Dashb = ({admin, setAdmin}) => {
         setPchools(data.pSchools)
         setPeachers(data.pTeachers)
         setPeviews(data.pReviews)
-        setSchoolReports(data.schoolReports)
-        setTeacherReports(data.teacherReports)
         setTeacherNames(data.teacherNames)
-        setSchoolNames(data.schoolNames)
       } catch (error) {
         console.log('eerorr, ', error)
       } finally {
@@ -68,11 +58,7 @@ const Dashb = ({admin, setAdmin}) => {
     setOpenSchool(true);
     setToggleSchool(s)
   }
-  const back = () => {
-    setConfirmation(false);
-    setMessages(false);
-  }
-  if(!confirmation && !messages) {
+  if(!confirmation) {
     return (
       <>
       <section className='p-4 bg-primary pb-20 md:p-8 h-[100vh]'>
@@ -93,8 +79,8 @@ const Dashb = ({admin, setAdmin}) => {
 <path d="M 25 2 C 12.309295 2 2 12.309295 2 25 C 2 37.690705 12.309295 48 25 48 C 37.690705 48 48 37.690705 48 25 C 48 12.309295 37.690705 2 25 2 z M 25 4 C 36.609824 4 46 13.390176 46 25 C 46 36.609824 36.609824 46 25 46 C 13.390176 46 4 36.609824 4 25 C 4 13.390176 13.390176 4 25 4 z M 37.039062 10.990234 A 1.0001 1.0001 0 0 0 36.265625 11.322266 L 26.183594 22.244141 A 3 3 0 0 0 25 22 A 3 3 0 0 0 22 25 A 3 3 0 0 0 25 28 A 3 3 0 0 0 25.5 27.958984 L 29.125 34.486328 A 1.0010694 1.0010694 0 1 0 30.875 33.513672 L 27.246094 26.984375 A 3 3 0 0 0 28 25 A 3 3 0 0 0 27.652344 23.599609 L 37.734375 12.677734 A 1.0001 1.0001 0 0 0 37.039062 10.990234 z"></path>
 </svg>
         </button>
-        <button onClick={() => setMessages(true)} className='flex items-center  gap-x-2 text-white bg-black rounded-lg px-6 py-4 text-3xl hover:opacity-80 md:mt-20 xl:px-12 xl:py-8 xl:text-[48px]'>
-          <p>Pranešimai</p>
+        <button className='flex items-center  gap-x-2 text-white bg-black rounded-lg px-6 py-4 text-3xl hover:opacity-80 md:mt-20 xl:px-12 xl:py-8 xl:text-[48px]'>
+          <Link href={`/skydelis/pranesimai`} >Pranešimai</Link>
           <img className='w-10 h-10' src="\images\flag-country-svgrepo-com.svg" alt="" />
         </button>
       </div>
@@ -223,14 +209,7 @@ const Dashb = ({admin, setAdmin}) => {
     )
   }
 
-  const viewTeacherMessage = (s) => {
-    setToggleTeacherMessage(s);
-    setTeacherMessage(true);
-  }
-  const viewSchoolMessage = (s) => {
-    setToggleSchoolMessage(s);
-    setSchoolMessage(true);
-  }
+
   if(messages === true) {
     return (
       <div className='bg-primary'>
