@@ -1,4 +1,3 @@
-import Review from '@/lib/modals/review'
 import School from '@/lib/modals/school'
 import Teacher from '@/lib/modals/teacher'
 import SchoolReport from '@/lib/modals/schoolReport'
