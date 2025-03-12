@@ -3,25 +3,21 @@ import Review from "@/lib/modals/review";
 import { revalidateTag } from "next/cache";
 import School from '@/lib/modals/school';
 import Teacher from '@/lib/modals/teacher';
+import connect from '@/lib/mongodb'
 export async function PATCH(req) {
     const {searchParams} = new URL(req.url);
-    const status = searchParams.get('s')
     const n = searchParams.get('n')
     const m = searchParams.get('m')
     const r = searchParams.get('r')
 
-    if(status === 'ok') {
-        await Review.findOneAndUpdate({n, m,r }, {
-            status: "ok"
-        }, {new: true})
-    } else {
-         await Review.findOneAndUpdate({n, m,r }, {
-            status: "pending"
-        })
-    }
-        const review = await Review.findOne({n, m, r})
-        const {criterion1, criterion2, criterion3} = review;
-        const ovrR = ((criterion1 + criterion2 + criterion3) / 3).toFixed(1);
+    await connect()
+    const review = await Review.findOneAndUpdate({n, m, r}, {
+        status: "ok"
+    }, {new: true});
+    console.log(review, 'our updated review');
+    
+    const {criterion1, criterion2, criterion3} = review;
+
         // Update teacher rating
         const teacher = await Teacher.findOne({ n, m });
         if (!teacher) {

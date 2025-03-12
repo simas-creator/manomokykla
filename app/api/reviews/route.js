@@ -8,7 +8,7 @@ export async function POST(req) {
   try {
     await connect();
     const body = await req.json();
-    let { user, n, m, rec, criterion1, criterion2, criterion3, comment, anonymous} = body;
+    let { user, n, m, criterion1, criterion2, criterion3, comment, anonymous} = body;
 
     console.log('checking anonymous, ', anonymous, 'checking user, ', user)
     // Parse values correctly
@@ -17,7 +17,6 @@ export async function POST(req) {
     criterion1 = parseInt(criterion1);
     criterion2 = parseInt(criterion2);
     criterion3 = parseInt(criterion3);
-    rec = Boolean(rec);
     
     const ovrR = ((criterion1 + criterion2 + criterion3) / 3).toFixed(1);
 

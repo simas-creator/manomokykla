@@ -31,7 +31,6 @@ export const GET = async (req) => {
         const query = Object.fromEntries(searchParams.entries());
         const filter = decodeSub(query['dalykas']);
         const number = parseInt(query['school']);
-        const status = searchParams.get('status');
         let data;
         console.log(filter)
         if(filter && filter !== 'undefined') {

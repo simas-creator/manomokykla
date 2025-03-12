@@ -77,8 +77,7 @@ const EditReview = ({ setOpen, open, review, admin }) => {
             const res = await fetch(`/api/reviews/status?s=ok&n=${n}&m=${m}&r=${r}`, {
                 method: 'PATCH'
             })
-        }
-        try {
+        }  else try {
             const response = await fetch(`/api/reviews/edit?n=${n}&m=${m}&r=${r}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
@@ -101,6 +100,7 @@ const EditReview = ({ setOpen, open, review, admin }) => {
             window.location.reload()
 
         }
+        setOpen(false)
     };
     const deleteReview = async () => {
         setDeleting(true)
@@ -118,7 +118,9 @@ const EditReview = ({ setOpen, open, review, admin }) => {
         } finally {
             setDeleting(false)
             setOpen(false)
-            window.location.reload()
+            if(!admin) {
+                window.location.reload()
+            }
         }
     }
     return (

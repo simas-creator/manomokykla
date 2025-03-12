@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 import Review from '@/lib/modals/review';
 import connect from "@/lib/mongodb";
-import School from '@/lib/modals/school';
-import Teacher from '@/lib/modals/teacher';
-import { revalidateTag, revalidatePath} from "next/cache";
 export async function PATCH(req) {
     try {
         await connect();
