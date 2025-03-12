@@ -3,7 +3,7 @@ import LoadingSpinner from './LoadingSpinner';
 import SearchBar from './SearchBar';
 import { useEffect, useState } from 'react';
 import Confirm from '@/components/Confirm'
-
+import ViewMessage from '@/components/ViewMessage'
 const Dashb = ({admin, setAdmin}) => {
   const [loading, setLoading] = useState(true);
   const [pchools, setPchools] = useState([]);
@@ -18,12 +18,17 @@ const Dashb = ({admin, setAdmin}) => {
 
   const [toggleTeacher, setToggleTeacher] = useState({})
 
-  const [reviewsNames, setReviewsNames] = useState({});
   const [teacherNames, setTeacherNames] = useState({})
   const [schoolNames, setSchoolNames] = useState({})
   const [openTeacher, setOpenTeacher] = useState(false);
   const [openSchool, setOpenSchool] = useState(false);
   const [toggleSchool, setToggleSchool] = useState({})
+
+  const [teacherMessage, setTeacherMessage] = useState(false);
+  const [schoolMessage, setSchoolMessage] = useState(false);
+  const [toggleTeacherMessage, setToggleTeacherMessage] = useState({})
+  const [toggleSchoolMessage, setToggleSchoolMessage] = useState({})
+
   useEffect(() => {
 
   }, [])
@@ -217,6 +222,15 @@ const Dashb = ({admin, setAdmin}) => {
       </section>
     )
   }
+
+  const viewTeacherMessage = (s) => {
+    setToggleTeacherMessage(s);
+    setTeacherMessage(true);
+  }
+  const viewSchoolMessage = (s) => {
+    setToggleSchoolMessage(s);
+    setSchoolMessage(true);
+  }
   if(messages === true) {
     return (
       <div className='bg-primary'>
@@ -226,7 +240,8 @@ const Dashb = ({admin, setAdmin}) => {
         <div className='max-w-lg w-[95%]'>
           <p className='text-white font-title p-4 text-center text-lg'>Mokyklų</p>
           <div className='bg-white h-[350px] m-auto rounded-xl shadow overflow-auto'>
-            <div>
+            {schoolMessage && <ViewMessage name={schoolNames} setOpen={setSchoolMessage} type={'school'} object={toggleSchoolMessage}></ViewMessage>}
+            {!schoolMessage && <div>
             <div className='sticky top-0 bg-white'>
               <SearchBar parameter={'Ieškoti'}></SearchBar>
             </div>
@@ -238,42 +253,47 @@ const Dashb = ({admin, setAdmin}) => {
             {
                 schoolReports?.length > 0 && 
                   schoolReports.map((s, index) => (
-                  <div key={index} className="h-[56px] flex items-center justify-between p-2 px-4 border-b hover:bg-gray-100 cursor-pointer">
+                  <div key={index} onClick={() => viewSchoolMessage(s)} className="h-[56px] flex items-center justify-between p-2 px-4 border-b hover:bg-gray-100 cursor-pointer">
                     <p className='truncate w-1/2'>{s.message}</p>
-                    <p className='font-medium w-1/2 px-4 text-center'>{schoolNames[`${s.school}`].slice(0, 24) + '...'}</p>
+                    <p className='font-medium w-1/2 px-4 text-center truncate'>{schoolNames[`${s.school}`]}</p>
                   </div>
                 ))
                 
               }
               {schoolReports?.length === 0 && <p className='text-center p-10'>Duomenų nerasta.</p>}
-            </div>
+            </div>}
+            
           </div>
         </div>
         <div className='max-w-lg w-[95%]'>
           <p className='text-white font-title p-4 text-center text-lg'>Mokytojų</p>
           <div className='bg-white h-[350px] m-auto rounded-xl shadow overflow-auto'>
-            <div>
-            <div className=' sticky top-0'>
-              <SearchBar parameter={'Ieškoti'}></SearchBar>
-            </div>
-            <div className='w-full flex justify-between p-2 border-b'>
-              <p className='px-4 font-medium text-gray-600 w-1/2 text-center'>Žinutė</p>
-              <p className='px-4 font-medium text-gray-600 w-1/2 text-center'>Mokytojas</p>
-            </div>
-            {loading && <LoadingSpinner></LoadingSpinner>}
-            {
-                teacherReports?.length > 0 && 
-                  teacherReports?.map((s, index) => (
-                  <div key={index} className="h-[56px] flex items-center px-4 p-2 border-b hover:bg-gray-100 cursor-pointer">
-                    <p className='truncate w-1/2'>{s.message}</p>
-                    <p className='font-medium text-center w-1/2 px-4'>{teacherNames[`${s.school}-${s.teacher}`].slice(0, 24)}{teacherNames[`${s.school}-${s.teacher}`].slice(0, 24).length > 24 ? + '...' : ''}</p>
-                  </div>
-                ))
-                
-              }
+          {teacherMessage && <ViewMessage name={teacherNames} setOpen={setTeacherMessage} type={'teacher'} object={toggleTeacherMessage}></ViewMessage>}
+          {!teacherMessage && 
+          <div>
+          <div className=' sticky top-0'>
+            <SearchBar parameter={'Ieškoti'}></SearchBar>
+          </div>
+          <div className='w-full flex justify-between p-2 border-b'>
+            <p className='px-4 font-medium text-gray-600 w-1/2 text-center'>Žinutė</p>
+            <p className='px-4 font-medium text-gray-600 w-1/2 text-center'>Mokytojas</p>
+          </div>
+          {loading && <LoadingSpinner></LoadingSpinner>}
+          {
+              teacherReports?.length > 0 && 
+                teacherReports?.map((s, index) => (
+                <div key={index} onClick={() => viewTeacherMessage(s)}  className="h-[56px] flex items-center px-4 p-2 border-b hover:bg-gray-100 cursor-pointer">
+                  <p className='truncate w-1/2'>{s.message}</p>
+                  <p className='font-medium text-center w-1/2 px-4 truncate'>{teacherNames[`${s.school}-${s.teacher}`].split('-')[0]}</p>
+                </div>
+              ))
               
-              {peachers?.length === 0 && <p>Duomenų nerasta.</p>}
-            </div>
+            }
+            
+            {teacherReports?.length === 0 && <p className='p-10 text-center w-full'>Duomenų nerasta.</p>}
+          </div>
+          }
+            
           </div>
         </div>
         </div>
