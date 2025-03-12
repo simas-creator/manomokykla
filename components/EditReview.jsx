@@ -8,7 +8,6 @@ const EditReview = ({ setOpen, open, review, admin }) => {
     const [changes, setChanges] = useState(false);
     const [error, setError] = useState("");
     const [deleting, setDeleting] = useState(false);
-    const recRef = useRef(review.rec)
     const [rec, setRec] = useState(review.rec)
     const handleRating = (i, index) => {
         const updatedCriteria = [...criteria];
@@ -71,14 +70,13 @@ const EditReview = ({ setOpen, open, review, admin }) => {
         if (!changes && !admin) {
             setError("Nieko nepakeitei:D");
             setLoading(false);
-            retunr
+            return
         } else setError("");
 
         if(admin) {
             const res = await fetch(`/api/reviews/status?s=ok&n=${n}&m=${m}&r=${r}`, {
                 method: 'PATCH'
             })
-
         }
         try {
             const response = await fetch(`/api/reviews/edit?n=${n}&m=${m}&r=${r}`, {
@@ -92,9 +90,13 @@ const EditReview = ({ setOpen, open, review, admin }) => {
             }
 
         } catch (error) {
-            console.error("Error updating review:", error);
+            console.log("Error updating review:", error);
             setError("Nepavyko išsaugoti. Bandykite dar kartą.");
         } finally {
+            if(admin) {
+                setOpen(false);
+                return;
+            }
             setLoading(false);
             window.location.reload()
 

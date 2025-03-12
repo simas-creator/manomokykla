@@ -121,9 +121,9 @@ const SchoolPage = ({School}) => {
   }, [School]);
   useEffect(() => {
     if(!search) { 
-      setFilteredData(teachers) 
+      setFilteredData(teachers.filter((t) => (t.status === 'ok'))) 
     } else {
-      setFilteredData(teachers.filter((teacher) => (`${teacher.name.toLowerCase()} ${teacher.surname.toLowerCase()}`).includes(search.toLowerCase())))
+      setFilteredData(teachers.filter((teacher) => (`${teacher.name.toLowerCase()} ${teacher.surname.toLowerCase()}`).includes(search.toLowerCase())).filter((t) => (t.status === 'ok')))
     }
     
   }, [search, teachers])

@@ -128,12 +128,12 @@ useEffect(() => {
           {/* My Ratings Section */}
           <section className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             
-            <div className="bg-white p-6 rounded-lg shadow">
+            <div className="bg-white p-6 rounded-lg shadow max-h-[350px] overflow-auto">
             <h2 className="text-2xl font-bold mb-4">Mano įvertinimai</h2>
               <div className="overflow-x-auto">
                 <table className="w-full table-auto">
                   <thead>
-                    <tr>
+                    <tr className='h-[48px]'>
                       <th className="px-4 py-2 text-left text-gray-600">Mokytojas</th>
                       <th className="px-4 py-2 text-left text-gray-600">Veiksmai</th>
                     </tr>
@@ -141,15 +141,12 @@ useEffect(() => {
                   <tbody>
                     {r?.map((review, index) => (
                       <tr key={index} className='border-t'>
-                        <td className='py-2 px-4'>
+                        <td className='py-2 px-4 h-[48px]'>
                           {teacherNames[`${review.n}-${review.m}`]}
                         </td>
                         <td className='px-4'>
                           <div className='flex items-center'>
                             <button onClick={() => toggleEdit(review)} className="hover:text-primary text-gray-500 hover:underline">Redaguoti</button>
-                            <button className="hover:text-red-500 text-red-400 ml-2">
-                              <svg xmlns="http://www.w3.org/2000/svg"  fill="#ef4444" viewBox="0 0 24 24" width="24px" height="24px"><path d="M 10 2 L 9 3 L 4 3 L 4 5 L 5 5 L 5 20 C 5 20.522222 5.1913289 21.05461 5.5683594 21.431641 C 5.9453899 21.808671 6.4777778 22 7 22 L 17 22 C 17.522222 22 18.05461 21.808671 18.431641 21.431641 C 18.808671 21.05461 19 20.522222 19 20 L 19 5 L 20 5 L 20 3 L 15 3 L 14 2 L 10 2 z M 7 5 L 17 5 L 17 20 L 7 20 L 7 5 z M 9 7 L 9 18 L 11 18 L 11 7 L 9 7 z M 13 7 L 13 18 L 15 18 L 15 7 L 13 7 z"/></svg>
-                            </button>
                           </div>
                           
                         </td>
@@ -164,20 +161,20 @@ useEffect(() => {
                       }
               </div>
             </div>
-            <div className='w-full bg-white rounded-lg shadow p-6'>
+            <div className='w-full bg-white rounded-lg shadow p-6 max-h-[350px] overflow-auto'>
               <h3 className='font-bold text-2xl mb-4'>Pridėti mokytojai</h3>
               <div className='overflow-x-auto'>
                 <table className='min-w-full text-left'>
                   <thead>
                     <tr>
-                      <th className='px-4 py-2 text-gray-600'>Mokytojas</th>
+                      <th className='px-4 py-2 h-[48px] text-gray-600'>Mokytojas</th>
                       <th className='px-4 py-2 text-gray-600'>Data</th>
                     </tr>
                     
                   </thead>
                   <tbody>
                     {t?.map((teacher, index) => (
-                      <tr key={index} className='border-t'>
+                      <tr key={index} className='border-t h-[48px]'>
                         <td className='px-4'>
                           {teacher.name} {teacher.surname}
                         </td>
@@ -195,29 +192,30 @@ useEffect(() => {
                       }
               </div>
             </div>
-            <div className='bg-white p-6 rounded-lg shadow w-full'>
+            <div className='bg-white p-6 rounded-lg shadow w-full max-h-[350px] overflow-auto'>
               <h3 className='font-bold text-2xl mb-4'>Pridėtos mokymo įstaigos</h3>
               <div className='overflow-x-auto'>
-                <table className='min-w-full text-left'>
+                <table className='min-w-full text-left overflow-auto'>
                   <thead>
-                    <tr>
+                    <tr className='h-[48px]'>
                       <th className='px-4 py-2 text-gray-600'>Įstaiga</th>
                       <th className='px-4 py-2 text-gray-600'>Data</th>
                     </tr>
                     
                   </thead>
-                  <tbody>
+                  <tbody >
                     {s?.map((school, index) => (
-                      <tr key={index} className='border-t'>
+                      <tr key={index} className='border-t h-[48px]'>
                         <td className='px-4 py-2'>
-                          {school.name}
+                          {(school.name).slice(0, 24)}
+                          {school.name.length >= 24 && ' ...'}
                         </td>
-                        <td className='px-4'>
+                        <td className='px-4 text-nowrap'>
                           {school.createdAt.split('T')[0]}
                         </td>
                       </tr>
                     ))}
-                              
+                          
                   </tbody>
                 </table>
                 {!s && s !== false && 

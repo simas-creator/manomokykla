@@ -28,7 +28,7 @@ export async function POST(req) {
     }
 
     // Count existing reviews
-    const rCount = await Review.countDocuments({ n, m });
+    const rCount = await Review.countDocuments({ n, m, status: 'ok' });
 
     // Update teacher rating
     const teacher = await Teacher.findOne({ n, m });
@@ -55,41 +55,16 @@ export async function POST(req) {
       n,
       m,
       r: rCount + 1,
-      rec,
       criterion1,
       criterion2,
       criterion3,
       ...(comment?.trim() && { comment }),
       anonymous
     };
-
-    const review = new Review(reviewData);
-
-    const update2 = await Teacher.findOne({ n, m });
-
-    if (update2 && comment) {
-      // Ensure reviews array exists
-      update2.reviews = update2.reviews || [];
-
-      // Count existing reviews
-      const numberOfReviews = update2.reviews.length;
-
-      // Push new review only if less than 2 reviews exist
-      if (numberOfReviews < 2) {
-        update2.reviews.push(review);
-        await update2.save();
-      }
-    }
-
-    if(rec) {
-      await Teacher.findOneAndUpdate({n, m}, {
-        $inc: {rec: 1}
-      }) 
-    }
-    revalidateTag(`school-${n}`)
-    await review.save();
-
-   
+    const newReview = new Review(reviewData);
+    revalidateTag(`school-${n}`);
+    await newReview.save();
+      
 
     return NextResponse.json({ message: "Įvertinimas išsaugotas sėkmingai!", updatedTeacher }, { status: 200 });
 

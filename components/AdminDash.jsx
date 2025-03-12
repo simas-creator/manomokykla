@@ -3,9 +3,7 @@ import LoadingSpinner from './LoadingSpinner';
 import SearchBar from './SearchBar';
 import { useEffect, useState } from 'react';
 import Confirm from '@/components/Confirm'
-const getTeacher = (n, m) => {
-  return 's'
-}
+
 const Dashb = ({admin, setAdmin}) => {
   const [loading, setLoading] = useState(true);
   const [pchools, setPchools] = useState([]);
@@ -193,7 +191,7 @@ const Dashb = ({admin, setAdmin}) => {
                         {peviews?.length > 0 &&
                           peviews.map((r, index) => (
                             <tr onClick={() => editReview(r)} key={index} className="border-b hover:bg-gray-50 cursor-pointer">
-                              <td className="w-1/2 p-2 pl-3 truncate">{r.comment.slice(0, 70) + "..."}</td>
+                              <td className="w-1/2 p-2 pl-3 truncate">{r?.comment?.slice(0, 70) || 'Nėra komentaro' }</td>
                               <td className="w-auto p-2 text-center flex justify-center items-center gap-1">
                                 {((r.criterion1 + r.criterion2 + r.criterion3) / 3).toFixed(1)}
                                 <svg

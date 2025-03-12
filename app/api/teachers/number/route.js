@@ -31,12 +31,13 @@ export const GET = async (req) => {
         const query = Object.fromEntries(searchParams.entries());
         const filter = decodeSub(query['dalykas']);
         const number = parseInt(query['school']);
+        const status = searchParams.get('status');
         let data;
         console.log(filter)
         if(filter && filter !== 'undefined') {
-            data = await Teacher.find({n: number, subject: filter})
+            data = await Teacher.find({n: number, subject: filter, status: 'ok'})
             console.log('hehe')
-        } else data = await Teacher.find({n: number});
+        } else data = await Teacher.find({n: number, status: 'ok'});
         if(!data) {
             return NextResponse.json({ message: 'No teacher found' }, { status: 404 });
         }

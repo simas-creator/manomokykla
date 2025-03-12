@@ -27,49 +27,12 @@ export async function PATCH(req) {
         const [criterion1, criterion2, criterion3] = criteria;
 
         // Update the review
-        const review = await Review.findOneAndUpdate(
+        await Review.findOneAndUpdate(
             { n: numN, m: numM, r: numR },
-            { comment, criterion1, criterion2, criterion3, rec },
+            { comment, criterion1, criterion2, criterion3, rec, status: 'pending'},
             { new: true }
         );
-
-        const school = await School.findOne({ n: numN });
-        
-        const teacher = await Teacher.findOne({n: numN, m: numM})
-        const reviews = await Review.find({n: numN, m: numM})
-        
-        const teacherRating = reviews.reduce((acc, r) => {
-            const one = r.criterion1
-            const two = r.criterion2
-            const three = r.criterion3
-            const avg = (one + two + three) / 3;
-            return acc + avg
-        }, 0) / reviews.length;
-        teacher.rating = teacherRating;
-        console.log('our teacher rating', teacherRating)
-        await teacher.save();
-        const teachers = await Teacher.find({ n: numN });
-        const avgR = teachers.reduce((acc, t) => {
-            return acc + t.rating;
-        }, 0) / teachers.length;
-        console.log(avgR, 'our avg school reting')
-        school.rating = avgR;
-        await school.save();
-        
-
-        if (!review) {
-            return NextResponse.json({ message: "Review not found" }, { status: 404 });
-        }
-
-        revalidateTag(`teachers`)
-        revalidateTag(`teacher-${n}-${m}`)
-        revalidateTag(`school-${n}`);
-        revalidatePath(`/perziureti-mokyklas/-${n}/-${m}`)
-        return NextResponse.json(
-            { message: "Success", updatedReview: review },
-            { status: 200 }
-        );
-
+        return NextResponse.json({message: "success"}, {status: 200})
     } catch (error) {
         console.log("Error processing PATCH request:", error);
         return NextResponse.json({ message: "Server error" }, { status: 500 });

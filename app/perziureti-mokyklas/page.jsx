@@ -64,6 +64,7 @@ const PageContent = () => {
       } else {
         setData(prevData => (pageRef.current === 1 ? result : [...prevData, ...result]));
       }
+
     } catch (error) {
       console.error("Fetch error:", error);
       setHasMore(false);
