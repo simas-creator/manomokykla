@@ -15,8 +15,6 @@ export async function PATCH(req) {
         status: "ok"
     }, {new: true});
     console.log(review, 'our updated review');
-    
-    const {criterion1, criterion2, criterion3} = review;
 
         // Update teacher rating
         const teacher = await Teacher.findOne({ n, m });
