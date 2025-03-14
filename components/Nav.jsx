@@ -58,10 +58,10 @@ function Nav() {
                 </ul>
               </li>
               <li>
-                <a href="/apie-mus">Apie mus</a>
+              <Link href={'/kontaktai'}>Kontaktai</Link>
               </li>
               <li>
-                <a href="/taisykles">Taisyklės</a>
+              <Link href={'/taisykles'}>Taisyklės</Link>
               </li>
             </ul>
           )}
@@ -83,16 +83,16 @@ function Nav() {
                 <Link href="/prideti-mokykla">Pridėti</Link>
                 </li>
                 <li>
-                <Link href="/perziureti-mokyklas">Peržiūrėti</Link>
+                <Link prefetch href="/perziureti-mokyklas">Peržiūrėti</Link>
                 </li>
               </ul>
             </details>
           </li>
           <li>
-            <a>Apie mus</a>
+            <Link href={'/kontaktai'}>Kontaktai</Link>
           </li>
           <li>
-            <a>Taisyklės</a>
+            <Link href={'/taisykles'}>Taisyklės</Link>
           </li>
         </ul>
       </div>
