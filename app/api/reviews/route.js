@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 import Review from "@/lib/modals/review";
-import Teacher from "@/lib/modals/teacher";
-import School from "@/lib/modals/school";
 import connect from "@/lib/mongodb";
 import { revalidateTag } from "next/cache";
 export async function POST(req) {
