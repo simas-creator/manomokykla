@@ -46,7 +46,7 @@ const Page = () => {
         setSchoolMessage(true);
       }
       return (
-        <div className='bg-primary h-[100vh] pt-10'>
+        <div className='bg-primary h-[100vh] pt-10 min-h-fit'>
           <h3 className='text-white font-title text-[34px] md:text-[48px] font-medium text-center p-2 md:mb-4'>Pranešimai</h3>
           <div className=' w-full flex flex-col items-center p-8 pt-3 md:flex-row justify-center gap-x-20'>
           <div className='max-w-lg w-[95%]'>

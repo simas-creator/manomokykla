@@ -8,17 +8,14 @@ export async function POST(req) {
   try {
     await connect();
     const body = await req.json();
-    let { user, n, m, criterion1, criterion2, criterion3, comment, anonymous} = body;
+    let { user, n, m, criterion1, criterion2, criterion3, comment, anonymous, rec} = body;
 
-    console.log('checking anonymous, ', anonymous, 'checking user, ', user)
     // Parse values correctly
     n = parseInt(n);
     m = parseInt(m);
     criterion1 = parseInt(criterion1);
     criterion2 = parseInt(criterion2);
     criterion3 = parseInt(criterion3);
-    
-    const ovrR = ((criterion1 + criterion2 + criterion3) / 3).toFixed(1);
 
     // Check if the user already submitted a review
     const alreadyExist = await Review.findOne({ user, n, m });
@@ -29,31 +26,13 @@ export async function POST(req) {
     // Count existing reviews
     const rCount = await Review.countDocuments({ n, m, status: 'ok' });
 
-    // Update teacher rating
-    const teacher = await Teacher.findOne({ n, m });
-    if (!teacher) {
-      return NextResponse.json({ message: "Mokytojas nerastas." }, { status: 404 });
-    }
-
-    const newR = rCount === 0 
-      ? parseFloat(ovrR) 
-      : ((rCount * parseFloat(teacher.rating) + parseFloat(ovrR)) / (rCount + 1)).toFixed(1);
-
-    const updatedTeacher = await Teacher.findOneAndUpdate({ n, m }, { rating: newR }, { new: true });
-    
-    // Update school rating
-    const teachersInSchool = await Teacher.find({ n });
-    const filtered = teachersInSchool.filter((teacher) => teacher.rating > 0.0)
-    if (filtered.length > 0) {
-      const schoolR = (filtered.reduce((sum, t) => sum + parseFloat(t.rating), 0) / filtered.length).toFixed(1);
-      await School.findOneAndUpdate({ n }, { rating: schoolR });
-    }
     // Save the new review
     const reviewData = {
       user,
       n,
       m,
       r: rCount + 1,
+      rec,
       criterion1,
       criterion2,
       criterion3,
@@ -65,10 +44,10 @@ export async function POST(req) {
     await newReview.save();
       
 
-    return NextResponse.json({ message: "Įvertinimas išsaugotas sėkmingai!", updatedTeacher }, { status: 200 });
+    return NextResponse.json({ message: "Įvertinimas išsaugotas sėkmingai!"}, { status: 200 });
 
   } catch (error) {
-    console.error("Server Error:", error);
+    console.log("Server Error:", error);
     return NextResponse.json({ message: "Server error. Try again later." }, { status: 500 });
   }
 }
