@@ -43,7 +43,6 @@ export async function POST(req) {
     revalidateTag(`school-${n}`);
     await newReview.save();
       
-
     return NextResponse.json({ message: "Įvertinimas išsaugotas sėkmingai!"}, { status: 200 });
 
   } catch (error) {

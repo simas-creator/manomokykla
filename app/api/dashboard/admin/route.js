@@ -9,8 +9,14 @@ export async function GET() {
         const pTeachers = await Teacher.find({status: 'pending'})
         const pReviews = await Review.find({status: 'pending'})
 
-
         const teacherNames ={}
+        const promises = pTeachers.map(async (t) => {
+            const school = await School.findOne({n: t.n})
+            
+            teacherNames[`${t.n}-${t.m}`] = `${t.name} ${t.surname} - ${school.name}`
+        })
+        await Promise.all(promises)
+
         const reviewsPromises = pReviews.map(async (review) => {
             const {n, m} = review;
             const teacher = await Teacher.findOne({n, m});
@@ -23,6 +29,7 @@ export async function GET() {
             }
         })
         await Promise.all(reviewsPromises)
+        console.log(teacherNames, 'our teacherNames')
         return NextResponse.json({
             pSchools,
             pTeachers,

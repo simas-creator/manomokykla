@@ -10,7 +10,7 @@ export async function GET(req) {
         const m = parseInt(searchParams.get("m"));
         const filter1 = searchParams.get('ivertinimai');
 
-        let reviews = await Review.find({ n, m });
+        let reviews = await Review.find({ n, m, status: 'ok' });
 
         reviews.sort((a, b) => {
             const ratingA = (a.criterion1 + a.criterion2 + a.criterion3) / 3;

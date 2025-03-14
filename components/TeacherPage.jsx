@@ -160,7 +160,7 @@ const TeacherPage = ({ teacher }) => {
         }
         if (reviewsRes.ok) {
           setReviews(reviewsData);
-          const recommendedCount = reviewsData.filter(r => r.rec === true).length;
+          const recommendedCount = reviewsData.filter(r => r.rec === true && r.status === 'ok').length;
           setRec(reviewsData.length > 0 ? (recommendedCount / reviewsData.length) * 100 : 0);
         }
       } catch (error) {
@@ -269,7 +269,7 @@ const TeacherPage = ({ teacher }) => {
       {edit === true && <EditReview setOpen={setEdit} open={edit} review={individualReview}/>}
       <button
         onClick={handleBack}
-        className="flex sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
+        className="flex fixed sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -382,6 +382,19 @@ const TeacherPage = ({ teacher }) => {
       
       <div className="mb-8 px-6 w-full grid gap-y-6 grid-flow-row bsm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 justify-items-center ">
         {!form && status !== 'loading' &&
+          reviews.map((r, index) => 
+          <ReviewCase key={index} review={r}></ReviewCase>)
+        }
+        {!form && status !== 'loading' &&
+          reviews.map((r, index) => 
+          <ReviewCase key={index} review={r}></ReviewCase>)
+        }{!form && status !== 'loading' &&
+          reviews.map((r, index) => 
+          <ReviewCase key={index} review={r}></ReviewCase>)
+        }{!form && status !== 'loading' &&
+          reviews.map((r, index) => 
+          <ReviewCase key={index} review={r}></ReviewCase>)
+        }{!form && status !== 'loading' &&
           reviews.map((r, index) => 
           <ReviewCase key={index} review={r}></ReviewCase>)
         }

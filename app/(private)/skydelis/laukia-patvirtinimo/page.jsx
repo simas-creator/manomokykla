@@ -11,7 +11,6 @@ const Page = () => {
     const [peviews, setPeviews] = useState([]);
     const [toggleReview, setToggleReview] = useState({})
     const [open, setOpen] = useState(false);
-    const [confirmation, setConfirmation] = useState(false);
   
     const [toggleTeacher, setToggleTeacher] = useState({})
   
@@ -53,7 +52,7 @@ const Page = () => {
         setToggleSchool(s)
       }
     return (        
-        <section className='bg-primary pb-4 h-[100vh] min-h-fit'>
+        <section className='bg-black pt-10 pb-4 h-[100vh] min-h-fit'>
            
           <h3 className='text-white font-title text-[34px] md:text-[48px] font-medium text-center p-2 md:mb-4'>Laukia patvirtinimo</h3>
                 <section className='flex items-center flex-col md:flex-row gap-x-10 justify-center p-8 pt-3'>
@@ -111,8 +110,8 @@ const Page = () => {
                           peachers?.length > 0 && 
                             peachers.map((s, index) => (
                             <div key={index} onClick={() => editTeacher(s)} className="flex px-6 p-4 border-b hover:bg-gray-100 cursor-pointer">
-                              <p className='w-1/2 truncate'>{s.name} {s.surname}</p>
-                              <p className='w-1/2 truncate'>{schoolNames[`${s.n}`]}</p>
+                              <p className='w-1/2 truncate text-center'>{s.name} {s.surname}</p>
+                              <p className='w-1/2 truncate text-center'>{(teacherNames[`${s.n}-${s.m}`]).split(' - ')[1]}</p>
                             </div>
                           ))
                           
