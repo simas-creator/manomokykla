@@ -58,9 +58,6 @@ function Nav() {
                 </ul>
               </li>
               <li>
-              <Link href={'/kontaktai'}>Kontaktai</Link>
-              </li>
-              <li>
               <Link href={'/taisykles'}>Taisyklės</Link>
               </li>
             </ul>
@@ -87,9 +84,6 @@ function Nav() {
                 </li>
               </ul>
             </details>
-          </li>
-          <li>
-            <Link href={'/kontaktai'}>Kontaktai</Link>
           </li>
           <li>
             <Link href={'/taisykles'}>Taisyklės</Link>

@@ -269,7 +269,7 @@ const TeacherPage = ({ teacher }) => {
       {edit === true && <EditReview setOpen={setEdit} open={edit} review={individualReview}/>}
       <button
         onClick={handleBack}
-        className="flex fixed sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
+        className="flex fixed top-16 bg-white z-20 h-10 w-32 border p-2 sm:hidden items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -285,7 +285,7 @@ const TeacherPage = ({ teacher }) => {
           </svg>
           <span className="font-medium">Atgal</span>
         </button>
-      <main className="w-full px-6 mt-4 sm:mt-10 flex flex-1 sm:px-10">
+      <main className="w-full px-6 mt-14 sm:mt-10 flex flex-1 sm:px-10">
         <div className="w-full">
           <div className="flex gap-3 flex-col md:flex-row md:items-center flex-wrap md:mb-2">
             <div className="p-3 rounded-full border-2 overflow-hidden w-20 h-20">

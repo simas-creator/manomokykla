@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
           className={`${montserrat.className} ${roboto.className} antialiased flex flex-col min-h-screen`}
         >
           <Nav />
-          <main className="flex-grow pt-[65px]">
+          <main className="flex-grow pt-[65px] pb-8">
            {children}
           </main>
           <Footer/>
