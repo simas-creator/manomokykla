@@ -270,15 +270,6 @@ const SchoolPage = ({School}) => {
         {filteredData.map((teacher, index) => (
           <TeacherCase key={index} teacher={teacher} />
         ))}
-        {filteredData.map((teacher, index) => (
-          <TeacherCase key={index} teacher={teacher} />
-        ))}{filteredData.map((teacher, index) => (
-          <TeacherCase key={index} teacher={teacher} />
-        ))}{filteredData.map((teacher, index) => (
-          <TeacherCase key={index} teacher={teacher} />
-        ))}{filteredData.map((teacher, index) => (
-          <TeacherCase key={index} teacher={teacher} />
-        ))}
       </div>
       <div className="pt-4 pb-8 m-auto px-10">
           <p className="w-full text-wrap">

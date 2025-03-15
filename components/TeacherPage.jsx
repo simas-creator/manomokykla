@@ -363,19 +363,6 @@ const TeacherPage = ({ teacher }) => {
           reviews.map((r, index) => 
           <ReviewCase key={index} review={r}></ReviewCase>)
         }
-        {!form && status !== 'loading' &&
-          reviews.map((r, index) => 
-          <ReviewCase key={index} review={r}></ReviewCase>)
-        }{!form && status !== 'loading' &&
-          reviews.map((r, index) => 
-          <ReviewCase key={index} review={r}></ReviewCase>)
-        }{!form && status !== 'loading' &&
-          reviews.map((r, index) => 
-          <ReviewCase key={index} review={r}></ReviewCase>)
-        }{!form && status !== 'loading' &&
-          reviews.map((r, index) => 
-          <ReviewCase key={index} review={r}></ReviewCase>)
-        }
       </div>
       {form && <ReviewForm n={teacher?.n} m={teacher?.m} user={u} open={form} type={school.type} />}
     </section>
