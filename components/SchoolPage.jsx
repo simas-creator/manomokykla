@@ -101,7 +101,7 @@ const SchoolPage = ({School}) => {
   
     async function getTeachers() {
       setLoading(true);
-      
+      const scrollY = window.scrollY || window.pageYOffset;
       try {
         const response = await fetch(`/api/teachers/number?school=${School.n}&dalykas=${queries['dalykas']}`);
         if (!response.ok) throw new Error("Failed to fetch teachers");
@@ -112,11 +112,11 @@ const SchoolPage = ({School}) => {
         console.log("Error fetching teachers:", error);
       } finally {
         setLoading(false); 
+        window.scrollTo(scrollY);
       }
     }
     
     getTeachers();
-    console.log(teachers)
     setSchoolRating(School.rating);
   }, [School]);
   useEffect(() => {

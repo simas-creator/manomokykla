@@ -131,6 +131,7 @@ const TeacherPage = ({ teacher }) => {
     }
   
     const fetchData = async () => {
+      const scrollY = window.scrollY || window.pageYOffset;
       try {
         const reviewCheckPromise = session?.user?.email
           ? fetch(`/api/reviews/check?user=${session.user.email}&n=${teacher.n}&m=${teacher.m}`)
@@ -167,6 +168,7 @@ const TeacherPage = ({ teacher }) => {
         console.log("Error fetching data:", error);
       } finally {
         setLoading(false);
+        window.scrollTo(scrollY)
       }
     };
   
