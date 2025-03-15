@@ -1,6 +1,6 @@
 'use client';
 import { Suspense, useEffect, useRef, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import FilterParameter from '@/components/FilterParameter';
 import SchoolCase from '@/components/SchoolCase';
 import SearchBar from '@/components/SearchBar';
@@ -142,7 +142,7 @@ const PageContent = () => {
 };
 
 const Page = () => (
-  <Suspense fallback={<p className='w-full mt-32'>Kraunama...</p>}>
+  <Suspense fallback={<p className='w-full mt-32 text-center'></p>}>
     <PageContent />
   </Suspense>
 );
