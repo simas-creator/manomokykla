@@ -53,7 +53,7 @@ const Login = () => {
   };
 
   return (
-    <div className="mx-4">
+    <div className="mx-4 pb-8">
 <div className="max-w-md mx-auto ring-primary ring bg-white shadow-sm rounded-lg p-6 mt-10">
       <h1 className="font-semibold text-3xl mt-5 font-title">Prisijungti</h1>
       <p className="text-slate-500 mt-2 mb-4">Nurodykite reikiamus duomenis</p>
