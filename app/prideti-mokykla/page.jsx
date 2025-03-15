@@ -116,8 +116,8 @@ const SchoolForm = () => {
   
   return (
     <section className="flex justify-center flex-col px-4 py-8 max-w-3xl mx-auto">
-      <h1 className='text-center text-3xl font-title text-gray-800 mb-6'>Pridėti mokyklą</h1>
-      <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-lg p-8 space-y-6 font-title">
+      <h1 className='text-center text-3xl font-title text-gray-800 mb-6 mt-4 font-semibold'>Pridėti mokyklą</h1>
+      <form onSubmit={handleSubmit} className="bg-white shadow-lg border border-primary rounded-lg p-8 space-y-6 font-title">
         {/* Input for Name */}
         <div className="space-y-4">
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">Pavadinimas*</label>
