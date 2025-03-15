@@ -158,26 +158,7 @@ const SchoolPage = ({School}) => {
   if(report) {
     return (
       <>
-
-    <button
-      onClick={handleBack}
-      className="flex sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className="w-6 h-6 group-hover:-translate-x-1 transition-transform duration-300"
-        >
-          <path
-            fillRule="evenodd"
-            d="M15.707 4.293a1 1 0 010 1.414L10.414 11H20a1 1 0 110 2h-9.586l5.293 5.293a1 1 0 11-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"
-            clipRule="evenodd"
-          />
-        </svg>
-        <span className="font-medium">Atgal</span>
-      </button>
-      <main className='mt-4 sm:mt-10 w-auto flex flex-col'>
+      <main className='bsm:mt-10 w-auto flex flex-col'>
 
       <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row bsm:px-6 sm:px-10">
       <div className="h-54  w-full bsm:w-auto overflow-hidden relative bsm:border-b-0 bsm:h-20">
@@ -217,9 +198,9 @@ const SchoolPage = ({School}) => {
   return (
     <section>
       {login && <LoginRegister setLogin={setLogin} login={login} />}
-        <button
+      <button
         onClick={handleBack}
-        className="flex sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
+        className="flex fixed top-16 bg-white z-20 h-10 w-32 border p-2 bsm:hidden items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -235,13 +216,13 @@ const SchoolPage = ({School}) => {
           </svg>
           <span className="font-medium">Atgal</span>
         </button>
-        <main className='mt-4 sm:mt-10 w-auto flex flex-col'>
+        <main className='bsm:mt-10 w-auto flex flex-col'>
 
             <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row bsm:px-6 sm:px-10">
             <div className="h-54  w-full bsm:w-auto overflow-hidden relative bsm:border-b-0 bsm:h-20">
               <img 
                 src={School.imgUrl}
-                className="h-64 w-full bsm:h-20 bsm:w-20 bsm:opacity-100 object-cover bsm:rounded-lg bsm:border-2 border-2"
+                className="h-64 w-full bsm:h-20 bsm:w-20 bsm:opacity-100 object-cover bsm:rounded-lg bsm:border-2 md:border-2"
               />
               
               <div className="bsm:hidden absolute bottom-0 left-0 w-full h-[70%] bg-gradient-to-t from-white/100 to-transparent"></div>
@@ -289,7 +270,15 @@ const SchoolPage = ({School}) => {
         {filteredData.map((teacher, index) => (
           <TeacherCase key={index} teacher={teacher} />
         ))}
-        
+        {filteredData.map((teacher, index) => (
+          <TeacherCase key={index} teacher={teacher} />
+        ))}{filteredData.map((teacher, index) => (
+          <TeacherCase key={index} teacher={teacher} />
+        ))}{filteredData.map((teacher, index) => (
+          <TeacherCase key={index} teacher={teacher} />
+        ))}{filteredData.map((teacher, index) => (
+          <TeacherCase key={index} teacher={teacher} />
+        ))}
       </div>
       <div className="pt-4 pb-8 m-auto px-10">
           <p className="w-full text-wrap">
