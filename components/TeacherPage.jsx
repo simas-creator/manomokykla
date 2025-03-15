@@ -168,13 +168,12 @@ const TeacherPage = ({ teacher }) => {
         console.log("Error fetching data:", error);
       } finally {
         setLoading(false);
-        window.scrollTo(scrollY)
+        window.scrollTo(0, scrollY)
       }
     };
   
     fetchData();
-  }, [teacher, session, searchParams, prevReviewRef]); // ✅ Now it's safe
-  
+  }, [teacher, session, searchParams, prevReviewRef]); 
   
   const handleBack = () => {
     router.push(`${pathname.slice(0, pathname.lastIndexOf('/'))}`)
@@ -195,25 +194,7 @@ const TeacherPage = ({ teacher }) => {
   if(report) {
     return (
       <div>
-          <button
-            onClick={handleBack}
-            className="flex sm:hidden mt-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300 p-2 rounded-lg group"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-6 h-6 group-hover:-translate-x-1 transition-transform duration-300"
-              >
-            <path
-              fillRule="evenodd"
-              d="M15.707 4.293a1 1 0 010 1.414L10.414 11H20a1 1 0 110 2h-9.586l5.293 5.293a1 1 0 11-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <span className="font-medium">Atgal</span>
-        </button>
-        <div className="px-6 sm:px-10 mt-4 sm:mt-10">
+        <div className="px-6 sm:px-10 mt-14 sm:mt-10 pb-8">
         <div className="flex gap-3 md:mb-2 flex-col md:flex-row md:items-center flex-wrap">
             <div className="p-3 rounded-full border-2 overflow-hidden w-20 h-20">
               <img src={teacher?.imageUrl} alt="" />
@@ -234,10 +215,7 @@ const TeacherPage = ({ teacher }) => {
 (
               <>
                 <p>
-                  Rekomenduoja <span className="text-primary font-medium">{(rec).toFixed(0)}%</span> {
-                    (rec).toFixed(0) % 10 === 1 && !((rec).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? "mokinys" : (length / teacher?.rec * 100).toFixed(0) % 10 === 0 || ((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? 
-                    "mokinių" : "mokiniai"
-                  }
+                  Rekomenduoja <span className="text-primary font-medium">{(rec).toFixed(0)}%</span> mokinių
                 </p>
                 <div>
                   <Image width={24} height={24} alt="Thumbs up" src="/images/thumbs-up.svg" />
@@ -266,7 +244,7 @@ const TeacherPage = ({ teacher }) => {
     )
   }
   return (
-    <section className="">
+    <section className="pb-8">
       {showLogin === true && <LoginRegister setLogin={setShowLogin} login={showLogin}/>}
       {edit === true && <EditReview setOpen={setEdit} open={edit} review={individualReview}/>}
       <button
@@ -309,10 +287,8 @@ const TeacherPage = ({ teacher }) => {
 (
               <>
                 <p>
-                  Rekomenduoja <span className="text-primary font-medium">{(rec).toFixed(0)}%</span> {
-                    (rec).toFixed(0) % 10 === 1 && !((rec).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? "mokinys" : (length / teacher?.rec * 100).toFixed(0) % 10 === 0 || ((length / teacher?.rec * 100).toFixed(0) >= 11 && (length / teacher?.rec * 100).toFixed(0) <= 19) ? 
-                    "mokinių" : "mokiniai"
-                  }
+                  Rekomenduoja <span className="text-primary font-medium">{(rec).toFixed(0)}% </span>
+                  mokinių
                 </p>
                 <div>
                   <Image width={24} height={24} alt="Thumbs up" src="/images/thumbs-up.svg" />

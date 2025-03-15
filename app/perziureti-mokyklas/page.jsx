@@ -81,7 +81,7 @@ const PageContent = () => {
       setHasMore(true);
       isFetching.current = false;
       fetchData();
-    }, 300); // Debounce for 300ms
+    }, 300);
   
     return () => clearTimeout(timeout);
   }, [searchParams]);
@@ -90,8 +90,8 @@ const PageContent = () => {
     const observer = new IntersectionObserver(
       async (entries) => {
         if (entries[0].isIntersecting && hasMore && !loading && !isFetching.current) {
-          pageRef.current += 1; // Increment first
-          await fetchData(); // Then fetch
+          pageRef.current += 1;
+          await fetchData(); 
         }
       },
       { threshold: 1 }
@@ -112,7 +112,7 @@ const PageContent = () => {
     : data;
   
   return (
-    <div className='w-full'>
+    <div className='w-full pb-8'>
       <SearchBar parameter={"Ieškokite mokyklos"} setSearch={setSearch} />
       
       <div className='w-full'>

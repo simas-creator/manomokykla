@@ -112,7 +112,7 @@ const SchoolPage = ({School}) => {
         console.log("Error fetching teachers:", error);
       } finally {
         setLoading(false); 
-        window.scrollTo(scrollY);
+        window.scrollTo(0, scrollY);
       }
     }
     
@@ -158,13 +158,13 @@ const SchoolPage = ({School}) => {
   if(report) {
     return (
       <>
-      <main className='bsm:mt-10 w-auto flex flex-col'>
+      <main className='bsm:mt-10 w-auto flex flex-col pb-8'>
 
       <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row bsm:px-6 sm:px-10">
       <div className="h-54  w-full bsm:w-auto overflow-hidden relative bsm:border-b-0 bsm:h-20">
               <img 
                 src={School.imgUrl}
-                className="h-64 w-full bsm:h-20 bsm:w-20 bsm:opacity-100 object-cover bsm:rounded-lg bsm:border-2 border-2"
+                className="h-64 w-full bsm:h-20 bsm:w-20 bsm:opacity-100 object-cover bsm:rounded-lg bsm:border-2"
               />
               
               <div className="bsm:hidden absolute bottom-0 left-0 w-full h-[70%] bg-gradient-to-t from-white/100 to-transparent"></div>
@@ -196,7 +196,7 @@ const SchoolPage = ({School}) => {
       </>)
   }
   return (
-    <section>
+    <section className="pb-8">
       {login && <LoginRegister setLogin={setLogin} login={login} />}
       <button
         onClick={handleBack}
