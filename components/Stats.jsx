@@ -4,10 +4,10 @@ import Review from '@/lib/modals/review'
 import User from '@/lib/modals/user'
 
 const getStats = async () => {
-    const schoolsPromise = School.countDocuments();
-    const teachersPromise = Teacher.countDocuments();
-    const reviewsPromise = Review.countDocuments();
-    const userPromise = User.countDocuments();
+    const schoolsPromise = School.estimatedDocumentCountd();
+    const teachersPromise = Teacher.estimatedDocumentCountd();
+    const reviewsPromise = Review.estimatedDocumentCountd();
+    const userPromise = User.estimatedDocumentCountd();
     const [schools, teachers, reviews, users] = await Promise.all([schoolsPromise, teachersPromise, reviewsPromise, userPromise])
     return {
         schools,
