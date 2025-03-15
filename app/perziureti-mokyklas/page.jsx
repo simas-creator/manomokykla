@@ -56,7 +56,10 @@ const PageContent = () => {
         headers: { "Content-Type": "application/json" },
       });
   
-      if (!res.ok) throw new Error("Error fetching data");
+      if (!res.ok) {
+        console.log('error fetching data');
+        return
+      }
   
       const result = await res.json();
       if (result.length === 0) {
