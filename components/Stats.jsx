@@ -2,8 +2,9 @@ import School from '@/lib/modals/school'
 import Teacher from '@/lib/modals/teacher'
 import Review from '@/lib/modals/review'
 import User from '@/lib/modals/user'
-
+import connect from '@/lib/mongodb'
 const getStats = async () => {
+    await connect();
     const schoolsPromise = School.estimatedDocumentCount();
     const teachersPromise = Teacher.estimatedDocumentCount();
     const reviewsPromise = Review.estimatedDocumentCount();
