@@ -17,8 +17,26 @@ const roboto = Roboto({
 });
 
 export const metadata = {
-  title: "Mokytojų bei dėstytojų įvertinimai",
-  description: "EDUinf",
+  title: "manomokyk.la",
+  description: "Mokytojų ir dėstytojų vertinimo platforma.",
+  icons: {
+    icon: "/images/la.svg",
+  },
+  openGraph: {
+    title: "manomokyk.la",
+    description: "Mokytojų ir dėstytojų vertinimo platforma.",
+    url: "https://manomokyk.la",
+    siteName: "EDUinf",
+    images: [
+      {
+        url: "/images/openGraph.png", 
+        width: 1200,
+        height: 630,
+        alt: "manomokykla",
+      },
+    ],
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }) {
