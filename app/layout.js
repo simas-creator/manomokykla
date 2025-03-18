@@ -17,6 +17,7 @@ const roboto = Roboto({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://manomokyk.la"), 
   title: "manomokyk.la",
   description: "Mokytojų ir dėstytojų vertinimo platforma.",
   icons: {
