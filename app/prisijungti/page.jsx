@@ -50,6 +50,9 @@ const Login = () => {
       setError("Įvyko serverio klaida");
       console.log(err)
     }
+    finally {
+      router.push('/skydelis')
+    }
   };
 
   return (
