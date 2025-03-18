@@ -32,11 +32,10 @@ const Login = () => {
     }
     setLoading(true);
     try {
-      // Sign in with the Credentials provider
       const result = await signIn("credentials", {
         email,
         password,
-        redirect: false,
+        redirect: true,
       });
 
       if (result?.error) {
@@ -44,6 +43,7 @@ const Login = () => {
         setLoading(false);
       } else {
         router.push("/skydelis");
+        setLoading('false')
       }
     } catch (err) {
       setLoading(false);
@@ -52,6 +52,7 @@ const Login = () => {
     }
     finally {
       router.push('/skydelis')
+      setLoading(false)
     }
   };
 
