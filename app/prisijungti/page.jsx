@@ -19,6 +19,8 @@ const Login = () => {
   useEffect(() => {
     if(searchParams.get('error') === 'prisiregistruokite') {
       setError("Prieš prisijungiant, prašome prisiregistruoti");
+    } else if (searchParams.get('error') === 'CredentialsSignin') {
+      setError('Neteisingas el. pašto adresas arba slaptažodis')
     }
   }, [searchParams])
   const submit = async (e) => {

@@ -1,31 +1,34 @@
-"use client";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+
 import TeacherPage from "@/components/TeacherPage";
 
-export default function Page() {
-  const pathname = usePathname();
-  const [teacher, setTeacher] = useState(null);
+async function getTeacherData(n, m) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXTAUTH_URL}/api/url?n=${n}&m=${m}`,
+      { cache: "force-cache" }
+    );
+    
+    if (!res.ok) {
+      return null;
+    }
 
-  useEffect(() => {
+    return await res.json();
+  } catch (error) {
+    console.error("Fetch failed:", error);
+    return null;
+  }
+}
+export default async function Page({ params }) {
+  const data = await params;
+  const id = await data.id;
+  const teacher = await data.teacher;
+  const n = id.match(/(\d+)$/)[0];
+  const m = teacher.match(/(\d+)$/)[0];
+  console.log('our n: ', n, 'our m: ', m)
+  if (!n || !m) {
+    return <div className="w-full text-center mt-20">Tokio mokytojo nėra</div>;
+  }
 
-    const fetchTeacherData = async () => {
-      try {
-        const res = await fetch(`/api/url?path=${encodeURIComponent(pathname)}`);
-        
-        if (!res.ok) {
-          console.log('ivyko klaida')
-        }
-
-        const data = await res.json();
-        setTeacher(data);
-      } catch (error) {
-        console.log("Fetch failed:", error);
-      }
-    };
-
-    fetchTeacherData();
-  }, [pathname]);
-
-  return <TeacherPage teacher={teacher} />;
+  const t = await getTeacherData(n, m);
+  return <TeacherPage teacher={t} />;
 }

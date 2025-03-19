@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image"
 import StarRating from "./StarRating";
 import { useEffect, useState, useRef } from "react";
