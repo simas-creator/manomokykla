@@ -9,6 +9,7 @@ import TeacherForm from "@/components/TeacherForm"
 import { useRouter, useSearchParams } from "next/navigation";
 import Report from '@/components/SchoolReport';
 import LoginRegister from "@/components/LoginRegister";
+import TinderCard from '@/components/TinderCard'
 const decodeSub = (str) => {
   const stringMap = {
     "biologija": "Biologija",
@@ -66,6 +67,8 @@ const SchoolPage = ({School}) => {
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState();
   const [login, setLogin] = useState(false);
+
+  const [tinder, setTinder] = useState(false)
   const subjects = [
     "Biologija",
     "Chemija",
@@ -155,6 +158,20 @@ const SchoolPage = ({School}) => {
     }
     setReport(true);
   }
+  const handleRateAll = () => {
+      if(tinder) {
+        setTinder(false)
+        return;
+      }
+      setTinder(true);
+  }
+  if(tinder) {
+    return (
+      <div>
+        <TinderCard setOpen={setTinder} teachers={teachers}></TinderCard>
+      </div>
+    )
+  }
   if(report) {
     return (
       <>
@@ -235,11 +252,20 @@ const SchoolPage = ({School}) => {
             </div>
           </div>
             <div className="mt-3 w-full z-10 flex justify-between relative px-6 sm:px-10">
-              <button onClick={() => handleForm()} className="w-auto px-4 py-2 border rounded-lg border-primary transition-colors text-primary font-medium hover:text-black text-sm hover:bg-primary">Pridėti {School.type === 'Gimnazija' ? ('mokytoją'): ('dėstytoją')}</button>
+              <div className="flex flex-col gap-y-3">
+                <button onClick={() => handleForm()} className="w-auto px-4 py-2 border rounded-lg border-primary transition-colors text-primary font-medium hover:text-black text-sm hover:bg-primary">Pridėti {School.type === 'Gimnazija' ? ('mokytoją'): ('dėstytoją')}</button>
+                <button 
+                  onClick={() => handleRateAll()} 
+                  className="w-auto px-5 py-3 border rounded-lg border-primary bg-gradient-to-r from-primary to-violet-200 text-white text-sm hover:scale-[1.01] transition-transform shadow-lg"
+                  >
+                  Greitai įvertinti mokytojus
+                </button>
+              </div>
+              
               {showReport === true && 
               <button
               onClick={() => handleReport()} 
-              className="flex text-sm items-center gap-2 border px-2 py-1 border-red-400 text-red-400 rounded-md hover:bg-red-400 hover:text-white transition-colors" >
+              className="flex text-sm h-10 items-center gap-2 border px-2 py-1 border-red-400 text-red-400 rounded-md hover:bg-red-400 hover:text-white transition-colors" >
                 Pranešti
                 <img src="/images/flag-country-svgrepo-com.svg" className="w-6 h-6" alt="" />
               </button>}
