@@ -16,3 +16,41 @@ body {
 html, body {
   overflow-x: hidden;
 }
+
+@keyframes blink {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #009dff;
+  }
+}
+@keyframes typing {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+@keyframes hideCursor {
+  to {
+    border-color: transparent;
+  }
+}
+.typed {
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+  border-right: 3px solid #00aaff;
+  width: 0;
+  padding-right: 2px;
+  max-width: fit-content;
+  animation: typing 3s steps(40, end) forwards, blink 0.5s step-end 6, hideCursor 0s 3s forwards;;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  
+}
+

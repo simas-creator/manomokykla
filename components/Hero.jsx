@@ -95,7 +95,7 @@ function Hero() {
       <div className="container mx-auto px-4">
         {/* Hero header */}
         <div className="mb-12 text-center">
-          <h1 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
+          <h1 className="mb-4 text-3xl typed font-bold tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
             Atraskite ir įvertinkite <span className="text-primary">mokyklas</span>
           </h1>
           <p className="mx-auto max-w-2xl text-gray-600 md:text-lg">
