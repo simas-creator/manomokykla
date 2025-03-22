@@ -101,7 +101,7 @@ const LoginRegister = ({ setLogin, login }) => {
   };
 
   return (
-    <div className="z-20 fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm px-10">
+    <div className="z-[21] fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm px-10">
       <div className="bg-white mt-24 rounded-md p-4 ring-2 ring-primary max-w-md mx-auto relative pb-8">
         <button onClick={() => setLogin(false)} className="absolute top-2 right-3 text-xl font-bold text-gray-500 hover:text-gray-800">
           ✖

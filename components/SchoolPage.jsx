@@ -256,7 +256,7 @@ const SchoolPage = ({School}) => {
                 <button onClick={() => handleForm()} className="w-auto px-4 py-2 border rounded-lg border-primary transition-colors text-primary font-medium hover:text-black text-sm hover:bg-primary">Pridėti {School.type === 'Gimnazija' ? ('mokytoją'): ('dėstytoją')}</button>
                 <button 
                   onClick={() => handleRateAll()} 
-                  className="w-auto px-5 py-3 border rounded-lg border-primary bg-gradient-to-r from-primary to-violet-200 text-white text-sm hover:scale-[1.01] transition-transform shadow-lg"
+                  className="md:hidden w-auto px-5 py-3 border rounded-lg border-primary bg-gradient-to-r from-primary to-violet-200 text-white text-sm hover:scale-[1.01] transition-transform shadow-lg"
                   >
                   Greitai įvertinti mokytojus
                 </button>
