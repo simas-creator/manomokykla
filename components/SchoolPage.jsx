@@ -67,7 +67,7 @@ const SchoolPage = ({School}) => {
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState();
   const [login, setLogin] = useState(false);
-
+  const [user, setUser] = useState()
   const [tinder, setTinder] = useState(false)
   const subjects = [
     "Biologija",
@@ -138,6 +138,7 @@ const SchoolPage = ({School}) => {
       setShowReport(true);
       return;
     }
+    setUser(session.user.email);
     const fetchIfReported = async () => {
       const res = await checkIfReported(School, session);
       if(res === true) {
@@ -165,10 +166,10 @@ const SchoolPage = ({School}) => {
       }
       setTinder(true);
   }
-  if(tinder) {
+  if(tinder && session) {
     return (
       <div>
-        <TinderCard setOpen={setTinder} teachers={teachers}></TinderCard>
+        <TinderCard setOpen={setTinder} teachers={teachers} user={user}></TinderCard>
       </div>
     )
   }

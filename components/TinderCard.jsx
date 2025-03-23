@@ -2,18 +2,21 @@
 
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
+import { useSession } from "next-auth/react"
+import LoadingSpinner from "./LoadingSpinner"
 
-const Case = ({ teacher, style, onSwipe }) => {
-  const criteria = [
-    "Gebėjimas perteikti žinias",
-    "Gebėjimas bendrauti su mokiniais",
-    "Dalyko išmanymas",
-  ];
+const Case = ({ teacher, style, onSwipe, user, loading, setLoading }) => {
+  const criteria = ["Gebėjimas perteikti žinias", "Gebėjimas bendrauti su mokiniais", "Dalyko išmanymas"]
   const [startX, setStartX] = useState(0)
   const [offsetX, setOffsetX] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const cardRef = useRef(null)
-  const [jsonData, setJsonData] = useState({})
+  const [jsonData, setJsonData] = useState({
+    "Gebėjimas bendrauti su mokiniais": 1,
+    "Gebėjimas perteikti žinias": 1,
+    "Dalyko išmanymas": 1,
+  })
+
   // Start dragging
   const handleStart = (clientX) => {
     setIsDragging(true)
@@ -24,27 +27,48 @@ const Case = ({ teacher, style, onSwipe }) => {
     setJsonData((prev) => ({
       ...prev,
       [criterion]: value,
-    }));
-  };
+    }))
+  }
   // Handle mouse/touch move
   const handleMove = (clientX) => {
     if (!isDragging) return
     const diff = clientX - startX
     setOffsetX(diff)
   }
- 
-  // End dragging
-  const handleEnd = () => {
-    if (!isDragging) return
 
+  // End dragging
+  const handleEnd = (e) => {
+    // If the click target is a rating star, don't process as a swipe
+    if (e && (e.target.classList.contains("mask-star-2") || e.target.closest(".rating"))) {
+      setIsDragging(false)
+      setOffsetX(0)
+      return
+    }
+
+    if (!isDragging) return
+    let direction = offsetX > 0 ? true : false;
+    const addReview = async () => {
+      const rec = direction;
+      const dataToSend = { ...jsonData, user, n: teacher.n, m: teacher.m, rec }
+      console.log(dataToSend)
+      // API call code...
+      setInterval(() => {
+        setLoading(false)
+      }, 3000)
+    }
     // Determine if swipe was significant enough
     if (Math.abs(offsetX) > 100) {
       // Swipe was significant
-      const direction = offsetX > 0 ? "right" : "left"
+      direction = offsetX > 0 ? true : false
       onSwipe(direction)
+      addReview()
+      setLoading(true);
+
     }
+
+   
     
-    // Reset position
+    setJsonData({ "Gebėjimas bendrauti su mokiniais": 1, "Gebėjimas perteikti žinias": 1, "Dalyko išmanymas": 1 })
     setOffsetX(0)
     setIsDragging(false)
   }
@@ -58,52 +82,58 @@ const Case = ({ teacher, style, onSwipe }) => {
     transform: `translateX(${offsetX}px) rotate(${rotation}deg)`,
     transition: isDragging ? "none" : "transform 0.3s ease",
   }
-
   return (
     <div
       ref={cardRef}
-      className="max-w-80 w-auto h-80 bg-white rounded-lg shadow-lg cursor-grab active:cursor-grabbing"
+      className="max-w-80 relative w-auto h-80 bg-white rounded-lg shadow-lg cursor-grab active:cursor-grabbing"
       style={cardStyle}
       onMouseDown={(e) => handleStart(e.clientX)}
       onMouseMove={(e) => handleMove(e.clientX)}
-      onMouseUp={handleEnd}
-      onMouseLeave={handleEnd}
+      onMouseUp={(e) => handleEnd(e)}
+      onMouseLeave={(e) => handleEnd(e)}
       onTouchStart={(e) => handleStart(e.touches[0].clientX)}
       onTouchMove={(e) => handleMove(e.touches[0].clientX)}
-      onTouchEnd={handleEnd}
+      onTouchEnd={(e) => handleEnd(e)}
     >
+      {loading &&
+        <div className="rounded-lg absolute z-[24] top-0 left-0 w-full gap-x-2 h-full bg-white flex justify-center items-center">
+          
+          <div className="flex justify-center items-center h-full">
+            <div className="w-12 h-12 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+          </div>
+        </div>
+      }
       <div className="p-4 flex justify-center flex-col">
         <div className="ml-2 flex gap-x-2 items-center">
-          <Image src={teacher.imageUrl} width={50} height={50} alt="mokytojas"></Image>
+          <Image src={teacher.imageUrl || "/placeholder.svg"} width={50} height={50} alt="mokytojas"></Image>
           <div className="flex flex-col">
-            <h3 className="text-xl font-bold truncate">{(teacher.name + ' ' + teacher.surname).slice(0,21)}
-            {teacher.name.length + teacher.surname.length > 20 && "..."}
+            <h3 className="text-xl font-bold truncate">
+              {(teacher.name + " " + teacher.surname).slice(0, 21)}
+              {teacher.name.length + teacher.surname.length > 20 && "..."}
             </h3>
-            
+
             {teacher.subject && <p className="text-gray-600">{teacher.subject}</p>}
           </div>
-
-          
         </div>
         <div className="flex flex-col gap-4 mt-4">
-              {criteria.map((criterion) => (
-                <div key={criterion} className="flex flex-col">
-                  <p className="font-medium text-gray-700">{criterion}</p>
-                  <div className="rating flex gap-1">
-                    {[1, 2, 3, 4, 5].map((index) => (
-                      <input
-                        key={index}
-                        type="radio"
-                        name={criterion}
-                        className="mask mask-star-2 w-8 h-8 bg-orange-400"
-                        onChange={() => handleRating(criterion, index)}
-                        defaultChecked={index===1}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ))}
+          {criteria.map((criterion) => (
+            <div key={criterion} className="flex flex-col">
+              <p className="font-medium text-gray-700">{criterion}</p>
+              <div className="rating flex gap-1">
+                {[1, 2, 3, 4, 5].map((index) => (
+                  <input
+                    key={index}
+                    type="radio"
+                    name={criterion}
+                    className="mask mask-star-2 w-8 h-8 bg-orange-400"
+                    onChange={() => handleRating(criterion, index)}
+                    defaultChecked={jsonData[criterion] === index}
+                  />
+                ))}
+              </div>
             </div>
+          ))}
+        </div>
       </div>
 
       {/* Swipe indicators */}
@@ -112,7 +142,7 @@ const Case = ({ teacher, style, onSwipe }) => {
           offsetX < -20 ? "opacity-100" : "opacity-0"
         }`}
       >
-        <Image src={'/images/thumbs-down-red.svg'} width={80} height={80} alt="thumbs-up"></Image>
+        <Image src={"/images/thumbs-down-red.svg"} width={80} height={80} alt="thumbs-up"></Image>
       </div>
 
       <div
@@ -120,17 +150,18 @@ const Case = ({ teacher, style, onSwipe }) => {
           offsetX > 20 ? "opacity-100" : "opacity-0"
         }`}
       >
-        <Image src={'/images/thumbs-up.svg'} width={80} height={80} alt="thumbs-up"></Image>
+        <Image src={"/images/thumbs-up.svg"} width={80} height={80} alt="thumbs-up"></Image>
       </div>
     </div>
   )
 }
 
-const TinderCard = ({ teachers, setOpen, img }) => {
+const TinderCard = ({ teachers, setOpen, user }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection] = useState(null)
   const [done, setDone] = useState(false)
-  
+  const [loading, setLoading] = useState(false)
+  const { data: session, status } = useSession()
   // Handle swipe completion
   const handleSwipe = (direction) => {
     setDirection(direction)
@@ -140,7 +171,7 @@ const TinderCard = ({ teachers, setOpen, img }) => {
       if (currentIndex < teachers.length - 1) {
         setCurrentIndex(currentIndex + 1)
       } else {
-        setDone(true);
+        setDone(true)
       }
       setDirection(null)
     }, 300)
@@ -148,15 +179,20 @@ const TinderCard = ({ teachers, setOpen, img }) => {
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
-    });
-  },[teachers])
-  if(done) {
+      behavior: "smooth",
+    })
+  }, [teachers])
+
+  if (status === "loading") {
+    return <div className="flex justify-center items-center h-screen text-white">Loading...</div>
+  }
+
+  if (done && !loading) {
     return (
       <div className="h-[100vh] w-full absolute bg-black border-b border-white">
         <button
-        onClick={() => setOpen(false)}
-        className="flex fixed top-16 lg:top-[68px] bg-white z-20 h-10 w-32 border p-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
+          onClick={() => setOpen(false)}
+          className="flex fixed top-16 lg:top-[68px] bg-white z-20 h-10 w-32 border p-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -183,42 +219,45 @@ const TinderCard = ({ teachers, setOpen, img }) => {
       <button
         onClick={() => setOpen(false)}
         className="flex fixed top-16 bg-white z-20 h-10 w-32 border p-2 md:top-[68px]items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="w-6 h-6 group-hover:-translate-x-1 transition-transform duration-300"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-6 h-6 group-hover:-translate-x-1 transition-transform duration-300"
-          >
-            <path
-              fillRule="evenodd"
-              d="M15.707 4.293a1 1 0 010 1.414L10.414 11H20a1 1 0 110 2h-9.586l5.293 5.293a1 1 0 11-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <span className="font-medium">Atgal</span>
-        </button>
+          <path
+            fillRule="evenodd"
+            d="M15.707 4.293a1 1 0 010 1.414L10.414 11H20a1 1 0 110 2h-9.586l5.293 5.293a1 1 0 11-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"
+            clipRule="evenodd"
+          />
+        </svg>
+        <span className="font-medium">Atgal</span>
+      </button>
 
       {/* Display current teacher card */}
       <div className="flex justify-center mt-20">
-      {teachers.length > 0 && (
-        <Case
-          teacher={teachers[currentIndex]}
-          style={{
-            zIndex: 10,
-            opacity: direction ? 0 : 1,
-            transform:
-              direction === "left"
-                ? "translateX(-100%) rotate(-10deg)"
-                : direction === "right"
-                  ? "translateX(100%) rotate(10deg)"
-                  : "none",
-          }}
-          onSwipe={handleSwipe}
-        />
-      )}
+        {teachers.length > 0 && status === "authenticated" && (
+          <Case
+            dir={direction}
+            teacher={teachers[currentIndex]}
+            user={user}
+            loading={loading}
+            setLoading={setLoading}
+            style={{
+              zIndex: 10,
+              opacity: direction ? 0 : 1,
+              transform:
+                direction === "left"
+                  ? "translateX(-100%) rotate(-10deg)"
+                  : direction === "right"
+                    ? "translateX(100%) rotate(10deg)"
+                    : "none",
+            }}
+            onSwipe={handleSwipe}
+          />
+        )}
       </div>
-      
 
       {/* Show next card behind current one */}
       {teachers.length > 1 && currentIndex < teachers.length - 1 && (
@@ -235,7 +274,7 @@ const TinderCard = ({ teachers, setOpen, img }) => {
           onClick={() => handleSwipe("left")}
           className="bg-white text-black w-12 h-12 rounded-full flex items-center justify-center font-bold"
         >
-          <Image src={'/images/thumbs-down-red.svg'} width={30} height={30} alt="thumbs-up"></Image>
+          <Image src={"/images/thumbs-down-red.svg"} width={30} height={30} alt="thumbs-up"></Image>
         </button>
         <button
           onClick={() => handleSwipe("up")}
@@ -247,7 +286,7 @@ const TinderCard = ({ teachers, setOpen, img }) => {
           onClick={() => handleSwipe("right")}
           className="bg-white text-black w-12 h-12 rounded-full flex items-center justify-center font-bold"
         >
-          <Image src={'/images/thumbs-up.svg'} width={30} height={30} alt="thumbs-up"></Image>
+          <Image src={"/images/thumbs-up.svg"} width={30} height={30} alt="thumbs-up"></Image>
         </button>
       </div>
 
@@ -260,3 +299,4 @@ const TinderCard = ({ teachers, setOpen, img }) => {
 }
 
 export default TinderCard
+
