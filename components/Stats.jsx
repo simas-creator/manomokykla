@@ -22,19 +22,25 @@ const Stats = async () => {
     const { schools, teachers, reviews, users } = await getStats();
   
     return (
-      <div className="mt-16 border grid grid-cols-2 gap-4 rounded-xl bg-white p-6 shadow-md md:grid-cols-4">
+      <div className="mt-16 bg-white grid grid-cols-2 gap-4 rounded-xl p-6 md:grid-cols-4">
         {[
           { label: "Mokyklų", value: schools, icon: "graduation-cap" },
           { label: "Mokytojų", value: teachers, icon: "teacher" },
           { label: "Atsiliepimų", value: reviews, icon: "review" },
           { label: "Vartotojų", value: users, icon: "user" },
         ].map(({ label, value, icon }, index) => (
-          <div key={index} className="text-center flex flex-col items-center">
-            <div className="text-2xl font-bold text-primary flex items-center gap-1 flex-col">
-              <div className="w-16 h-16 rounded-lg bg-primary bg-opacity-30 flex items-center justify-center">
+          <div key={index}
+           className="text-center flex flex-col items-center border p-4 rounded-lg shadow-md">
+            <div className=" relative text-2xl font-bold text-primary flex items-center gap-1 flex-col">
+              <div 
+                className="w-16 h-16 rounded-full bg-primary bg-opacity-30 flex items-center justify-center"
+                style={{
+                  backgroundImage: 'linear-gradient(135deg, #009dff, #00d2ff)',
+                }}
+              >
                 {icon === "graduation-cap" && (
                   <svg
-                  fill={'#009dff'}
+                  fill={'#000000'}
                   height={40}
                   width={40}
                   version="1.1"
@@ -62,7 +68,7 @@ const Stats = async () => {
                   height={50}
                   viewBox="0 0 245.827 245.827"
                   xmlns="http://www.w3.org/2000/svg"
-                  fill={'#009dff'}
+                  fill={'#000000'}
                 >
                   <path d="M223.336,148.384l-0.137-23.527l22.628-12.662L122.576,47.195L0,113.495l49.144,28.216l0.098,16.766l0.01,1.339
                   l0.449-0.215c-0.518,0.703-0.85,1.426-0.84,2.149c0.039,8.246,33.326,14.772,74.41,14.548c41.064-0.215,74.302-7.122,74.273-15.349
@@ -76,12 +82,12 @@ const Stats = async () => {
                 </svg>
                 )}
                 {icon === "review" && (
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#009DFF" className="w-12 h-12">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={'#000000'} className="w-12 h-12">
                     <path d="M12 2L15 8H21L16 12L18 18L12 14L6 18L8 12L3 8H9L12 2Z" />
                   </svg>
                 )}
                 {icon === "user" && (
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#009DFF" className="w-12 h-12">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={'#000000'} className="w-12 h-12">
                     <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" />
                     <path d="M4 20C4 16.6863 6.68629 14 10 14H14C17.3137 14 20 16.6863 20 20H4Z" />
                   </svg>
@@ -89,7 +95,7 @@ const Stats = async () => {
               </div>
               <p className="text-2xl font-title">{value}+</p>
             </div>
-            <p className="text-sm text-gray-600 tracking-tight">{label}</p>
+            <p className="text-sm text-gray-500 tracking-wider">{label}</p>
           </div>
         ))}
       </div>

@@ -41,22 +41,14 @@ function Nav() {
           {dropdownOpen && (
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[50] mt-3 w-52 p-2 shadow-lg"
+              className="menu border menu-sm dropdown-content bg-base-100 rounded-box z-[50] mt-3 w-52 p-2 shadow-lg"
             >
               <li>
-                
-              </li>
-              <li>
-                <a>Mokyklos ir universitetai</a>
-                <ul className="p-2">
-                  <li>
-                  <Link href="/prideti-mokykla">Pridėti</Link>
+                  <Link href="/prideti-mokykla">Pridėti mokymo įstaigą</Link>
                   </li>
                   <li>
-                    <Link href="/perziureti-mokyklas">Peržiūrėti</Link>
+                    <Link href="/perziureti-mokyklas">Peržiūrėti mokyklas</Link>
                   </li>
-                </ul>
-              </li>
               <li>
               <Link href={'/taisykles'}>Taisyklės</Link>
               </li>

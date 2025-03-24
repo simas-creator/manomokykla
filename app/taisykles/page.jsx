@@ -36,7 +36,7 @@ export default function GuidelinesPage() {
                 <path d="M12 16v-4" />
                 <path d="M12 8h.01" />
               </svg>
-              Mūsų Misija
+              Mūsų misija
             </div>
             <p className="text-gray-500 text-sm mt-1">
               Mūsų tikslas – sukurti naudingą, pagarbią bendruomenę, kurioje studentai galėtų dalintis sąžiningais
@@ -147,7 +147,7 @@ export default function GuidelinesPage() {
         </section>
 
         <section className="space-y-6 pt-4">
-          <h2 className="text-2xl font-semibold font-title tracking-tight">Vertinimo Gairės</h2>
+          <h2 className="text-2xl font-semibold font-title tracking-tight">Vertinimo gairės</h2>
 
           <div className="w-full border rounded-lg divide-y">
             <div className="border-b">
@@ -155,7 +155,7 @@ export default function GuidelinesPage() {
                 onClick={() => toggleAccordion("item-1")}
                 className="flex justify-between w-full p-4 text-left font-medium"
               >
-                Vertinimo Kriterijai
+                Vertinimo kriterijai
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -188,7 +188,7 @@ export default function GuidelinesPage() {
                 onClick={() => toggleAccordion("item-2")}
                 className="flex justify-between w-full p-4 text-left font-medium"
               >
-                Atsiliepimų Rašymas
+                Atsiliepimų rašymas
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -221,7 +221,7 @@ export default function GuidelinesPage() {
                 onClick={() => toggleAccordion("item-3")}
                 className="flex justify-between w-full p-4 text-left font-medium"
               >
-                Mokyklų ir Mokytojų Pridėjimas
+                Mokyklų ir mokytojų pridėjimas
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -258,7 +258,7 @@ export default function GuidelinesPage() {
           <div className="rounded-lg border p-6">
             <div className="space-y-4">
               <div>
-                <h3 className="font-medium">Peržiūros Procesas</h3>
+                <h3 className="font-medium">Peržiūros procesas</h3>
                 <p className="text-sm text-gray-500 mt-1">
                   Visi atsiliepimai yra moderuojami. Turinys, pažeidžiantis mūsų gaires, bus pašalintas. Pakartotiniai
                   pažeidimai gali lemti paskyros sustabdymą.
@@ -266,7 +266,7 @@ export default function GuidelinesPage() {
               </div>
 
               <div>
-                <h3 className="font-medium">Turinio Pranešimas</h3>
+                <h3 className="font-medium">Turinio pranešimas</h3>
                 <p className="text-sm text-gray-500 mt-1">
                   Jei matote turinį, kuris pažeidžia šias gaires, praneškite apie jį naudodami mygtuką „Pranešti". Mūsų
                   moderavimo komanda peržiūrės visus pranešimus per 48 valandas.
