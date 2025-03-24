@@ -3,13 +3,13 @@ import Stats from '@/components/Stats'
 const Card = ({ type }) => {
   return (
     <Link href={type === "view" ? "/perziureti-mokyklas" : "/prideti-mokykla"}>
-      <div className="w-full sm:w-[350px] h-full">
+      <div className={`relative group  w-full sm:w-[350px] h-full z-[10]  ${type === 'view' ? 'grad-view': 'grad-rate'}`}>
         <div
-          className={`group relative cursor-pointer overflow-hidden rounded-xl ${type === "view" ? "bg-gradient-to-br from-gray-50 to-blue-50" : "bg-gradient-to-br from-blue-50 to-indigo-50"} p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl`}
+          className={`relative cursor-pointer rounded-xl ${type === "view" ? "bg-gradient-to-br from-gray-50 to-blue-50" : "bg-gradient-to-br from-blue-50 to-indigo-50"} p-6 shadow-lg `}
         >
           {/* Icon container with background */}
           <div
-            className={`mb-5 flex h-16 w-16 items-center justify-center rounded-full ${type === "view" ? "bg-black" : "bg-primary"} shadow-md transition-transform duration-300 group-hover:scale-110`}
+            className={`mb-5 flex h-16 w-16 items-center group-hover:scale-110 group group-hover:translate-x-2 duration-300 justify-center rounded-full ${type === "view" ? "bg-black" : "bg-primary"} shadow-md`}
           >
             {type === "view" ? (
               <svg
@@ -95,7 +95,7 @@ function Hero() {
       <div className="container mx-auto px-4">
         {/* Hero header */}
         <div className="mb-12 text-center">
-          <h1 className="mb-4 text-3xl typed font-bold tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
+          <h1 className="mb-4  h-14 text-3xl typed font-bold tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
             Atraskite ir įvertinkite <span className="text-primary">mokyklas</span>
           </h1>
           <p className="mx-auto max-w-2xl text-gray-600 md:text-lg">
