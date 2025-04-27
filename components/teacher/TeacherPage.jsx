@@ -1,15 +1,15 @@
 'use client'
 import Image from "next/image"
-import StarRating from "./StarRating";
+import StarRating from "../UI/StarRating";
 import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import ReviewForm from "@/components/ReviewForm"
-import ReviewCase from "@/components/ReviewCase"
-import FilterParameter from "./FilterParameter";
-import TeacherReport from "@/components/TeacherReport";
-import LoginRegister from "./LoginRegister";
-import EditReview from '@/components/EditReview'
+import ReviewForm from "@/components/teacher/ReviewForm"
+import ReviewCase from "@/components/teacher/ReviewCase"
+import FilterParameter from "../FilterParameter";
+import TeacherReport from "@/components/teacher/TeacherReport";
+import LoginRegister from "../UI/LoginRegister";
+import EditReview from '@/components/teacher/EditReview'
 const getReviewText = (length) => {
   if (length % 10 === 1 && (length < 11 || length > 19)) {
     return `atsiliepimas`; // 1, 21, 31, 41, etc.

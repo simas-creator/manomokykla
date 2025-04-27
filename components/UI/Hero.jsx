@@ -1,5 +1,5 @@
 import Link from "next/link"
-import Stats from '@/components/Stats'
+import Stats from '@/components/UI/Stats'
 const Card = ({ type }) => {
   return (
     <Link href={type === "view" ? "/perziureti-mokyklas" : "/prideti-mokykla"}>

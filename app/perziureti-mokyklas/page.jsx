@@ -2,9 +2,9 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import FilterParameter from '@/components/FilterParameter';
-import SchoolCase from '@/components/SchoolCase';
-import SearchBar from '@/components/SearchBar';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import SchoolCase from '@/components/school/SchoolCase';
+import SearchBar from '@/components/UI/SearchBar';
+import LoadingSpinner from '@/components/UI/LoadingSpinner';
 const decodeLithuanianChars = (str) => {
   const wordMap = new Map([
     ["alytaus", "Alytaus"],

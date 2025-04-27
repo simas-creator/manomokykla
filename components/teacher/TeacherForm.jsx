@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CustomSelect from "@/components/CustomSelect";
+import CustomSelect from "@/components/UI/CustomSelect";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 const TeacherForm = ({School}) => {

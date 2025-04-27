@@ -1,7 +1,7 @@
 "use client"
 import { useSession } from 'next-auth/react'
 import React from 'react'
-import Dashb from '@/components/Dashb'
+import Dashb from '@/components/dashboard/Dashb'
 const Page = () => {
   const {data: session, status} = useSession()
   if (status === "loading") {

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import EditReview from '@/components/EditReview';
-import LoadingSpinner from './LoadingSpinner';
-import AdminDash from '@/components/AdminDash';
+import EditReview from '../teacher/EditReview';
+import LoadingSpinner from '../UI/LoadingSpinner';
+import AdminDash from '../dashboard/AdminDash';
 
 const Dashb = () => {
   const [s, setS] = useState();

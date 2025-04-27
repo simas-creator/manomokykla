@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import LoadingSpinner from "@/components/LoadingSpinner"
+import LoadingSpinner from "@/components/UI/LoadingSpinner"
 const EditReview = ({ setOpen, open, review, admin }) => {
     const { criterion1, criterion2, criterion3, comment, n, m, r} = review;
     const [criteria, setCriteria] = useState([criterion1, criterion2, criterion3]);

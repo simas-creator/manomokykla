@@ -1,8 +1,8 @@
 'use client'
-import EditReview from '@/components/EditReview'
-import SearchBar from '@/components/SearchBar';
+import EditReview from '@/components/teacher/EditReview'
+import SearchBar from '@/components/UI/SearchBar';
 import { useEffect, useState } from 'react';
-import Confirm from '@/components/Confirm'
+import Confirm from '@/components/dashboard/Confirm'
 
 const Page = () => {
     const [loading, setLoading] = useState(true);

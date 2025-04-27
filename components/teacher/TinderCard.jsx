@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import { useSession } from "next-auth/react"
-import LoadingSpinner from "./LoadingSpinner"
 
 const Case = ({ teacher, style, onSwipe, user, loading, setLoading }) => {
   const criteria = ["Gebėjimas perteikti žinias", "Gebėjimas bendrauti su mokiniais", "Dalyko išmanymas"]

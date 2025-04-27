@@ -1,6 +1,6 @@
 import "./globals.css";
-import Nav from "/components/Nav";
-import  Footer from "/components/Footer";
+import Nav from "/components/UI/Nav";
+import  Footer from "/components/UI/Footer";
 import { Montserrat } from 'next/font/google';
 import { Roboto } from 'next/font/google';
 import SessionWrapper from "@/components/SessionWrapper";

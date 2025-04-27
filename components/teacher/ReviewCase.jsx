@@ -1,6 +1,6 @@
 import { useState } from "react";
-import StarRating from "./StarRating"
-import Popup from "@/components/Popup"
+import StarRating from "../UI/StarRating"
+import Popup from "@/components/UI/Popup"
 const ReviewCase = ({review}) => {
     const {criterion1, criterion2, criterion3, user, comment, updatedAt, rec} = review
     const rating = (criterion1 + criterion2 + criterion3) / 3;

@@ -1,5 +1,5 @@
 
-import TeacherPage from "@/components/TeacherPage";
+import TeacherPage from "@/components/teacher/TeacherPage";
 
 async function getTeacherData(n, m) {
   try {
