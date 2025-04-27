@@ -1,8 +1,8 @@
 "use client"
 import { useEffect, useState } from 'react';
-import SearchBar from '@/components/SearchBar';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import ViewMessage from '@/components/ViewMessage';
+import SearchBar from '@/components/UI/SearchBar';
+import LoadingSpinner from '@/components/UI/LoadingSpinner';
+import ViewMessage from '@/components/dashboard/ViewMessage';
 const Page = () => {
 
     const [teacherMessage, setTeacherMessage] = useState(false);
