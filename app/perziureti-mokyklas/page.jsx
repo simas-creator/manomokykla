@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import FilterParameter from '@/components/FilterParameter';
 import SchoolCase from '@/components/school/SchoolCase';
 import SearchBar from '@/components/UI/SearchBar';
+import Fallback from '@/components/UI/Fallback';
 import LoadingSpinner from '@/components/UI/LoadingSpinner';
 const decodeLithuanianChars = (str) => {
   const wordMap = new Map([
@@ -145,7 +146,7 @@ const PageContent = () => {
 };
 
 const Page = () => (
-  <Suspense fallback={<p className='w-full mt-32 text-center'></p>}>
+  <Suspense fallback={Fallback}>
     <PageContent />
   </Suspense>
 );

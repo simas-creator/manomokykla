@@ -359,7 +359,7 @@ const TeacherPage = ({ teacher }) => {
         <FilterParameter parameters={parameters1} filter={filter1} setFilter={setFilter1} type={'Įvertinimai'} active={active} setActive={setActive} />
       </div>}
       
-      <div className="mb-8 px-6 w-full grid gap-y-6 grid-flow-row bsm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 justify-items-center ">
+      <div className="mb-8 px-6 w-full gap-x-4 grid gap-y-6 grid-flow-row bsm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 justify-items-center ">
         {!form && status !== 'loading' &&
           reviews.map((r, index) => 
           <ReviewCase key={index} review={r}></ReviewCase>)

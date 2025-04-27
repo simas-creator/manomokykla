@@ -280,7 +280,7 @@ const SchoolPage = ({ School }) => {
             </button>
             <button
               onClick={() => handleRateAll()}
-              className="md:hidden w-auto px-5 py-3 border rounded-lg border-primary bg-gradient-to-r from-primary to-violet-200 text-white text-sm hover:scale-[1.01] transition-transform shadow-lg"
+              className="md:hidden w-auto px-5 py-2 border rounded-lg border-primary bg-gradient-to-r from-primary to-violet-200 text-white text-sm hover:scale-[1.01] transition-transform shadow-lg"
             >
               Greitai įvertinti mokytojus
             </button>
