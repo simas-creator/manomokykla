@@ -70,7 +70,7 @@ const TeacherPage = ({ teacher }) => {
     'Nuo naujausio',
     'Nuo seniausio',
   ]
-
+  
   const [active, setActive] = useState(false);
   const [filter1, setFilter1] = useState(decodeSub(searchParams.get('ivertinimai')));
   const pathname = usePathname()
@@ -364,6 +364,7 @@ const TeacherPage = ({ teacher }) => {
           reviews.map((r, index) => 
           <ReviewCase key={index} review={r}></ReviewCase>)
         }
+        
       </div>
       {form && <ReviewForm n={teacher?.n} m={teacher?.m} user={u} open={form} type={school.type} />}
     </section>

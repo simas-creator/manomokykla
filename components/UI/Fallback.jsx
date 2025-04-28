@@ -1,9 +1,30 @@
-import React from 'react'
+'use client'
+import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 
-const Fallback = () => {
+const LoadingSpinner = () => (
+  <Loader2 className="h-10 w-10 animate-spin text-primary" />
+);
+
+const Fallback = ({isActive}) => {
+  useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    
+    document.body.style.overflow = "hidden";
+    
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, [isActive]);
+
   return (
-    <div className='h-screen text-8xl'>Fallback</div>
-  )
-}
+    <div className="fixed inset-0 z-10 flex flex-col items-center justify-center bg-white dark:bg-gray-900">
+      <div className="flex flex-col items-center space-y-4">
+        <LoadingSpinner />
+        <p className="text-xl font-medium text-gray-700 dark:text-gray-300">Kraunama...</p>
+      </div>
+    </div>
+  );
+};
 
-export default Fallback
+export default Fallback;
