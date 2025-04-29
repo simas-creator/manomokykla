@@ -2,14 +2,17 @@ import { NextResponse } from "next/server";
 import connect from "@/lib/mongodb";
 import School from "@/lib/modals/school";
 import { revalidateTag } from "next/cache";
-
-
+import { getToken } from "next-auth/jwt";
 
 export async function POST(req) {
   try {
 
     await connect();
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
+    if (!token) {
+      return NextResponse.json({message: "Unauthorized"}, {status: 401});
+    }
     const {name, apskritis, type, imgUrl, user } = await req.json();
     console.log("Received data:", { name, apskritis, type, imgUrl, user });  
     ;
