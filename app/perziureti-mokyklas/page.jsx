@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, use, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import FilterParameter from "@/components/FilterParameter";
 import SchoolCase from "@/components/school/SchoolCase";
@@ -119,6 +119,9 @@ const PageContent = () => {
     return () => clearTimeout(timeout);
   }, [searchParams]);
   useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+  useEffect(() => {
     const observer = new IntersectionObserver(
       async (entries) => {
         if (
@@ -149,7 +152,7 @@ const PageContent = () => {
     : data;
 
   return (
-    <div className={`w-full pb-8 ${loading || isFetching.current ? 'h-screen' : ''}`}>      
+    <div className={`w-full pb-8`}>      
       <SearchBar parameter={"Ieškokite mokyklos"} setSearch={setSearch} />
 
       <div className="w-full">
@@ -183,7 +186,7 @@ const PageContent = () => {
 
       <div className="flex justify-center items-center relative">
         {!loading && filteredData.length === 0 && !isFetching.current && !hasMore && (
-          <p className="mt-4">Atsiprašome, bet nieko neradome.</p>
+          <p className="mt-4 h-screen">Atsiprašome, bet nieko neradome.</p>
         )}
       </div>
 
@@ -200,10 +203,10 @@ const PageContent = () => {
         </div>
         <div
           ref={interRef}
-          className="text-center w-full"
+          className="text-center w-full h-creen"
           style={{ visibility: hasMore ? "visible" : "hidden" }}
         >
-          {hasMore && isFetching ? <LoadingSpinner /> : ""}
+          <LoadingSpinner />
         </div>
 
       </div>
