@@ -62,12 +62,6 @@ const PageContent = () => {
   const [filter3, setFilter3] = useState(
     decodeLithuanianChars(queriesObject["ivertinimai"])
   );
-  function closeDialog() {
-    const dialog = document.getElementById("fallback");
-    if (dialog) {
-      dialog.close();
-    }
-  }
   const fetchData = async () => {
     if (!hasMore || isFetching.current) return;
     isFetching.current = true;
@@ -94,8 +88,8 @@ const PageContent = () => {
         setData((prevData) =>
           pageRef.current === 1 ? result : [...prevData, ...result]
         );
-        if(result.length < 6) {
-          setHasMore(false)
+        if (result.length < 6) {
+          setHasMore(false);
         }
       }
     } catch (error) {
@@ -119,8 +113,8 @@ const PageContent = () => {
     return () => clearTimeout(timeout);
   }, [searchParams]);
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+    window.scrollTo(0, 0);
+  }, []);
   useEffect(() => {
     const observer = new IntersectionObserver(
       async (entries) => {
@@ -152,7 +146,7 @@ const PageContent = () => {
     : data;
 
   return (
-    <div className={`w-full pb-8`}>      
+    <div className={`w-full pb-8`}>
       <SearchBar parameter={"Ieškokite mokyklos"} setSearch={setSearch} />
 
       <div className="w-full">
@@ -185,21 +179,22 @@ const PageContent = () => {
       </div>
 
       <div className="flex justify-center items-center relative">
-        {!loading && filteredData.length === 0 && !isFetching.current && !hasMore && (
-          <p className="mt-4 h-screen">Atsiprašome, bet nieko neradome.</p>
-        )}
+        {!loading &&
+          filteredData.length === 0 &&
+          !isFetching.current &&
+          !hasMore && (
+            <p className="mt-4 h-screen">Atsiprašome, bet nieko neradome.</p>
+          )}
       </div>
 
       <div className="grid w-full items-center justify-center">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 p-4 w-full max-w-screen-xl sm:justify-center sm:items-center">
-          {filteredData
-            .filter((s, i) => s.status === "ok")
-            .map((school) => (
-              <SchoolCase
-                key={`${school.apskritis}-${school.name}`}
-                school={school}
-              />
-            ))}
+          {filteredData.map((school) => (
+            <SchoolCase
+              key={`${school.apskritis}-${school.name}`}
+              school={school}
+            />
+          ))}
         </div>
         <div
           ref={interRef}
@@ -208,7 +203,6 @@ const PageContent = () => {
         >
           <LoadingSpinner />
         </div>
-
       </div>
     </div>
   );

@@ -1,23 +1,28 @@
 import { useEffect, useState, useCallback } from "react";
+import { Verified } from "lucide-react";
 import Link from "next/link";
 const SchoolCase = ({
   school = {
     name: "",
     rating: 0.0,
     imgUrl: "",
-  }, ref
+    status: "",
+  },
+  ref,
 }) => {
   const rating = school.rating;
   const [teachers, setTeachers] = useState([]);
   const getTeachers = useCallback(async () => {
-
     try {
-      const res = await fetch(`/api/teachers/number?school=${school.n}?status=ok`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await fetch(
+        `/api/teachers/number?school=${school.n}?status=ok`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!res.ok) {
         console.log(res.message, "error");
@@ -33,43 +38,77 @@ const SchoolCase = ({
   }, [school?.n]);
   const replaceLithuanianChars = useCallback((str) => {
     const charMap = {
-      'ą': 'a', 'č': 'c', 'ę': 'e', 'ė': 'e', 'į': 'i', 'š': 's', 'ų': 'u', 'ū': 'u', 'ž': 'z',
-      'Ą': 'A', 'Č': 'C', 'Ę': 'E', 'Ė': 'E', 'Į': 'I', 'Š': 'S', 'Ų': 'U', 'Ū': 'U', 'Ž': 'Z',
-      '„': '', '“': '',
+      ą: "a",
+      č: "c",
+      ę: "e",
+      ė: "e",
+      į: "i",
+      š: "s",
+      ų: "u",
+      ū: "u",
+      ž: "z",
+      Ą: "A",
+      Č: "C",
+      Ę: "E",
+      Ė: "E",
+      Į: "I",
+      Š: "S",
+      Ų: "U",
+      Ū: "U",
+      Ž: "Z",
+      "„": "",
+      "“": "",
     };
-    
+
     return str
-    .normalize("NFKD") 
-    .replace(/[„“‘’"']/g, '') 
-    .replace(/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/g, (char) => charMap[char] || char)
-    .replace(/[^a-zA-Z0-9-]/g, '') 
-    .replace(/-{2,}/g, '-') 
-    .toLowerCase();
-    
+      .normalize("NFKD")
+      .replace(/[„“‘’"']/g, "")
+      .replace(/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/g, (char) => charMap[char] || char)
+      .replace(/[^a-zA-Z0-9-]/g, "")
+      .replace(/-{2,}/g, "-")
+      .toLowerCase();
   }, []);
-  const id = replaceLithuanianChars(school.name.toLowerCase().replace(/\s/g, "-"));
+  const id = replaceLithuanianChars(
+    school.name.toLowerCase().replace(/\s/g, "-")
+  );
   useEffect(() => {
     getTeachers(setTeachers, school);
   }, [school.n]);
   const truncate = useCallback((str, n) => {
     if (!str) return "";
-    if(str === `${undefined} ${undefined}` && n === 12) {
-      return "Vardas Pavardė"
+    if (str === `${undefined} ${undefined}` && n === 12) {
+      return "Vardas Pavardė";
     } else if (str === `undefined` && n === 22) {
-      return "Atsiliepimas..."
+      return "Atsiliepimas...";
     }
     return str.length > n ? str.slice(0, n) + "..." : str;
-  }, [])
+  }, []);
   return (
-    <div ref={ref} className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg h-auto bg-white rounded-lg shadow-md border border-gray-200 flex flex-col">
+    <div
+      ref={ref}
+      className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg h-auto bg-white rounded-lg shadow-md border border-gray-200 flex flex-col"
+    >
       {/* Image Section */}
-      <div className="w-full h-36 overflow-hidden">
+      <div className="w-full h-36 relative">
         <img
           src={school.imgUrl}
           alt={school.name}
-          className="h-full w-full m-auto object-cover rounded-t-lg opacity-30"
+          className="h-full w-full m-auto object-cover rounded-t-lg"
         />
-        
+        <div className="absolute top-2 right-2 group cursor-pointer">
+          <Verified
+            size={36}
+            fill="white"
+            stroke={school.status === "ok" ? "#009dff" : "#6b7280"}
+          />
+          <div
+            className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap 
+                  bg-black text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 
+                  transition-opacity duration-200 pointer-events-none z-10"
+          >
+            {school.status === 'ok' ? 'Patvirtinta' : "Nepatvirtinta"}
+          </div>
+        </div>
       </div>
       <div className="border"></div>
       {/* Content Section */}
@@ -114,22 +153,29 @@ const SchoolCase = ({
                 {/* Profile Picture */}
                 <div className="w-10 h-10 border-2 rounded-full flex items-center justify-center overflow-hidden">
                   {teacher?.imageUrl ? (
-                    <img src={teacher.imageUrl} className="w-7 h-7 object-cover" />
+                    <img
+                      src={teacher.imageUrl}
+                      className="w-7 h-7 object-cover"
+                    />
                   ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-gray-500"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                  </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 text-gray-500"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
                   )}
-                  
                 </div>
                 <div className="flex flex-col">
                   <p className="ml-2 text-sm text-gray-500">Mokytojas(-a)</p>
-                  <p className=" ml-2 text-gray-800 font-medium">{truncate(`${teachers[index]?.name} ${teachers[index]?.surname}`, 12)}</p>
+                  <p className=" ml-2 text-gray-800 font-medium">
+                    {truncate(
+                      `${teachers[index]?.name} ${teachers[index]?.surname}`,
+                      12
+                    )}
+                  </p>
                 </div>
               </div>
 
@@ -137,12 +183,18 @@ const SchoolCase = ({
               <div className="text-sm text-gray-600 line-clamp-2">
                 {truncate(`${teacher?.reviews[0]?.comment}`, 22)}
               </div>
-            </div> 
+            </div>
           ))}
         </div>
 
         {/* Button */}
-        <Link prefetch href={`/perziureti-mokyklas/${id}-${school.n}`} className="mt-4 bg-primary self-start rounded-md px-5 py-2 text-white font-medium hover:opacity-80">Plačiau</Link>
+        <Link
+          prefetch
+          href={`/perziureti-mokyklas/${id}-${school.n}`}
+          className="mt-4 bg-primary self-start rounded-md px-5 py-2 text-white font-medium hover:opacity-80"
+        >
+          Plačiau
+        </Link>
       </div>
     </div>
   );

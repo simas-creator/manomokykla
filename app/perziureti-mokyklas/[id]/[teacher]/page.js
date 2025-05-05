@@ -5,7 +5,7 @@ async function getTeacherData(n, m) {
   try {
     const res = await fetch(
       `${process.env.NEXTAUTH_URL}/api/url?n=${n}&m=${m}`,
-      { cache: "force-cache" }
+      { next : {revalidate: 60}}
     );
     
     if (!res.ok) {

@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Report from "@/components/school/SchoolReport";
 import LoginRegister from "@/components/UI/LoginRegister";
 import TinderCard from "@/components/teacher/TinderCard";
+import LoadingSpinner from "../UI/LoadingSpinner";
 const decodeSub = (str) => {
   const stringMap = {
     biologija: "Biologija",
@@ -331,7 +332,7 @@ const SchoolPage = ({ School }) => {
           <div>
             {loading ? (
               <div className="p-10 w-full flex justify-center items-center">
-                <p>Kraunama...</p> {/* Show loading state */}
+                <LoadingSpinner/>
               </div>
             ) : teachers.length > 0 ? (
               <>
