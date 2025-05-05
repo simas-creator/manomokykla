@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import { useSession } from "next-auth/react"
-import Rate from "./Rate"
+import { Star } from "lucide-react";
 const Case = ({ teacher, style, onSwipe, user, loading, setLoading }) => {
   const criteria = ["Gebėjimas perteikti žinias", "Gebėjimas bendrauti su mokiniais", "Dalyko išmanymas"]
   const [startX, setStartX] = useState(0)
@@ -11,9 +11,9 @@ const Case = ({ teacher, style, onSwipe, user, loading, setLoading }) => {
   const [isDragging, setIsDragging] = useState(false)
   const cardRef = useRef(null)
   const [jsonData, setJsonData] = useState({
-    "Gebėjimas bendrauti su mokiniais": 1,
-    "Gebėjimas perteikti žinias": 1,
-    "Dalyko išmanymas": 1,
+    "Gebėjimas bendrauti su mokiniais": 0,
+    "Gebėjimas perteikti žinias": 0,
+    "Dalyko išmanymas": 0,
   })
 
   // Start dragging
@@ -84,7 +84,7 @@ const Case = ({ teacher, style, onSwipe, user, loading, setLoading }) => {
   return (
     <div
       ref={cardRef}
-      className="w-full relative h-80 bg-white border rounded-lg shadow-lg cursor-grab active:cursor-grabbing"
+      className="w-fit relative min-h-80 bg-white border rounded-lg shadow-lg cursor-grab active:cursor-grabbing"
       style={cardStyle}
       onMouseDown={(e) => handleStart(e.clientX)}
       onMouseMove={(e) => handleMove(e.clientX)}
@@ -103,22 +103,38 @@ const Case = ({ teacher, style, onSwipe, user, loading, setLoading }) => {
         </div>
       }
       <div className="p-4 flex justify-center flex-col">
-        <div className="ml-2 flex gap-x-2 items-center">
-          <Image src={teacher.imageUrl || "/placeholder.svg"} width={50} height={50} alt="mokytojas"></Image>
-          <div className="flex flex-col">
-            <h3 className="text-xl font-bold truncate">
+        <div className="mb-2 p-4 flex gap-x-2 border border-black items-center w-full justify-center bg-gray-200">
+          <Image src={teacher.imageUrl || "/placeholder.svg"} width={100} height={100} alt="mokytojas"></Image>
+          
+        </div>
+        <div className="flex flex-col">
+            <h3 className="text-3xl font-bold truncate">
               {(teacher.name + " " + teacher.surname).slice(0, 21)}
               {teacher.name.length + teacher.surname.length > 20 && "..."}
             </h3>
 
-            {teacher.subject && <p className="text-gray-600">{teacher.subject}</p>}
+            {teacher.subject && <p className="text-gray-500">{teacher.subject}</p>}
           </div>
-        </div>
-        <div className="flex flex-col gap-4 mt-4">
+        <div className="space-y-2 mt-2">
           {criteria.map((criterion) => (
-            <div key={criterion} className="flex flex-col">
-              <p className="font-medium text-gray-700">{criterion}</p>
-              <Rate setJsonData={setJsonData} jsonData={jsonData} criterion={criterion}/>
+            <div key={criterion} className="rating-container">
+              <div className="flex justify-between items-center mb-1">
+                <p className="font-medium text-gray-700">{criterion}</p>
+              </div>
+              <div className="rating flex gap-0.5">
+                {[1, 2, 3, 4, 5].map((index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => handleRating(criterion, index)}
+                    className={`star-rating w-8 h-8 flex items-center justify-center transition-all ${
+                      jsonData[criterion] >= index ? "text-amber-400" : "text-gray-300"
+                    }`}
+                  >
+                    <Star fill={jsonData[criterion] >= index ? "#fbbf24" : "white"}/>
+                  </button>
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -177,7 +193,7 @@ const TinderCard = ({ teachers, setOpen, user }) => {
 
   if (done && !loading) {
     return (
-      <div className="h-[100vh] w-full absolute bg-black border-b border-white">
+      <div className="h-[100vh] w-full absolute bg-white border-b border-white">
         <button
           onClick={() => setOpen(false)}
           className="flex fixed top-16 lg:top-[68px] bg-white z-20 h-10 w-32 border p-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
@@ -203,7 +219,7 @@ const TinderCard = ({ teachers, setOpen, user }) => {
     )
   }
   return (
-    <div className="h-[100vh] w-full absolute bg-black border-b border-white">
+    <div className="h-[100vh] w-full absolute bg-white border-b border-white">
       <button
         onClick={() => setOpen(false)}
         className="flex fixed top-16 bg-white z-20 h-10 w-32 border p-2 md:top-[68px]items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
@@ -266,7 +282,7 @@ const TinderCard = ({ teachers, setOpen, user }) => {
         </button>
         <button
           onClick={() => handleSwipe("up")}
-          className="bg-white text-black rounded-md px-4 h-12 flex items-center justify-center font-bold"
+          className="bg-white text-black border rounded-md px-4 h-12 flex items-center justify-center"
         >
           Neturiu šito mokytojo
         </button>

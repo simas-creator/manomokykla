@@ -46,7 +46,7 @@ export default function RootLayout({ children }) {
       <html lang="lt">
         <head><link rel="icon" href="/images/la.svg"></link></head>
         <body suppressHydrationWarning={true}
-          className={`${montserrat.className} ${roboto.className} antialiased flex flex-col min-h-screen`}
+          className={`${montserrat.className} ${roboto.className} antialiased flex flex-col min-h-screen bg-transparent`}
         >
           <Nav />
           <main className="flex-grow pt-[65px]">

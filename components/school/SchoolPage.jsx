@@ -181,13 +181,13 @@ const SchoolPage = ({ School }) => {
   };
   if (tinder && session) {
     return (
-      <div>
+      <>
         <TinderCard
           setOpen={setTinder}
           teachers={teachers}
           user={user}
         ></TinderCard>
-      </div>
+      </>
     );
   }
   if (report) {
