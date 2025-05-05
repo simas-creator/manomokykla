@@ -332,7 +332,7 @@ const SchoolPage = ({ School }) => {
           <div>
             {loading ? (
               <div className="p-10 w-full flex justify-center items-center">
-                <LoadingSpinner/>
+                <LoadingSpinner />
               </div>
             ) : teachers.length > 0 ? (
               <>

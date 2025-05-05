@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import { useSession } from "next-auth/react"
-
+import Rate from "./Rate"
 const Case = ({ teacher, style, onSwipe, user, loading, setLoading }) => {
   const criteria = ["Gebėjimas perteikti žinias", "Gebėjimas bendrauti su mokiniais", "Dalyko išmanymas"]
   const [startX, setStartX] = useState(0)
@@ -67,7 +67,7 @@ const Case = ({ teacher, style, onSwipe, user, loading, setLoading }) => {
 
    
     
-    setJsonData({ "Gebėjimas bendrauti su mokiniais": 1, "Gebėjimas perteikti žinias": 1, "Dalyko išmanymas": 1 })
+    setJsonData({ "Gebėjimas bendrauti su mokiniais": 0, "Gebėjimas perteikti žinias": 0, "Dalyko išmanymas": 0 })
     setOffsetX(0)
     setIsDragging(false)
   }
@@ -84,7 +84,7 @@ const Case = ({ teacher, style, onSwipe, user, loading, setLoading }) => {
   return (
     <div
       ref={cardRef}
-      className="max-w-80 relative w-auto h-80 bg-white rounded-lg shadow-lg cursor-grab active:cursor-grabbing"
+      className="w-full relative h-80 bg-white border rounded-lg shadow-lg cursor-grab active:cursor-grabbing"
       style={cardStyle}
       onMouseDown={(e) => handleStart(e.clientX)}
       onMouseMove={(e) => handleMove(e.clientX)}
@@ -118,18 +118,7 @@ const Case = ({ teacher, style, onSwipe, user, loading, setLoading }) => {
           {criteria.map((criterion) => (
             <div key={criterion} className="flex flex-col">
               <p className="font-medium text-gray-700">{criterion}</p>
-              <div className="rating flex gap-1">
-                {[1, 2, 3, 4, 5].map((index) => (
-                  <input
-                    key={index}
-                    type="radio"
-                    name={criterion}
-                    className="mask mask-star-2 w-8 h-8 bg-orange-400"
-                    onChange={() => handleRating(criterion, index)}
-                    defaultChecked={jsonData[criterion] === index}
-                  />
-                ))}
-              </div>
+              <Rate setJsonData={setJsonData} jsonData={jsonData} criterion={criterion}/>
             </div>
           ))}
         </div>
