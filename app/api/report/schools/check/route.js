@@ -6,8 +6,8 @@ export const GET = async (req) => {
         const url = await req.url;
         const searchParams = new URL(url).searchParams
         const user = searchParams.get('user')
-        const n = parseInt(searchParams.get('school'))
-        const report = await SchoolReport.findOne({user, school: n});
+        const id = searchParams.get('school')
+        const report = await SchoolReport.findOne({user, url: id});
         if(report) {
             return NextResponse.json({exists: true, message: 'You have already reported this school'}, {status: 200})
         } else {

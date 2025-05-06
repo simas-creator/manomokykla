@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { Verified } from "lucide-react";
 import Link from "next/link";
+import replaceLithuanianChars from "@/lib/transfomUrl";
 const SchoolCase = ({
   school = {
     name: "",
@@ -15,7 +16,7 @@ const SchoolCase = ({
   const getTeachers = useCallback(async () => {
     try {
       const res = await fetch(
-        `/api/teachers/number?school=${school.n}?status=ok`,
+        `/api/teachers/view?school=${school.url}?status=ok`,
         {
           method: "GET",
           headers: {
@@ -36,41 +37,8 @@ const SchoolCase = ({
       console.error("Fetch error:", error);
     }
   }, [school?.n]);
-  const replaceLithuanianChars = useCallback((str) => {
-    const charMap = {
-      ą: "a",
-      č: "c",
-      ę: "e",
-      ė: "e",
-      į: "i",
-      š: "s",
-      ų: "u",
-      ū: "u",
-      ž: "z",
-      Ą: "A",
-      Č: "C",
-      Ę: "E",
-      Ė: "E",
-      Į: "I",
-      Š: "S",
-      Ų: "U",
-      Ū: "U",
-      Ž: "Z",
-      "„": "",
-      "“": "",
-    };
 
-    return str
-      .normalize("NFKD")
-      .replace(/[„“‘’"']/g, "")
-      .replace(/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/g, (char) => charMap[char] || char)
-      .replace(/[^a-zA-Z0-9-]/g, "")
-      .replace(/-{2,}/g, "-")
-      .toLowerCase();
-  }, []);
-  const id = replaceLithuanianChars(
-    school.name.toLowerCase().replace(/\s/g, "-")
-  );
+  const id = replaceLithuanianChars(school.name);
   useEffect(() => {
     getTeachers(setTeachers, school);
   }, [school.n]);
@@ -106,7 +74,7 @@ const SchoolCase = ({
                   bg-black text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 
                   transition-opacity duration-200 pointer-events-none z-10"
           >
-            {school.status === 'ok' ? 'Patvirtinta' : "Nepatvirtinta"}
+            {school.status === "ok" ? "Patvirtinta" : "Nepatvirtinta"}
           </div>
         </div>
       </div>
@@ -190,7 +158,7 @@ const SchoolCase = ({
         {/* Button */}
         <Link
           prefetch
-          href={`/perziureti-mokyklas/${id}-${school.n}`}
+          href={`/perziureti-mokyklas/${id}`}
           className="mt-4 bg-primary self-start rounded-md px-5 py-2 text-white font-medium hover:opacity-80"
         >
           Plačiau

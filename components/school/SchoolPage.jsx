@@ -35,7 +35,7 @@ const decodeSub = (str) => {
 };
 const checkIfReported = async (object, session) => {
   const response = await fetch(
-    `/api/report/schools/check?school=${object.n}&user=${session.user.email}`,
+    `/api/report/schools/check?school=${object.url}&user=${session.user.email}`,
     {
       method: "GET",
       headers: {
@@ -104,7 +104,6 @@ const SchoolPage = ({ School }) => {
     router.push("/perziureti-mokyklas");
   };
   useEffect(() => {
-    if (!School?.n) return;
 
     async function getTeachers() {
       setLoading(true);

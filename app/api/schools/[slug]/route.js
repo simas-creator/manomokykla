@@ -3,14 +3,11 @@ import { NextResponse } from "next/server";
 import School from "@/lib/modals/school";
 
 export const GET = async (request, { params }) => {
-  const number = (await params).number;
+  const slug = (await params).slug;
   try {
-    
-    
-    const aNumber = parseInt(number)
     await connect();
 
-    const school = await School.findOne({ n: aNumber });
+    const school = await School.findOne({ url: slug });
 
     if (!school) {
       return NextResponse.json(

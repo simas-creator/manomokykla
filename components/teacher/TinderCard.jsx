@@ -5,13 +5,13 @@ import { Check, X } from "lucide-react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { Star, Info } from "lucide-react";
-
+const criteria = [
+  "Gebėjimas perteikti žinias",
+  "Gebėjimas bendrauti su mokiniais",
+  "Dalyko išmanymas",
+];
 const Case = ({ teacher, setCurrentIndex, currentIndex, setDone, length }) => {
-  const criteria = [
-    "Gebėjimas perteikti žinias",
-    "Gebėjimas bendrauti su mokiniais",
-    "Dalyko išmanymas",
-  ];
+
   const [jsonData, setJsonData] = useState({
     "Gebėjimas bendrauti su mokiniais": 0,
     "Gebėjimas perteikti žinias": 0,
@@ -96,7 +96,7 @@ const Case = ({ teacher, setCurrentIndex, currentIndex, setDone, length }) => {
         <div className="my-4 flex justify-center gap-4">
           <button
             onClick={() => handleSubmit("recommend")}
-            className=" gap-x-2 py-2 bg-red-600 border px-3 text-sm flex items-center justify-center text-white"
+            className=" gap-x-2 py-2 bg-red-600 px-3 text-sm flex items-center justify-center text-white"
           >
             <X strokeWidth={1} />
             <p>Nerekomenduoju</p>
@@ -104,7 +104,7 @@ const Case = ({ teacher, setCurrentIndex, currentIndex, setDone, length }) => {
 
           <button
             onClick={() => handleSubmit("norecommend")}
-            className="bg-green-500 text-white gap-x-2 py-2 border text-sm flex px-3 items-center justify-center "
+            className="bg-green-500 text-white gap-x-2 py-2 text-sm flex px-3 items-center justify-center "
           >
             <Check strokeWidth={1} />
             <p>Rekomenduoju</p>
@@ -113,7 +113,7 @@ const Case = ({ teacher, setCurrentIndex, currentIndex, setDone, length }) => {
 
         <button
           onClick={() => handleSubmit("skip")}
-          className="bg-white text-black text-sm border border-gray-600 px-4 h-12 flex items-center justify-center"
+          className="bg-white text-black text-sm borderpx-4 h-12 flex items-center justify-center"
         >
           Neturiu šito mokytojo
         </button>

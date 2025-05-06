@@ -3,7 +3,7 @@ import connect from "@/lib/mongodb";
 import School from "@/lib/modals/school";
 import { revalidateTag } from "next/cache";
 import { getToken } from "next-auth/jwt";
-
+import replaceLithuanianChars from "@/lib/transfomUrl";
 export async function POST(req) {
   try {
 
@@ -16,15 +16,14 @@ export async function POST(req) {
     const {name, apskritis, type, imgUrl, user } = await req.json();
     console.log("Received data:", { name, apskritis, type, imgUrl, user });  
     ;
-    const n = await School.countDocuments();
-    
+    const url = replaceLithuanianChars(name);
+    console.log(url, 'our url')
     const newSchool = new School({
       name,
+      url,
       apskritis,
       type,
-      teachers: [],
       imgUrl: `https://mokyklos.s3.eu-north-1.amazonaws.com/${imgUrl}`,
-      n: n + 1,
       rating: 0,
       user,
       status: "pending",

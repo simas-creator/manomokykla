@@ -15,11 +15,8 @@ async function getSchoolData(n) {
 }
 
 export default async function Page({ params }) {
-  const id = (await params).id;
+  const n = (await params).id;
 
-  const match = id.match(/-(\d+)$/);
-  
-  const n = match[1];
   const school = await getSchoolData(n);
 
   if (!school) {
