@@ -6,8 +6,8 @@ import { revalidateTag } from 'next/cache';
 export const POST = async (req) => {
     try {
         const data = await req.json();
-        let { first, surname, subj, n, user } = data;
-        console.log(first, surname, subj, n, user);
+        let { first, surname, subj, user, school_id } = data;
+        console.log(first, surname, subj, user);
         if (!first || !surname || !subj) {
             return NextResponse.json({ message: 'Užpildykite privalomus laukelius' }, { status: 400 });
         }
@@ -15,7 +15,7 @@ export const POST = async (req) => {
 
         await connect();
 
-        const teacherCount = await Teacher.countDocuments({ n });
+        const teacherCount = await Teacher.countDocuments({ school_id });
 
         switch (subj) {
             case 'Biologija':
@@ -82,8 +82,7 @@ export const POST = async (req) => {
             reviews: [],
             subject: subj,
             imageUrl,
-            n, // school identifier
-            m: teacherCount + 1, // teacher identifier
+            school_id,
             user,
             status: "pending",
         });

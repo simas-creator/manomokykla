@@ -16,7 +16,7 @@ const SchoolCase = ({
   const getTeachers = useCallback(async () => {
     try {
       const res = await fetch(
-        `/api/teachers/view?school=${school.url}?status=ok`,
+        `/api/teachers/view?school=${school._id}`,
         {
           method: "GET",
           headers: {

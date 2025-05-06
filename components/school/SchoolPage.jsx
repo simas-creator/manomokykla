@@ -104,13 +104,12 @@ const SchoolPage = ({ School }) => {
     router.push("/perziureti-mokyklas");
   };
   useEffect(() => {
-
     async function getTeachers() {
       setLoading(true);
       const scrollY = window.scrollY || window.pageYOffset;
       try {
         const response = await fetch(
-          `/api/teachers/number?school=${School.n}&dalykas=${queries["dalykas"]}`
+          `/api/teachers/view?school=${School._id}&dalykas=${queries["dalykas"]}`
         );
         if (!response.ok) throw new Error("Failed to fetch teachers");
 
@@ -128,19 +127,14 @@ const SchoolPage = ({ School }) => {
     setSchoolRating(School.rating);
   }, [School]);
   useEffect(() => {
-    if (!search) {
-      setFilteredData(teachers.filter((t) => t.status === "ok"));
-    } else {
-      setFilteredData(
-        teachers
-          .filter((teacher) =>
-            `${teacher.name.toLowerCase()} ${teacher.surname.toLowerCase()}`.includes(
-              search.toLowerCase()
-            )
+    setFilteredData(
+      teachers
+        .filter((teacher) =>
+          `${teacher.name.toLowerCase()} ${teacher.surname.toLowerCase()}`.includes(
+            search.toLowerCase()
           )
-          .filter((t) => t.status === "ok")
-      );
-    }
+        )
+    );
   }, [search, teachers]);
   useEffect(() => {
     if (status === "loading") {

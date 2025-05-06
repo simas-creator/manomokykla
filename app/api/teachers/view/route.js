@@ -30,13 +30,13 @@ export const GET = async (req) => {
         const searchParams = req.nextUrl.searchParams;
         const query = Object.fromEntries(searchParams.entries());
         const filter = decodeSub(query['dalykas']);
-        const url = query['school']
+        const id = query['school']
         let data;
         console.log(filter)
         if(filter && filter !== 'undefined') {
-            data = await Teacher.find({url: url, subject: filter, status: 'ok'})
+            data = await Teacher.find({school_id: id, subject: filter})
             console.log('hehe')
-        } else data = await Teacher.find({url: url, status: 'ok'});
+        } else data = await Teacher.find({school_id: id});
         if(!data) {
             return NextResponse.json({ message: 'No teacher found' }, { status: 404 });
         }

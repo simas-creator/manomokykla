@@ -28,10 +28,7 @@ const TeacherForm = ({School}) => {
       "Vokiečių"
     ];
       const {data: session, status} = useSession();
-      const truncate = (text, n) => {
-        return text?.length > n ? text.slice(0, n - 1) + '...' : text;
-      }
-    
+
       const handleData = (e) => {
         setJsonData({
           ...jsonData,
@@ -48,6 +45,7 @@ const TeacherForm = ({School}) => {
           ...jsonData,
           subj: subj,
           user: session?.user?.email,
+          school_id: School._id
       };
         if(!first || !surname || !subj) {
           setError('Užpildykite privalomus laukelius');
