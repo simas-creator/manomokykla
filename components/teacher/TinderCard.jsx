@@ -1,120 +1,48 @@
-"use client"
+"use client";
 
-import { useState, useRef, useEffect } from "react"
-import Image from "next/image"
-import { useSession } from "next-auth/react"
+import { useState } from "react";
+import { Check, X } from "lucide-react";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
 import { Star } from "lucide-react";
-const Case = ({ teacher, style, onSwipe, user, loading, setLoading }) => {
-  const criteria = ["Gebėjimas perteikti žinias", "Gebėjimas bendrauti su mokiniais", "Dalyko išmanymas"]
-  const [startX, setStartX] = useState(0)
-  const [offsetX, setOffsetX] = useState(0)
-  const [isDragging, setIsDragging] = useState(false)
-  const cardRef = useRef(null)
-  const [jsonData, setJsonData] = useState({
-    "Gebėjimas bendrauti su mokiniais": 0,
-    "Gebėjimas perteikti žinias": 0,
-    "Dalyko išmanymas": 0,
-  })
+const Case = ({ teacher, jsonData, setJsonData }) => {
 
-  // Start dragging
-  const handleStart = (clientX) => {
-    setIsDragging(true)
-    setStartX(clientX)
-  }
-
+  const criteria = [
+    "Gebėjimas perteikti žinias",
+    "Gebėjimas bendrauti su mokiniais",
+    "Dalyko išmanymas",
+  ];
   const handleRating = (criterion, value) => {
     setJsonData((prev) => ({
       ...prev,
       [criterion]: value,
-    }))
-  }
+    }));
+  };
   // Handle mouse/touch move
-  const handleMove = (clientX) => {
-    if (!isDragging) return
-    const diff = clientX - startX
-    setOffsetX(diff)
-  }
 
-  // End dragging
-  const handleEnd = (e) => {
-    // If the click target is a rating star, don't process as a swipe
-    if (e && (e.target.classList.contains("mask-star-2") || e.target.closest(".rating"))) {
-      setIsDragging(false)
-      setOffsetX(0)
-      return
-    }
+  
 
-    if (!isDragging) return
-    let direction = offsetX > 0 ? true : false;
-    const addReview = async () => {
-      const rec = direction;
-      const dataToSend = { ...jsonData, user, n: teacher.n, m: teacher.m, rec }
-      console.log(dataToSend)
-      // API call code...
-      setInterval(() => {
-        setLoading(false)
-      }, 3000)
-    }
-    // Determine if swipe was significant enough
-    if (Math.abs(offsetX) > 100) {
-      // Swipe was significant
-      direction = offsetX > 0 ? true : false
-      onSwipe(direction)
-      addReview()
-      setLoading(true);
-
-    }
-
-   
-    
-    setJsonData({ "Gebėjimas bendrauti su mokiniais": 0, "Gebėjimas perteikti žinias": 0, "Dalyko išmanymas": 0 })
-    setOffsetX(0)
-    setIsDragging(false)
-  }
-
-  // Calculate rotation based on drag distance
-  const rotation = offsetX * 0.1 // 0.1 degrees per pixel
-
-  // Combine passed style with swipe transform
-  const cardStyle = {
-    ...style,
-    transform: `translateX(${offsetX}px) rotate(${rotation}deg)`,
-    transition: isDragging ? "none" : "transform 0.3s ease",
-  }
   return (
-    <div
-      ref={cardRef}
-      className="w-fit relative min-h-80 bg-white border rounded-lg shadow-lg cursor-grab active:cursor-grabbing"
-      style={cardStyle}
-      onMouseDown={(e) => handleStart(e.clientX)}
-      onMouseMove={(e) => handleMove(e.clientX)}
-      onMouseUp={(e) => handleEnd(e)}
-      onMouseLeave={(e) => handleEnd(e)}
-      onTouchStart={(e) => handleStart(e.touches[0].clientX)}
-      onTouchMove={(e) => handleMove(e.touches[0].clientX)}
-      onTouchEnd={(e) => handleEnd(e)}
-    >
-      {loading &&
-        <div className="rounded-lg absolute z-[24] top-0 left-0 w-full gap-x-2 h-full bg-white flex justify-center items-center">
-          
-          <div className="flex justify-center items-center h-full">
-            <div className="w-12 h-12 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
-          </div>
-        </div>
-      }
+    <div className="w-fit relative min-h-80 bg-white border rounded-lg shadow-lg cursor-grab active:cursor-grabbing">
       <div className="p-4 flex justify-center flex-col">
         <div className="mb-2 p-4 flex gap-x-2 border border-black items-center w-full justify-center bg-gray-200">
-          <Image src={teacher.imageUrl || "/placeholder.svg"} width={100} height={100} alt="mokytojas"></Image>
-          
+          <Image
+            src={teacher.imageUrl || "/placeholder.svg"}
+            width={100}
+            height={100}
+            alt="mokytojas"
+          ></Image>
         </div>
         <div className="flex flex-col">
-            <h3 className="text-3xl font-bold truncate">
-              {(teacher.name + " " + teacher.surname).slice(0, 21)}
-              {teacher.name.length + teacher.surname.length > 20 && "..."}
-            </h3>
+          <h3 className="text-2xl font-bold truncate">
+            {(teacher.name + " " + teacher.surname).slice(0, 21)}
+            {teacher.name.length + teacher.surname.length > 20 && "..."}
+          </h3>
 
-            {teacher.subject && <p className="text-gray-500">{teacher.subject}</p>}
-          </div>
+          {teacher.subject && (
+            <p className="text-gray-500">{teacher.subject}</p>
+          )}
+        </div>
         <div className="space-y-2 mt-2">
           {criteria.map((criterion) => (
             <div key={criterion} className="rating-container">
@@ -128,10 +56,14 @@ const Case = ({ teacher, style, onSwipe, user, loading, setLoading }) => {
                     type="button"
                     onClick={() => handleRating(criterion, index)}
                     className={`star-rating w-8 h-8 flex items-center justify-center transition-all ${
-                      jsonData[criterion] >= index ? "text-amber-400" : "text-gray-300"
+                      jsonData[criterion] >= index
+                        ? "text-amber-400"
+                        : "text-gray-300"
                     }`}
                   >
-                    <Star fill={jsonData[criterion] >= index ? "#fbbf24" : "white"}/>
+                    <Star
+                      fill={jsonData[criterion] >= index ? "#fbbf24" : "white"}
+                    />
                   </button>
                 ))}
               </div>
@@ -140,55 +72,32 @@ const Case = ({ teacher, style, onSwipe, user, loading, setLoading }) => {
         </div>
       </div>
 
-      {/* Swipe indicators */}
-      <div
-        className={`absolute top-4 left-[-40px] px-2 py-1 rounded font-bold transform -rotate-12 transition-opacity ${
-          offsetX < -20 ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <Image src={"/images/thumbs-down-red.svg"} width={80} height={80} alt="thumbs-up"></Image>
-      </div>
-
-      <div
-        className={`absolute top-4 right-[-40px] rounded font-bold transform rotate-12 transition-opacity ${
-          offsetX > 20 ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <Image src={"/images/thumbs-up.svg"} width={80} height={80} alt="thumbs-up"></Image>
-      </div>
     </div>
-  )
-}
+  );
+};
 
 const TinderCard = ({ teachers, setOpen, user }) => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [direction, setDirection] = useState(null)
-  const [done, setDone] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const { data: session, status } = useSession()
-  // Handle swipe completion
-  const handleSwipe = (direction) => {
-    setDirection(direction)
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { data: session, status } = useSession();
 
-    // Move to next teacher after animation
-    setTimeout(() => {
-      if (currentIndex < teachers.length - 1) {
-        setCurrentIndex(currentIndex + 1)
-      } else {
-        setDone(true)
-      }
-      setDirection(null)
-    }, 300)
+  const [jsonData, setJsonData] = useState({
+    "Gebėjimas bendrauti su mokiniais": 0,
+    "Gebėjimas perteikti žinias": 0,
+    "Dalyko išmanymas": 0,
+  });
+  function handleSubmit(direction){
+    if(direction === 'skip') {
+      setCurrentIndex(prev => prev+ 1)
+    }
   }
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    })
-  }, [teachers])
-
   if (status === "loading") {
-    return <div className="flex justify-center items-center h-screen text-white">Loading...</div>
+    return (
+      <div className="flex justify-center items-center h-screen text-white">
+        Loading...
+      </div>
+    );
   }
 
   if (done && !loading) {
@@ -196,7 +105,7 @@ const TinderCard = ({ teachers, setOpen, user }) => {
       <div className="h-[100vh] w-full absolute bg-white border-b border-white">
         <button
           onClick={() => setOpen(false)}
-          className="flex fixed top-16 lg:top-[68px] bg-white z-20 h-10 w-32 border p-2 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
+          className="flex fixed top-16 lg:top-[68px] bg-white z-20 h-10 w-32 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -216,13 +125,13 @@ const TinderCard = ({ teachers, setOpen, user }) => {
           <h1 className="text-white text-2xl typed">Ačiū už atsiliepimus</h1>
         </div>
       </div>
-    )
+    );
   }
   return (
-    <div className="h-[100vh] w-full absolute bg-white border-b border-white">
+    <div className="h-fit pb-6 w-full absolute bg-white border-b border-white  px-8">
       <button
         onClick={() => setOpen(false)}
-        className="flex fixed top-16 bg-white z-20 h-10 w-32 border p-2 md:top-[68px]items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
+        className="flex fixed top-20 bg-white z-20 h-10 w-32 md:top-[68px]items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -243,64 +152,35 @@ const TinderCard = ({ teachers, setOpen, user }) => {
       <div className="flex justify-center mt-20">
         {teachers.length > 0 && status === "authenticated" && (
           <Case
-            dir={direction}
             teacher={teachers[currentIndex]}
-            user={user}
-            loading={loading}
-            setLoading={setLoading}
-            style={{
-              zIndex: 10,
-              opacity: direction ? 0 : 1,
-              transform:
-                direction === "left"
-                  ? "translateX(-100%) rotate(-10deg)"
-                  : direction === "right"
-                    ? "translateX(100%) rotate(10deg)"
-                    : "none",
-            }}
-            onSwipe={handleSwipe}
+            jsonData={jsonData}
+            setJsonData={setJsonData}
           />
         )}
       </div>
 
-      {/* Show next card behind current one */}
-      {teachers.length > 1 && currentIndex < teachers.length - 1 && (
-        <div className="w-80 h-80 bg-white rounded-lg shadow-lg absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 scale-95 opacity-70">
-          <div className="p-4">
-            <h3 className="text-xl font-bold">{teachers[currentIndex + 1].name}</h3>
-          </div>
-        </div>
-      )}
-
       {/* Simple navigation controls */}
       <div className="mt-4 flex justify-center gap-4">
-        <button
-          onClick={() => handleSwipe("left")}
-          className="bg-white text-black w-12 h-12 rounded-full flex items-center justify-center font-bold"
-        >
-          <Image src={"/images/thumbs-down-red.svg"} width={30} height={30} alt="thumbs-up"></Image>
+        <button onClick={() => handleSubmit('recommend')} className="bg-white gap-x-2 py-2 border-red-600 rounded-md border px-3 text-sm flex items-center justify-center text-red-600">
+          <X strokeWidth={1} />
+          <p>Nerekomenduoju</p>
         </button>
-        <button
-          onClick={() => handleSwipe("up")}
-          className="bg-white text-black border rounded-md px-4 h-12 flex items-center justify-center"
-        >
-          Neturiu šito mokytojo
-        </button>
-        <button
-          onClick={() => handleSwipe("right")}
-          className="bg-white text-black w-12 h-12 rounded-full flex items-center justify-center font-bold"
-        >
-          <Image src={"/images/thumbs-up.svg"} width={30} height={30} alt="thumbs-up"></Image>
+
+        <button onClick={() => handleSubmit('norecommend')} className="bg-white gap-x-2 py-2 border text-sm flex rounded-md px-3 items-center justify-center text-green-400 border-green-400">
+          <Check strokeWidth={1} />
+          <p>Rekomenduoju</p>
         </button>
       </div>
 
       {/* Card counter */}
-      <div className="left-0 right-0 text-center text-white">
+      <div className="mt-4 text-center w-full flex justify-center flex-col items-center">
+        <button onClick={() => handleSubmit('skip')} className="bg-white text-black text-sm border border-gray-600 rounded-md px-4 h-12 flex items-center justify-center">
+          Neturiu šito mokytojo
+        </button>
         {currentIndex + 1} / {teachers.length}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TinderCard
-
+export default TinderCard;
