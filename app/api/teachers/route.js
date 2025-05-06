@@ -15,8 +15,6 @@ export const POST = async (req) => {
 
         await connect();
 
-        const teacherCount = await Teacher.countDocuments({ school_id });
-
         switch (subj) {
             case 'Biologija':
                 imageUrl = "https://mokyklos.s3.eu-north-1.amazonaws.com/mokyklos/mokytojai/biologija.png";
