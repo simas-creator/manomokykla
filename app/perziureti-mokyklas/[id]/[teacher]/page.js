@@ -24,8 +24,13 @@ export default async function Page({ params }) {
   const data = await params;
   const id = await data.id;
   const teacher = await data.teacher;
-  const school = await School.findOne({url: id})
+  const school = await School.findOne({url: id}).lean()
+  const cleanSchool = JSON.parse(JSON.stringify(school));
+  var {__v, createdAt, updatedAt, ...plainSchool} = school;
   const t = await Teacher.findOne({school_id: school._id, url: teacher}).lean()
-  const {_id, _v, createdAt, updatedAt, ...plainObject} = t;
-  return <TeacherPage teacher={plainObject} />;
+  const cleanTeacher = JSON.parse(JSON.stringify(t));
+  var {__v, createdAt, updatedAt, ...plainTeacher} = t;
+  cleanTeacher.school = cleanSchool;
+  console.log(cleanTeacher)
+  return <TeacherPage teacher={cleanTeacher} />;
 }

@@ -11,7 +11,8 @@ export async function GET(req) {
     const block = await User.findOne({email: user}).lean();
     console.log('our username: ', block)
     if (!user) {
-      return NextResponse.json({ exists: false, message: "Invalid request parameters" }, { status: 400 });
+      return NextResponse.json({ exists: false, 
+        essage: "Invalid request parameters" }, { status: 400 });
     }
     const alreadyExist = await Review.findOne({ user: block.username, teacher_id: m }).lean();
     console.log(alreadyExist, ' exists??')

@@ -57,7 +57,6 @@ const TeacherPage = ({ teacher }) => {
   const [u, setU] = useState("");
   const [loading, setLoading] = useState(true);
   const [school, setSchool] = useState(null);
-  const [schoolImage, setSchoolImage] = useState(null);
   const [form, setForm] = useState(false);
   const [report, setReport] = useState(false);
   const [showReport, setShowReport] = useState(false);
@@ -100,20 +99,6 @@ const TeacherPage = ({ teacher }) => {
       showReport(true);
       return;
     }
-    const fetchReportStatus = async () => {
-      if (!teacher?.n || !teacher?.m) {
-        return;
-      }
-
-      const isReported = await checkIfReported(teacher, session);
-      console.log(isReported);
-      if (isReported) {
-        setShowReport(false);
-      } else {
-        setShowReport(true);
-      }
-    };
-    fetchReportStatus();
     const checkUsername = async (email) => {
       const response = await fetch("/api/reviews/username?email=" + email);
       let data;
@@ -145,18 +130,17 @@ const TeacherPage = ({ teacher }) => {
             )
           : Promise.resolve({ ok: false });
 
-        const [reviewRes, schoolRes, reviewsRes] = await Promise.all([
+        const [reviewRes, reviewsRes] = await Promise.all([
           reviewCheckPromise,
-          fetch(`/api/schools/byn?n=${teacher.school_id}`),
+        
           fetch(
             `/api/reviews/view?n=${teacher._id}
             &ivertinimai=${searchParams.get("ivertinimai")}`
           ),
         ]);
 
-        const [reviewData, schoolData, reviewsData] = await Promise.all([
+        const [reviewData, reviewsData] = await Promise.all([
           reviewRes.ok ? reviewRes.json() : { exists: false },
-          schoolRes.json(),
           reviewsRes.json(),
         ]);
 
@@ -166,10 +150,7 @@ const TeacherPage = ({ teacher }) => {
         }
 
         if (reviewRes.ok) setAlreadyReviewed(reviewData.exists);
-        if (schoolRes.ok) {
-          setSchool(schoolData.data);
-          setSchoolImage(schoolData.image);
-        }
+        
         if (reviewsRes.ok) {
           setReviews(reviewsData);
           const recommendedCount = reviewsData.filter(
@@ -264,17 +245,16 @@ const TeacherPage = ({ teacher }) => {
         <div className="px-6 sm:px-8 mb-8">
           <TeacherReport object={teacher} setReport={setReport} />
         </div>
-        {schoolImage && (
+
           <div className="absolute end-0 top-[63px]">
             <div className="border-2 w-28 h-28 md:w-20 md:h-20">
               <img
                 className="w-full h-full object-cover"
-                src={schoolImage}
+                src={teacher.school.imgUrl}
                 alt=""
               />
             </div>
           </div>
-        )}
       </div>
     );
   }
@@ -410,19 +390,17 @@ const TeacherPage = ({ teacher }) => {
           </div>
         </div>
         <div className="absolute right-20 md:right-24 top-[95px] text-sm hidden md:block">
-          {school}
+          {teacher.school.name}
         </div>
-        {schoolImage && (
           <div className="absolute end-0 top-[63px]">
             <div className="border-2 w-28 h-28 md:w-20 md:h-20">
               <img
                 className="w-full h-full object-cover"
-                src={schoolImage}
+                src={teacher.school.imgUrl}
                 alt=""
               />
             </div>
           </div>
-        )}
       </main>
       <div className={`relative border mt-4 ${form ? "" : "mb-6"}`}></div>
       {!form && (

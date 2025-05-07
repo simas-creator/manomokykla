@@ -29,7 +29,6 @@ const SchoolCase = ({
         console.log(res.message, "error");
         return;
       }
-
       const result = await res.json();
       setTeachers(result.data);
       console.log(result);
