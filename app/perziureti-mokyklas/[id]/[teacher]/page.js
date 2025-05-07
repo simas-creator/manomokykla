@@ -3,34 +3,27 @@ import TeacherPage from "@/components/teacher/TeacherPage";
 import School from "@/lib/modals/school";
 import Teacher from "@/lib/modals/teacher";
 
-async function getTeacherData(n, m) {
-  try {
-    const res = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/url?n=${n}&m=${m}`,
-      { next : {revalidate: 60}}
-    );
-    
-    if (!res.ok) {
-      return null;
-    }
-
-    return await res.json();
-  } catch (error) {
-    console.error("Fetch failed:", error);
-    return null;
-  }
-}
 export default async function Page({ params }) {
   const data = await params;
   const id = await data.id;
   const teacher = await data.teacher;
-  const school = await School.findOne({url: id}).lean()
-  const cleanSchool = JSON.parse(JSON.stringify(school));
-  var {__v, createdAt, updatedAt, ...plainSchool} = school;
-  const t = await Teacher.findOne({school_id: school._id, url: teacher}).lean()
-  const cleanTeacher = JSON.parse(JSON.stringify(t));
-  var {__v, createdAt, updatedAt, ...plainTeacher} = t;
-  cleanTeacher.school = cleanSchool;
-  console.log(cleanTeacher)
-  return <TeacherPage teacher={cleanTeacher} />;
+    // Fetch school
+    const school = await School.findOne({ url: id }).lean();
+  
+    const { __v, createdAt, updatedAt, ...plainSchool } = {
+      ...school,
+      _id: school._id.toString()
+    };
+  
+    // Fetch teacher
+    const t = await Teacher.findOne({ school_id: school._id, url: teacher }).lean();
+  
+    const { __v: v2, createdAt: c2, updatedAt: u2, ...plainTeacher } = {
+      ...t,
+      _id: t._id.toString(),
+      school_id: t.school_id.toString()
+    };
+  
+    plainTeacher.school = plainSchool;
+  return <TeacherPage teacher={plainTeacher} />;
 }
