@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Teacher from '@/lib/modals/teacher';
 import connect from '@/lib/mongodb';
 import { revalidateTag } from 'next/cache';
+import replaceLithuanianChars from '../../../lib/transfomUrl';
 
 export const POST = async (req) => {
     try {
@@ -72,10 +73,12 @@ export const POST = async (req) => {
                 break;
         }
         
-
+        const url = replaceLithuanianChars(`${first} ${surname}`)
+        console.log(url, 'url')
         const teacher = new Teacher({
             name: first,
             surname,
+            url,
             rating: '0.0',
             reviews: [],
             subject: subj,

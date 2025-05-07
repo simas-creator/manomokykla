@@ -141,17 +141,16 @@ const TeacherPage = ({ teacher }) => {
       try {
         const reviewCheckPromise = session?.user?.email
           ? fetch(
-              `/api/reviews/check?user=${session.user.email}&n=${teacher.n}&m=${teacher.m}`
+              `/api/reviews/check?user=${session.user.email}&m=${teacher._id}`
             )
           : Promise.resolve({ ok: false });
 
         const [reviewRes, schoolRes, reviewsRes] = await Promise.all([
           reviewCheckPromise,
-          fetch(`/api/schools/byn?n=${teacher.n}`),
+          fetch(`/api/schools/byn?n=${teacher.school_id}`),
           fetch(
-            `/api/reviews/view?n=${teacher.n}&m=${
-              teacher.m
-            }&ivertinimai=${searchParams.get("ivertinimai")}`
+            `/api/reviews/view?n=${teacher._id}
+            &ivertinimai=${searchParams.get("ivertinimai")}`
           ),
         ]);
 

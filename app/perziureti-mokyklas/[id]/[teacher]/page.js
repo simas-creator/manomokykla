@@ -1,5 +1,7 @@
 
 import TeacherPage from "@/components/teacher/TeacherPage";
+import School from "@/lib/modals/school";
+import Teacher from "@/lib/modals/teacher";
 
 async function getTeacherData(n, m) {
   try {
@@ -22,13 +24,8 @@ export default async function Page({ params }) {
   const data = await params;
   const id = await data.id;
   const teacher = await data.teacher;
-  const n = id.match(/(\d+)$/)[0];
-  const m = teacher.match(/(\d+)$/)[0];
-  console.log('our n: ', n, 'our m: ', m)
-  if (!n || !m) {
-    return <div className="w-full text-center mt-20">Tokio mokytojo nėra</div>;
-  }
-
-  const t = await getTeacherData(n, m);
-  return <TeacherPage teacher={t} />;
+  const school = await School.findOne({url: id})
+  const t = await Teacher.findOne({school_id: school._id, url: teacher}).lean()
+  const {_id, _v, createdAt, updatedAt, ...plainObject} = t;
+  return <TeacherPage teacher={plainObject} />;
 }

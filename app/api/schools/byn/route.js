@@ -5,7 +5,7 @@ export async function GET(req) {
     await connect()
     const {searchParams} = new URL(req.url)
     const n = searchParams.get('n');
-    const school = await School.findOne({n});
+    const school = await School.findOne({_id: n});
     if(!school) {
         return NextResponse.json({message: error}, {status: 500})
     }
