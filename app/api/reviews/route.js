@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import Review from "@/lib/modals/review";
 import connect from "@/lib/mongodb";
-import { revalidateTag } from "next/cache";
 export async function POST(req) {
   try {
     await connect();
