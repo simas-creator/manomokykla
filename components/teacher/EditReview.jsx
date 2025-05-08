@@ -89,7 +89,7 @@ const EditReview = ({ setOpen, open, review, admin }) => {
       });
     } else
       try {
-        const response = await fetch(`/api/reviews/edit?n=${n}&m=${m}&r=${r}`, {
+        const response = await fetch(`/api/reviews/edit?id=${review._id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(jsonData),
@@ -114,7 +114,7 @@ const EditReview = ({ setOpen, open, review, admin }) => {
   const deleteReview = async () => {
     setDeleting(true);
     try {
-      const res = await fetch(`/api/reviews/delete?n=${n}&m=${m}&r=${r}`, {
+      const res = await fetch(`/api/reviews/delete?id=${review._id}`, {
         method: "DELETE",
       });
       if (!res.ok) {

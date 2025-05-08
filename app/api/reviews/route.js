@@ -3,6 +3,7 @@ import Review from "@/lib/modals/review";
 import Teacher from "@/lib/modals/teacher";
 import connect from "@/lib/mongodb";
 import School from "@/lib/modals/school";
+import recalculateTeacher from "@/lib/recalculateTeacher";
 export async function POST(req) {
   try {
     await connect();
@@ -42,26 +43,7 @@ export async function POST(req) {
     const newReview = new Review(reviewData);
     await newReview.save();
 
-    const allReviews = await Review.find({ teacher_id });
-    const total = allReviews.reduce((acc, review) => {
-      const { criterion1: c1, criterion2: c2, criterion3: c3 } = review;
-      return acc + (c1 + c2 + c3) / 3;
-    }, 0);
-    const rating = (total / allReviews.length).toFixed(2);
-
-    const teacher = await Teacher.findOne({ _id: teacher_id });
-    teacher.rating = rating;
-    await teacher.save();
-
-    ///updating schools rating
-    const allTeachers = await Teacher.find({ school_id: teacher.school_id });
-    const schoolTotal = allTeachers.reduce((acc, teacher) => {
-      return acc += teacher.rating;
-    }, 0);
-    const schoolRating = (schoolTotal / allTeachers.length).toFixed(2);
-    await School.findOneAndUpdate({ _id: teacher.school_id }, {
-      rating: schoolRating
-    });
+    await recalculateTeacher(newReview.teacher_id)
     return NextResponse.json(
       { message: "Įvertinimas išsaugotas sėkmingai!" },
       { status: 200 }
