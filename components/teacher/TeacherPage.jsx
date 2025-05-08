@@ -34,21 +34,6 @@ const decodeSub = (str) => {
   };
   return subMap[str] || str;
 };
-const checkIfReported = async (object, session) => {
-  const response = await fetch(
-    `/api/report/teachers/check?school=${object?.n}&teacher=${object?.m}&user=${session?.user?.email}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const data = await response.json();
-  if (data.exists === true) {
-    return true;
-  } else return false;
-};
 const TeacherPage = ({ teacher }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -96,7 +81,7 @@ const TeacherPage = ({ teacher }) => {
       return;
     }
     if (session === "unauthenticated") {
-      showReport(true);
+      setShowReport(true);
       return;
     }
     const checkUsername = async (email) => {
@@ -110,17 +95,11 @@ const TeacherPage = ({ teacher }) => {
       }
     };
     checkUsername(session?.user?.email);
-    console.log(u);
   }, [session, teacher]);
 
   const prevReviewRef = useRef(null);
 
   useEffect(() => {
-    if (!teacher?.n || !teacher?.m) {
-      setLoading(false);
-      return;
-    }
-
     const fetchData = async () => {
       const scrollY = window.scrollY || window.pageYOffset;
       try {
@@ -132,7 +111,7 @@ const TeacherPage = ({ teacher }) => {
 
         const [reviewRes, reviewsRes] = await Promise.all([
           reviewCheckPromise,
-        
+
           fetch(
             `/api/reviews/view?n=${teacher._id}
             &ivertinimai=${searchParams.get("ivertinimai")}`
@@ -143,18 +122,18 @@ const TeacherPage = ({ teacher }) => {
           reviewRes.ok ? reviewRes.json() : { exists: false },
           reviewsRes.json(),
         ]);
-
+        setLength(reviewsData.length);
         if (reviewRes.ok && reviewData?.data !== prevReviewRef.current) {
           prevReviewRef.current = reviewData?.data;
           setIndividualReview(reviewData?.data);
         }
 
         if (reviewRes.ok) setAlreadyReviewed(reviewData.exists);
-        
+
         if (reviewsRes.ok) {
           setReviews(reviewsData);
           const recommendedCount = reviewsData.filter(
-            (r) => r.rec === true && r.status === "ok"
+            (r) => r.rec === true
           ).length;
           setRec(
             reviewsData.length > 0
@@ -171,7 +150,7 @@ const TeacherPage = ({ teacher }) => {
     };
 
     fetchData();
-  }, [teacher, session, searchParams, prevReviewRef]);
+  }, [teacher, session, searchParams]);
 
   const handleBack = () => {
     router.push(`${pathname.slice(0, pathname.lastIndexOf("/"))}`);
@@ -246,15 +225,15 @@ const TeacherPage = ({ teacher }) => {
           <TeacherReport object={teacher} setReport={setReport} />
         </div>
 
-          <div className="absolute end-0 top-[63px]">
-            <div className="border-2 w-28 h-28 md:w-20 md:h-20">
-              <img
-                className="w-full h-full object-cover"
-                src={teacher.school.imgUrl}
-                alt=""
-              />
-            </div>
+        <div className="absolute end-0 top-[63px]">
+          <div className="border-2 w-28 h-28 md:w-20 md:h-20">
+            <img
+              className="w-full h-full object-cover"
+              src={teacher.school.imgUrl}
+              alt=""
+            />
           </div>
+        </div>
       </div>
     );
   }
@@ -373,34 +352,32 @@ const TeacherPage = ({ teacher }) => {
                 </button>
               )}
 
-              {showReport === true && (
-                <button
-                  onClick={() => handleReport()}
-                  className=" flex text-sm items-center gap-2 border px-2 py-1 border-red-400 text-red-400 rounded-md hover:bg-red-400 hover:text-white transition-colors"
-                >
-                  Pranešti
-                  <img
-                    src="/images/flag-country-svgrepo-com.svg"
-                    className="w-6 h-6"
-                    alt=""
-                  />
-                </button>
-              )}
+              <button
+                onClick={() => handleReport()}
+                className=" flex text-sm items-center gap-2 border px-2 py-1 border-red-400 text-red-400 rounded-md hover:bg-red-400 hover:text-white transition-colors"
+              >
+                Pranešti
+                <img
+                  src="/images/flag-country-svgrepo-com.svg"
+                  className="w-6 h-6"
+                  alt=""
+                />
+              </button>
             </div>
           </div>
         </div>
         <div className="absolute right-20 md:right-24 top-[95px] text-sm hidden md:block">
           {teacher.school.name}
         </div>
-          <div className="absolute end-0 top-[63px]">
-            <div className="border-2 w-28 h-28 md:w-20 md:h-20">
-              <img
-                className="w-full h-full object-cover"
-                src={teacher.school.imgUrl}
-                alt=""
-              />
-            </div>
+        <div className="absolute end-0 top-[63px]">
+          <div className="border-2 w-28 h-28 md:w-20 md:h-20">
+            <img
+              className="w-full h-full object-cover"
+              src={teacher.school.imgUrl}
+              alt=""
+            />
           </div>
+        </div>
       </main>
       <div className={`relative border mt-4 ${form ? "" : "mb-6"}`}></div>
       {!form && (
@@ -415,7 +392,10 @@ const TeacherPage = ({ teacher }) => {
           />
         </div>
       )}
-      <div className={`${loading ? '' : 'hidden'}`}>
+      {!loading && !form && reviews.length === 0 && (
+        <p className="px-6 sm:px-10">Įvertinimų nėra.</p>
+      )}
+      <div className={`${loading ? "" : "hidden"}`}>
         <LoadingSpinner />
       </div>
 
@@ -428,11 +408,10 @@ const TeacherPage = ({ teacher }) => {
       </div>
       {form && (
         <ReviewForm
-          n={teacher?.n}
-          m={teacher?.m}
+          teacher_id={teacher._id}
           user={u}
           open={form}
-          type={school.type}
+          type={teacher.school.type}
         />
       )}
     </section>

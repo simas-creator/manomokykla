@@ -1,7 +1,7 @@
 import { useState} from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-const ReviewForm = ({ n, m, user, open, type}) => {
+const ReviewForm = ({ teacher_id, user, open, type}) => {
   const [anonymous, setAnonymous] = useState(false);
   const criteria = [
     "Gebėjimas perteikti žinias",
@@ -12,7 +12,7 @@ const ReviewForm = ({ n, m, user, open, type}) => {
   const pathname = usePathname();
   // Initialize state with passed props
   const [jsonData, setJsonData] = useState({
-    n, m, user, rec: true,
+    teacher_id, user, rec: true,
     "Gebėjimas perteikti žinias": 1,
     "Gebėjimas bendrauti su mokiniais": 1,
     "Dalyko išmanymas": 1,
@@ -54,8 +54,7 @@ const ReviewForm = ({ n, m, user, open, type}) => {
   const handleSubmit = async () => {
     const data = {
       user: user.username,
-      n,
-      m,
+      teacher_id,
       rec: jsonData.rec,
       criterion1: jsonData["Gebėjimas perteikti žinias"],
       criterion2: jsonData["Gebėjimas bendrauti su mokiniais"],

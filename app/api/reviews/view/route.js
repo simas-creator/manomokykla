@@ -6,11 +6,10 @@ export async function GET(req) {
     try {
         await connect();
         const { searchParams } = new URL(req.url);
-        const n = parseInt(searchParams.get("n"));
-        const m = parseInt(searchParams.get("m"));
+        const n = searchParams.get("n");
         const filter1 = searchParams.get('ivertinimai');
 
-        let reviews = await Review.find({ n, m, status: 'ok' });
+        let reviews = await Review.find({ teacher_id: n});
 
         reviews.sort((a, b) => {
             const ratingA = (a.criterion1 + a.criterion2 + a.criterion3) / 3;
