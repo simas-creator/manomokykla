@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import Review from "@/lib/modals/review";
-import Teacher from "@/lib/modals/teacher";
 import connect from "@/lib/mongodb";
-import School from "@/lib/modals/school";
 import recalculateTeacher from "@/lib/recalculateTeacher";
 export async function POST(req) {
   try {
