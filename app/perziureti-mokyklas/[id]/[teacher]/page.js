@@ -2,8 +2,10 @@
 import TeacherPage from "@/components/teacher/TeacherPage";
 import School from "@/lib/modals/school";
 import Teacher from "@/lib/modals/teacher";
+import connect from "@/lib/mongodb";
 
 export default async function Page({ params }) {
+  await connect()
   const data = await params;
   const id = await data.id;
   const teacher = await data.teacher;
