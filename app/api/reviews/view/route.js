@@ -1,6 +1,7 @@
 import connect from '@/lib/mongodb'
 import Review from '@/lib/modals/review'
 import { NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 
 export async function GET(req) {
     try {
@@ -8,8 +9,8 @@ export async function GET(req) {
         const { searchParams } = new URL(req.url);
         const n = searchParams.get("n");
         const filter1 = searchParams.get('ivertinimai');
-
-        let reviews = await Review.find({ teacher_id: n});
+        const id = n.trim()
+        let reviews = await Review.find({ teacher_id: id});
 
         reviews.sort((a, b) => {
             const ratingA = (a.criterion1 + a.criterion2 + a.criterion3) / 3;

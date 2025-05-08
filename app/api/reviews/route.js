@@ -2,19 +2,31 @@ import { NextResponse } from "next/server";
 import Review from "@/lib/modals/review";
 import Teacher from "@/lib/modals/teacher";
 import connect from "@/lib/mongodb";
-
+import School from "@/lib/modals/school";
 export async function POST(req) {
   try {
     await connect();
     const body = await req.json();
-    let { user, teacher_id, criterion1, criterion2, criterion3, comment, anonymous, rec } = body;
+    let {
+      user,
+      teacher_id,
+      criterion1,
+      criterion2,
+      criterion3,
+      comment,
+      anonymous,
+      rec,
+    } = body;
     criterion1 = parseInt(criterion1);
     criterion2 = parseInt(criterion2);
     criterion3 = parseInt(criterion3);
 
     const alreadyExist = await Review.findOne({ user, teacher_id });
     if (alreadyExist) {
-      return NextResponse.json({ message: "Jau įvertinote šį mokytoją." }, { status: 400 });
+      return NextResponse.json(
+        { message: "Jau įvertinote šį mokytoją." },
+        { status: 400 }
+      );
     }
 
     const reviewData = {
@@ -41,10 +53,24 @@ export async function POST(req) {
     teacher.rating = rating;
     await teacher.save();
 
-    return NextResponse.json({ message: "Įvertinimas išsaugotas sėkmingai!" }, { status: 200 });
-
+    ///updating schools rating
+    const allTeachers = await Teacher.find({ school_id: teacher.school_id });
+    const schoolTotal = allTeachers.reduce((acc, teacher) => {
+      return acc += teacher.rating;
+    }, 0);
+    const schoolRating = (schoolTotal / allTeachers.length).toFixed(2);
+    await School.findOneAndUpdate({ _id: teacher.school_id }, {
+      rating: schoolRating
+    });
+    return NextResponse.json(
+      { message: "Įvertinimas išsaugotas sėkmingai!" },
+      { status: 200 }
+    );
   } catch (error) {
     console.log("Server Error:", error);
-    return NextResponse.json({ message: "Server error. Try again later." }, { status: 500 });
+    return NextResponse.json(
+      { message: "Server error. Try again later." },
+      { status: 500 }
+    );
   }
 }

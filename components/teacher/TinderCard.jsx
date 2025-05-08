@@ -10,8 +10,14 @@ const criteria = [
   "Gebėjimas bendrauti su mokiniais",
   "Dalyko išmanymas",
 ];
-const Case = ({ teacher, setCurrentIndex, currentIndex, setDone, length }) => {
-
+const Case = ({
+  teacher,
+  setCurrentIndex,
+  currentIndex,
+  setDone,
+  length,
+  setOpen,
+}) => {
   const [jsonData, setJsonData] = useState({
     "Gebėjimas bendrauti su mokiniais": 0,
     "Gebėjimas perteikti žinias": 0,
@@ -36,7 +42,7 @@ const Case = ({ teacher, setCurrentIndex, currentIndex, setDone, length }) => {
   return (
     <div className="w-auto bg-gray-800 relative h-fit border rounded-lg shadow-lg">
       <div className="px-4 pt-4 flex justify-center flex-col">
-        <div className="mb-2 p-4 flex gap-x-2 border relative border-black items-center w-full justify-center bg-gray-200">
+        <div className="mb-2 p-4 flex gap-x-2 border relative border-black items-center w-full justify-center bg-white">
           <Image
             src={teacher.imageUrl}
             width={100}
@@ -53,8 +59,14 @@ const Case = ({ teacher, setCurrentIndex, currentIndex, setDone, length }) => {
           <div className="absolute top-2 left-2">
             {currentIndex + 1} / {length}
           </div>
+          <button
+            onClick={() => setOpen(false)}
+            className="absolute left-2 bottom-2 px-2 py-2 bg-primary rounded-md text-white text-sm"
+          >
+            Grįžti
+          </button>
         </div>
-        <div className="flex flex-col bg-white text-center p-2">
+        <div className="flex flex-col bg-gray-200 text-center p-2">
           <h3 className="text-2xl font-bold truncate">
             {(teacher.name + " " + teacher.surname).slice(0, 21)}
             {teacher.name.length + teacher.surname.length > 20 && "..."}
@@ -139,25 +151,16 @@ const TinderCard = ({ teachers, setOpen }) => {
   if (done && !loading) {
     return (
       <div className="h-screen w-full absolute bg-white border-b border-white">
-        <button
-          onClick={() => setOpen(false)}
-          className="flex fixed top-16 lg:top-[68px] bg-white z-20 h-10 w-32 items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-6 h-6 group-hover:-translate-x-1 transition-transform duration-300"
-          >
-            <path
-              fillRule="evenodd"
-              d="M15.707 4.293a1 1 0 010 1.414L10.414 11H20a1 1 0 110 2h-9.586l5.293 5.293a1 1 0 11-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
-        <div className="flex justify-center items-center mt-20 bg-white h-32 m-auto w-80 rounded-lg shadow-lg">
-          <h1 className="text-white text-2xl typed">Ačiū už atsiliepimus</h1>
+        <div className="flex justify-center flex-col items-center mt-20 bg-white h-32 m-auto w-80 rounded-lg shadow-lg">
+          <h1 className="text-white text-2xl typed w-full">Ačiū už atsiliepimus</h1>
+          <div className="w-full flex justify-center mt-4">
+            <button
+              onClick={() => setOpen(false)}
+              className="px-4 py-2 border border-primary text-gray-700 rounded-md text-sm"
+            >
+              Grįžti
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -173,6 +176,7 @@ const TinderCard = ({ teachers, setOpen }) => {
             setDone={setDone}
             currentIndex={currentIndex}
             length={teachers.length}
+            setOpen={setOpen}
           />
         )}
       </div>

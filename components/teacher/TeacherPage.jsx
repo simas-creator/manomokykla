@@ -127,9 +127,7 @@ const TeacherPage = ({ teacher }) => {
           prevReviewRef.current = reviewData?.data;
           setIndividualReview(reviewData?.data);
         }
-
         if (reviewRes.ok) setAlreadyReviewed(reviewData.exists);
-
         if (reviewsRes.ok) {
           setReviews(reviewsData);
           const recommendedCount = reviewsData.filter(
