@@ -1,7 +1,7 @@
-'use client';
-import { useState } from 'react';
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
+"use client";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 function Nav() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -10,8 +10,8 @@ function Nav() {
     setDropdownOpen((prev) => !prev);
   };
 
-  const {data: session, status} = useSession(false);
-  
+  const { data: session, status } = useSession(false);
+
   return (
     <div className="navbar shadow-sm bg-base-100 border-b border-gray-100 fixed z-20">
       <div className="navbar-start">
@@ -44,22 +44,22 @@ function Nav() {
               className="menu border menu-sm dropdown-content bg-base-100 rounded-box z-[50] mt-3 w-52 p-2 shadow-lg"
             >
               <li>
-                  <Link href="/prideti-mokykla">Pridėti mokymo įstaigą</Link>
-                  </li>
-                  <li>
-                    <Link href="/perziureti-mokyklas">Peržiūrėti mokyklas</Link>
-                  </li>
+                <Link href="/prideti-mokykla">Pridėti mokymo įstaigą</Link>
+              </li>
               <li>
-              <Link href={'/taisykles'}>Taisyklės</Link>
+                <Link href="/perziureti-mokyklas">Peržiūrėti mokyklas</Link>
+              </li>
+              <li>
+                <Link href={"/taisykles"}>Taisyklės</Link>
+              </li>
+              <li>
+                <Link href={"/privatumo-politika"}>Privatumo politika</Link>
               </li>
             </ul>
           )}
         </div>
-        <a href='/' className="text-xl font-bold lg:px-20">
-          <img 
-              src="/images/manomokykla.png"
-              alt="manomokyk.la"
-              width={150} />
+        <a href="/" className="text-xl font-bold lg:px-20">
+          <img src="/images/manomokykla.png" alt="manomokyk.la" width={150} />
         </a>
       </div>
       <div className="navbar-center hidden lg:flex z-[50]">
@@ -67,36 +67,40 @@ function Nav() {
           <li>
             <details>
               <summary>Mokyklos ir universitetai</summary>
-              <ul className="p-2">
+              <ul className="p-2 border">
                 <li>
-                <Link href="/prideti-mokykla">Pridėti</Link>
+                  <Link href="/prideti-mokykla">Pridėti</Link>
                 </li>
                 <li>
-                <Link prefetch href="/perziureti-mokyklas">Peržiūrėti</Link>
+                  <Link prefetch href="/perziureti-mokyklas">
+                    Peržiūrėti
+                  </Link>
                 </li>
               </ul>
             </details>
           </li>
           <li>
-            <Link href={'/taisykles'}>Taisyklės</Link>
+            <Link href={"/taisykles"}>Taisyklės</Link>
+          </li>
+          <li>
+            <Link href={"/privatumo-politika"}>Privatumo politika</Link>
           </li>
         </ul>
       </div>
-      
-      {session? (
+
+      {session ? (
         <div className="navbar-end">
-        <a href="/skydelis" className="btn btn-outline btn-primary">
-          Paskyra
-        </a>
-      </div>
-      ) : 
-      <div className="navbar-end">
-        <a href="/prisijungti" className="btn btn-outline btn-primary">
-          Paskyra
-        </a>
-      </div>}
-      
-      
+          <a href="/skydelis" className="btn btn-outline btn-primary">
+            Paskyra
+          </a>
+        </div>
+      ) : (
+        <div className="navbar-end">
+          <a href="/prisijungti" className="btn btn-outline btn-primary">
+            Paskyra
+          </a>
+        </div>
+      )}
     </div>
   );
 }

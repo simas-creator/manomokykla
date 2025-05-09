@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState, useEffect, Suspense } from "react";
 function LoginForm() {
   return (
@@ -6,7 +7,7 @@ function LoginForm() {
       <div className="bg-white rounded-lg shadow-lg overflow-hidden max-w-[500px] border">
         <div className="px-6 py-8">
           <h2 className="text-2xl font-bold text-center text-gray-800">
-            Sveiki sugrįžę
+            Prisijungimas
           </h2>
           <p className="mt-2 text-center text-gray-600">
             Prisijunkite, kad galėtumėte vertinti mokytojus bei pridėti mokyklas
@@ -65,6 +66,11 @@ function LoginForm() {
             </button>
           </div>
         </div>
+        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
+        <p className="text-xs text-center text-gray-500">
+          Prieš tęsdami patvirtinate, jog susipažinote su mūsų <Link className="hover:underline underline-offset-1 text-primary cursor-pointer" href="/privatumo-politika">privatumo politika</Link>
+        </p>
+      </div>
       </div>
     </div>
   );
