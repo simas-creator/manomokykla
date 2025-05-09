@@ -39,9 +39,7 @@ const TeacherPage = ({ teacher }) => {
   const router = useRouter();
   const [rec, setRec] = useState(0);
   const [alreadyReviewed, setAlreadyReviewed] = useState(null);
-  const [u, setU] = useState("");
   const [loading, setLoading] = useState(true);
-  const [school, setSchool] = useState(null);
   const [form, setForm] = useState(false);
   const [report, setReport] = useState(false);
   const [showReport, setShowReport] = useState(false);
@@ -80,54 +78,35 @@ const TeacherPage = ({ teacher }) => {
     if (status === "loading") {
       return;
     }
-    if (session === "unauthenticated") {
+    if (status === "unauthenticated") {
       setShowReport(true);
       return;
     }
-    const checkUsername = async (email) => {
-      const response = await fetch("/api/reviews/username?email=" + email);
-      let data;
-      if (response.ok) {
-        data = await response.json();
-      } else return;
-      if (data) {
-        setU(data);
-      }
-    };
-    checkUsername(session?.user?.email);
   }, [session, teacher]);
-
-  const prevReviewRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       const scrollY = window.scrollY || window.pageYOffset;
       try {
-        const reviewCheckPromise = session?.user?.email
-          ? fetch(
-              `/api/reviews/check?user=${session.user.email}&m=${teacher._id}`
-            )
-          : Promise.resolve({ ok: false });
+        const reviewsRes = await fetch(
+          `/api/reviews/view?n=${teacher._id}&ivertinimai=${searchParams.get(
+            "ivertinimai"
+          )}`
+        );
 
-        const [reviewRes, reviewsRes] = await Promise.all([
-          reviewCheckPromise,
-
-          fetch(
-            `/api/reviews/view?n=${teacher._id}
-            &ivertinimai=${searchParams.get("ivertinimai")}`
-          ),
-        ]);
-
-        const [reviewData, reviewsData] = await Promise.all([
-          reviewRes.ok ? reviewRes.json() : { exists: false },
-          reviewsRes.json(),
-        ]);
-        setLength(reviewsData.length);
-        if (reviewRes.ok && reviewData?.data !== prevReviewRef.current) {
-          prevReviewRef.current = reviewData?.data;
-          setIndividualReview(reviewData?.data);
+        const reviewsData = await reviewsRes.json();
+        if(reviewsData.length === 0) {
+          setLoading(false)
+          return
         }
-        if (reviewRes.ok) setAlreadyReviewed(reviewData.exists);
+        const didUserSubmitReview = reviewsData.find((review) => (
+          review.user === session?.user?.email
+        ))
+        if(didUserSubmitReview) {
+          setAlreadyReviewed(true)
+          setIndividualReview(didUserSubmitReview)
+        }
+        setLength(reviewsData.length);
         if (reviewsRes.ok) {
           setReviews(reviewsData);
           const recommendedCount = reviewsData.filter(
@@ -400,14 +379,14 @@ const TeacherPage = ({ teacher }) => {
       <div className="mb-8 px-6 w-full gap-x-4 grid gap-y-6 grid-flow-row bsm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 justify-items-center ">
         {!form &&
           status !== "loading" &&
-          reviews.map((r, index) => (
+          reviews?.map((r, index) => (
             <ReviewCase key={index} review={r}></ReviewCase>
           ))}
       </div>
       {form && (
         <ReviewForm
           teacher_id={teacher._id}
-          user={u}
+          user={session?.user?.email}
           open={form}
           type={teacher.school.type}
         />

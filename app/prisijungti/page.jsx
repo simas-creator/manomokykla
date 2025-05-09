@@ -1,10 +1,11 @@
 "use client";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useState, useEffect, Suspense } from "react";
 function LoginForm() {
   return (
-    <div className="w-full flex justify-center py-10 px-8">
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden max-w-[500px] border">
+    <div className="w-full flex justify-center py-10 px-8 h-screen">
+      <div className="bg-white rounded-lg shadow-lg h-fit mt-24 overflow-hidden max-w-[500px] border">
         <div className="px-6 py-8">
           <h2 className="text-2xl font-bold text-center text-gray-800">
             Prisijungimas
@@ -15,7 +16,7 @@ function LoginForm() {
 
           <div className="mt-8 space-y-4">
             {/* Google Sign In Button */}
-            <button className="w-full flex items-center justify-center gap-2 h-12 px-4 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+            <button onClick={() => signIn('google')} className="w-full flex items-center justify-center gap-2 h-12 px-4 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
               {/* Google icon */}
               <svg
                 viewBox="0 0 24 24"
@@ -44,26 +45,6 @@ function LoginForm() {
               <span className="text-gray-700">Prisijungti su Google</span>
             </button>
 
-            {/* Facebook Sign In Button */}
-            <button className="w-full flex items-center justify-center gap-2 h-12 px-4 rounded-md bg-[#1877F2] hover:bg-[#166FE5] text-white transition-colors">
-              {/* Facebook icon */}
-              <svg
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                className="h-5 w-5 fill-current"
-              >
-                <path d="M9.19795 21.5H13.198V13.4901H16.8021L17.198 9.50977H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H17.198V2.5H14.198C11.4365 2.5 9.19795 4.73858 9.19795 7.5V9.50977H7.19795L6.80206 13.4901H9.19795V21.5Z" />
-              </svg>
-              <span>Prisijungti su Facebook</span>
-            </button>
-
-            {/* Apple Sign In Button */}
-            <button className="w-full flex items-center justify-center gap-2 h-12 px-4 rounded-md bg-black hover:bg-gray-800 text-white transition-colors">
-              {/* Apple icon */}
-              <img width={20} height={20} src="images/apple.svg"></img>
-              <span>Prisijungti su Apple</span>
-            </button>
           </div>
         </div>
         <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">

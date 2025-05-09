@@ -3,14 +3,14 @@ import Teacher from '@/lib/modals/teacher'
 import Review from '@/lib/modals/review'
 import { NextResponse } from 'next/server';
 import connect from '@/lib/mongodb'
+import { getServerSession } from 'next-auth';
 export async function GET(req) {
+  const session = await getServerSession();
+  console.log(session)
     try {
         await connect();
-        const {searchParams} = new URL(req.url);
-        const email = searchParams.get('email')
-
-        const username = block.username;
-        const reviews = await Review.find({user: username})
+        const email = session.user.email
+        const reviews = await Review.find({user: email})
         let reviewsNames = {}
         await Promise.all(
             reviews.map(async (r) => {
