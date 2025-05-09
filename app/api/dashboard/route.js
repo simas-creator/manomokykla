@@ -1,4 +1,3 @@
-import User from '@/lib/modals/user'
 import School from '@/lib/modals/school'
 import Teacher from '@/lib/modals/teacher'
 import Review from '@/lib/modals/review'
@@ -10,9 +9,6 @@ export async function GET(req) {
         const {searchParams} = new URL(req.url);
         const email = searchParams.get('email')
 
-        ///fetch reviews
-        const block = await User.findOne({email})
-        const role = block.role;
         const username = block.username;
         const reviews = await Review.find({user: username})
         let reviewsNames = {}
@@ -39,7 +35,7 @@ export async function GET(req) {
         const pendSchools = schools.filter((t) => t.status === 'pending')
         const pendReviews = reviews.filter((t) => t.status === 'pending')
 
-        return NextResponse.json({data: {confTeachers, confSchools, confReviews, pendTeachers, pendSchools, pendReviews, reviewsNames, role}}, {status: 200})
+        return NextResponse.json({data: {confTeachers, confSchools, confReviews, pendTeachers, pendSchools, pendReviews, reviewsNames, role: 'notadmin'}}, {status: 200})
     } catch (error) {
         console.log(error, 'error')
         return NextResponse.json({message: 'failed to fetch'}, {status: 500})
