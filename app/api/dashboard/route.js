@@ -4,7 +4,7 @@ import Review from '@/lib/modals/review'
 import { NextResponse } from 'next/server';
 import connect from '@/lib/mongodb'
 import { getServerSession } from 'next-auth';
-export async function GET(req) {
+export async function GET(_req) {
   const session = await getServerSession();
   console.log(session)
     try {
