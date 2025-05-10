@@ -72,6 +72,7 @@ const PageContent = () => {
         `/api/schools/view?${searchParams}&pages=${pageRef.current}`,
         {
           method: "GET",
+          next: {tags: [`schools-pages-${pageRef.current}`], revalidate: 3600},
           headers: { "Content-Type": "application/json" },
         }
       );

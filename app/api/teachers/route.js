@@ -3,8 +3,13 @@ import Teacher from '@/lib/modals/teacher';
 import connect from '@/lib/mongodb';
 import { revalidateTag } from 'next/cache';
 import replaceLithuanianChars from '../../../lib/transfomUrl';
+import { getToken } from 'next-auth/jwt';
 
 export const POST = async (req) => {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if(!token) {
+      return NextResponse.json({message: "Unauthorized"}, {status: 401});
+    }
     try {
         const data = await req.json();
         let { first, surname, subj, user, school_id } = data;

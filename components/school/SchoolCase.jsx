@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { Verified } from "lucide-react";
 import Link from "next/link";
 import replaceLithuanianChars from "@/lib/transfomUrl";
+import Image from "next/image";
 const SchoolCase = ({
   school = {
     name: "",
@@ -16,12 +17,13 @@ const SchoolCase = ({
   const getTeachers = useCallback(async () => {
     try {
       const res = await fetch(
-        `/api/teachers/view?school=${school._id}`,
+        `/api/teachers/view?school=${school._id}&limit=2`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
+          next: { revalidate: 3600 },
         }
       );
 
@@ -57,7 +59,8 @@ const SchoolCase = ({
     >
       {/* Image Section */}
       <div className="w-full h-36 relative">
-        <img
+        <Image
+          fill
           src={school.imgUrl}
           alt={school.name}
           className="h-full w-full m-auto object-cover rounded-t-lg"
@@ -120,7 +123,10 @@ const SchoolCase = ({
                 {/* Profile Picture */}
                 <div className="w-10 h-10 border-2 rounded-full flex items-center justify-center overflow-hidden">
                   {teacher?.imageUrl ? (
-                    <img
+                    <Image
+                      alt="teacher"
+                      width={20}
+                      height={20}
                       src={teacher.imageUrl}
                       className="w-7 h-7 object-cover"
                     />

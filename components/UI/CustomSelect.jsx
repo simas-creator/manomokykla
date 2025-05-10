@@ -40,7 +40,7 @@ const CustomSelect = ({ name, parameters, action, subj }) => {
       {active && (
         <div
           id="dropdown-list"
-          className="absolute top-full mt-2 w-full bg-white rounded-md shadow-lg overflow-hidden z-10"
+          className="absolute top-full h-52 mt-2 w-full bg-white rounded-md shadow-lg overflow-hidden z-10"
           role="listbox"
         >
           {/* Search Input */}

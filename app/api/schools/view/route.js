@@ -59,7 +59,6 @@ export const GET = async (req) => {
       status: 200,
       headers: {
         "Cache-Control": "s-maxage=3600, stale-while-revalidate",
-        "x-next-cache-tags": "schools"
       },
     });
 

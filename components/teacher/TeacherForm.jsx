@@ -59,7 +59,8 @@ const TeacherForm = ({School}) => {
           const response = await fetch('/api/teachers', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              "Authorization": "Bearer " + session.user.accessToken
             },
             body: JSON.stringify(requestBody)
           })

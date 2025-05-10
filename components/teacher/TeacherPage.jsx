@@ -38,7 +38,6 @@ const TeacherPage = ({ teacher }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [rec, setRec] = useState(0);
-  const [alreadyReviewed, setAlreadyReviewed] = useState(null);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState(false);
   const [report, setReport] = useState(false);
@@ -47,7 +46,7 @@ const TeacherPage = ({ teacher }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [length, setLength] = useState(0);
   const [edit, setEdit] = useState(false);
-  const [individualReview, setIndividualReview] = useState("");
+  const [individualReview, setIndividualReview] = useState(null);
   const searchParams = useSearchParams();
   const parameters1 = [
     "Nuo aukščiausio įvertinimo",
@@ -69,9 +68,6 @@ const TeacherPage = ({ teacher }) => {
       setShowLogin(true);
       return;
     }
-    if (alreadyReviewed) {
-      return;
-    }
     setForm(!form);
   };
   useEffect(() => {
@@ -86,37 +82,42 @@ const TeacherPage = ({ teacher }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const scrollY = window.scrollY || window.pageYOffset;
       try {
         const reviewsRes = await fetch(
           `/api/reviews/view?n=${teacher._id}&ivertinimai=${searchParams.get(
             "ivertinimai"
           )}`
         );
-
+      
         const reviewsData = await reviewsRes.json();
-        if(reviewsData.length === 0) {
-          setLoading(false)
-          return
-        }
-        const didUserSubmitReview = reviewsData.find((review) => (
-          review.user === session?.user?.email
-        ))
-        if(didUserSubmitReview) {
-          setAlreadyReviewed(true)
-          setIndividualReview(didUserSubmitReview)
-        }
-        setLength(reviewsData.length);
-        if (reviewsRes.ok) {
-          setReviews(reviewsData);
-          const recommendedCount = reviewsData.filter(
-            (r) => r.rec === true
-          ).length;
-          setRec(
-            reviewsData.length > 0
-              ? (recommendedCount / reviewsData.length) * 100
-              : 0
-          );
+        
+        // Process the data without early returns
+        if(reviewsData.length > 0) {
+          const userSubmittedReview = reviewsData.find((review) => (
+            review.user === session?.user?.email
+          ));
+          
+          if(userSubmittedReview) {
+            setIndividualReview(userSubmittedReview);
+          }
+          
+          setLength(reviewsData.length);
+          
+          if (reviewsRes.ok) {
+            setReviews(reviewsData);
+            const recommendedCount = reviewsData.filter(
+              (r) => r.rec === true
+            ).length;
+            
+            setRec(
+              reviewsData.length > 0
+                ? (recommendedCount / reviewsData.length) * 100
+                : 0
+            );
+          }
+        } else {
+          setLength(0);
+          setReviews([]);
         }
       } catch (error) {
         console.log("Error fetching data:", error);
@@ -294,20 +295,20 @@ const TeacherPage = ({ teacher }) => {
                 >
                   Grįžti atgal
                 </button>
-              ) : alreadyReviewed !== null ? (
+              ) : individualReview ? (
                 <div className="flex flex-col items-start gap-2">
                   <button
                     className={`px-4 py-2 border mt-2 rounded-md  ${
-                      alreadyReviewed
+                      individualReview
                         ? "text-gray-600 border-gray-400"
                         : "text-primary border-primary"
                     } `}
                     onClick={() => toggleForm()}
-                    disabled={alreadyReviewed}
+                    disabled={individualReview}
                   >
-                    {alreadyReviewed ? "Jūs jau įvertinote" : "Įvertinti"}
+                    {individualReview ? "Jūs jau įvertinote" : "Įvertinti"}
                   </button>
-                  {alreadyReviewed && (
+                  {individualReview && (
                     <button
                       onClick={toggleEdit}
                       className="border-primary border text-primary px-4 py-2 rounded-md hover:bg-primary hover:text-white"
@@ -316,7 +317,7 @@ const TeacherPage = ({ teacher }) => {
                     </button>
                   )}
                 </div>
-              ) : !session ? (
+              ) : !session || !loading ? (
                 <button
                   onClick={() => toggleForm()}
                   className="px-4 py-2 border mt-2 rounded-md border-primary text-primary"

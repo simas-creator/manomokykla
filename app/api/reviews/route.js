@@ -2,7 +2,15 @@ import { NextResponse } from "next/server";
 import Review from "@/lib/modals/review";
 import connect from "@/lib/mongodb";
 import recalculateTeacher from "@/lib/recalculateTeacher";
+import { getToken } from "next-auth/jwt";
+import { getServerSession } from "next-auth";
 export async function POST(req) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const {data: session, status} = await getServerSession();
+  console.log(session, 'session')
+  if(!token) {
+    return NextResponse.json({message: "Unauthorized"}, {status: 401});
+  }
   try {
     await connect();
     const body = await req.json();
@@ -19,7 +27,7 @@ export async function POST(req) {
     criterion1 = parseInt(criterion1);
     criterion2 = parseInt(criterion2);
     criterion3 = parseInt(criterion3);
-
+    
     const alreadyExist = await Review.findOne({ user, teacher_id });
     if (alreadyExist) {
       return NextResponse.json(

@@ -1,7 +1,8 @@
 import { useState} from "react";
 import { usePathname, useRouter } from "next/navigation";
-
-const ReviewForm = ({ teacher_id, user, open, type}) => {
+import { useSession } from "next-auth/react";
+const ReviewForm = ({ teacher_id, open, type}) => {
+  const {data: session, status} = useSession()
   const [anonymous, setAnonymous] = useState(false);
   const criteria = [
     "Gebėjimas perteikti žinias",
@@ -12,7 +13,7 @@ const ReviewForm = ({ teacher_id, user, open, type}) => {
   const pathname = usePathname();
   // Initialize state with passed props
   const [jsonData, setJsonData] = useState({
-    teacher_id, user, rec: true,
+    teacher_id, user: session?.user.email, rec: true,
     "Gebėjimas perteikti žinias": 1,
     "Gebėjimas bendrauti su mokiniais": 1,
     "Dalyko išmanymas": 1,
@@ -53,7 +54,7 @@ const ReviewForm = ({ teacher_id, user, open, type}) => {
   // Handles form submission
   const handleSubmit = async () => {
     const data = {
-      user: user.username,
+      user: session.user.email,
       teacher_id,
       rec: jsonData.rec,
       criterion1: jsonData["Gebėjimas perteikti žinias"],
@@ -69,6 +70,7 @@ const ReviewForm = ({ teacher_id, user, open, type}) => {
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + session.user.accessToken
         },
       });
   

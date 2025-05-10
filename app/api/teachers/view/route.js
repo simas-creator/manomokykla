@@ -30,13 +30,19 @@ export const GET = async (req) => {
         const searchParams = req.nextUrl.searchParams;
         const query = Object.fromEntries(searchParams.entries());
         const filter = decodeSub(query['dalykas']);
+        const limit = query['limit']
         const id = query['school']
         let data;
         console.log(filter)
         if(filter && filter !== 'undefined') {
             data = await Teacher.find({school_id: id, subject: filter})
             console.log('hehe')
-        } else data = await Teacher.find({school_id: id});
+        } else if(limit) {
+            data = await Teacher.find({school_id: id}).limit(Number(limit));
+        } else {
+            data = await Teacher.find({school_id: id}).lean()
+        }
+        console.log(data)
         if(!data) {
             return NextResponse.json({ message: 'No teacher found' }, { status: 404 });
         }
@@ -46,9 +52,9 @@ export const GET = async (req) => {
             },
          });
     } catch (error) {
-        console.log("error:", error.message);
+        console.log("error:", error);
         return NextResponse.json(
-            { message: "An error occurred while saving teacher data" },
+            { message: "An error occurred while returning teacher data" },
             { status: 500 }
         );
     }
