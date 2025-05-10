@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingSpinner from "@/components/UI/LoadingSpinner";
 const EditReview = ({ setOpen, open, review, admin }) => {
-  const { criterion1, criterion2, criterion3, comment, n, m, r } = review;
+  const { criterion1, criterion2, criterion3, comment, n, m, r, anonymous: isAnonymous } = review;
+  const [anonymous, setAnonymous] = useState(isAnonymous)
   const [criteria, setCriteria] = useState([
     criterion1,
     criterion2,
@@ -11,6 +12,7 @@ const EditReview = ({ setOpen, open, review, admin }) => {
     criteria: [criterion1, criterion2, criterion3],
     comment,
     rec: review.rec,
+    anonymous: isAnonymous
   });
   const [loading, setLoading] = useState(false);
   const [changes, setChanges] = useState(false);
@@ -24,7 +26,16 @@ const EditReview = ({ setOpen, open, review, admin }) => {
     setJsonData((prev) => ({ ...prev, criteria: updatedCriteria }));
     setChanges(true);
   };
-
+  const toggleAnonymous = () => {
+    if(anonymous === isAnonymous) {
+      setChanges({anonymous}) 
+    } 
+    setAnonymous(!anonymous)
+    setJsonData((prev) => ({
+      ...prev, anonymous: !anonymous
+    }))
+    console.log(jsonData)
+  }
   const handleChange = (e) => {
     const value = e.target.value;
     setJsonData((prev) => ({ ...prev, comment: value }));
@@ -78,7 +89,7 @@ const EditReview = ({ setOpen, open, review, admin }) => {
     setLoading(true);
 
     if (!changes && !admin) {
-      setError("Nieko nepakeitei:D");
+      setError("Nieko nepakeitei!");
       setLoading(false);
       return;
     } else setError("");
@@ -210,6 +221,18 @@ const EditReview = ({ setOpen, open, review, admin }) => {
               </div>
             </div>
           </div>
+          <div className="flex flex-wrap flex-col gap-2 mt-3">
+              <p className="font-medium text-gray-700">Slėpti vartotojo vardą</p>
+              <button
+                type="button"
+                className={`rounded-sm w-6 h-6 flex transition-all items-center justify-center border border-black hover:border-primary ${
+                  anonymous ? "border-primary" : ""
+                }`}
+                onClick={toggleAnonymous}
+              >
+                {anonymous && <img className="transition-all w-4 h-4" src="/images/check.svg" alt="Checked" />}
+              </button>
+            </div>
           <div className="flex justify-between pt-4">
             <button
               type="delete"

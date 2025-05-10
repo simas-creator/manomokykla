@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { Verified } from "lucide-react";
+import { Star, Verified } from "lucide-react";
 import Link from "next/link";
 import replaceLithuanianChars from "@/lib/transfomUrl";
 import Image from "next/image";
@@ -14,7 +14,7 @@ const SchoolCase = ({
 }) => {
   const rating = school.rating;
   const [teachers, setTeachers] = useState([]);
-  const getTeachers = useCallback(async () => {
+  async function getTeachers() {
     try {
       const res = await fetch(
         `/api/teachers/view?school=${school._id}&limit=2`,
@@ -37,7 +37,7 @@ const SchoolCase = ({
     } catch (error) {
       console.error("Fetch error:", error);
     }
-  }, [school?.n]);
+  }
 
   const id = replaceLithuanianChars(school.name);
   useEffect(() => {
@@ -47,8 +47,6 @@ const SchoolCase = ({
     if (!str) return "";
     if (str === `${undefined} ${undefined}` && n === 12) {
       return "Vardas Pavardė";
-    } else if (str === `undefined` && n === 22) {
-      return "Atsiliepimas...";
     }
     return str.length > n ? str.slice(0, n) + "..." : str;
   }, []);
@@ -59,12 +57,18 @@ const SchoolCase = ({
     >
       {/* Image Section */}
       <div className="w-full h-36 relative">
+        {school.status === "verified" &&
         <Image
-          fill
-          src={school.imgUrl}
-          alt={school.name}
-          className="h-full w-full m-auto object-cover rounded-t-lg"
-        />
+        fill
+        src={school.imgUrl}
+        alt={school.name}
+        className="h-full w-full m-auto object-cover rounded-t-lg"
+      />
+        }
+
+        {school.status === "pending" &&
+          <p className="w-full h-full flex items-center bg-gray-50 justify-center text-gray-600 font-thin text-2xl">Laukia patvirtinimo...</p>
+        }
         <div className="absolute top-2 right-2 group cursor-pointer">
           <Verified
             size={36}
@@ -80,7 +84,9 @@ const SchoolCase = ({
           </div>
         </div>
       </div>
-      <div className="border"></div>
+      <div className=" h-0.5 w-full" style={{
+        backgroundImage: "linear-gradient(to right, #009DFF, white )"
+      }}></div>
       {/* Content Section */}
       <div className="p-4 flex flex-col justify-between flex-grow">
         {/* School Name */}
@@ -98,26 +104,14 @@ const SchoolCase = ({
           </div>
           <div className="flex gap-1">
             {[...Array(5)].map((_, index) => (
-              <svg
-                key={index}
-                xmlns="http://www.w3.org/2000/svg"
-                className={`h-5 w-5 ${
-                  index < Math.round(rating)
-                    ? "text-orange-400"
-                    : "text-gray-300"
-                }`}
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path d="M9.049 2.927C9.469 1.784 10.53 1.784 10.95 2.927l1.357 3.936a1 1 0 00.95.674h4.243c1.054 0 1.487 1.36.637 1.993l-3.293 2.418a1 1 0 00-.364 1.118l1.357 3.936c.42 1.143-.374 2.093-1.514 1.574l-3.293-2.418a1 1 0 00-1.175 0l-3.293 2.418c-1.14.519-1.934-.431-1.514-1.574l1.357-3.936a1 1 0 00-.364-1.118L2.637 9.53c-.85-.633-.417-1.993.637-1.993h4.243a1 1 0 00.95-.674L9.049 2.927z" />
-              </svg>
+              <Star key={index} size={16} fill={index < Math.floor(rating) ? "black": "white"}/>
             ))}
           </div>
         </div>
 
         {/* Teachers and Reviews */}
         <div className="grid grid-cols-2 gap-2 overflow-hidden">
-          {[teachers[0], teachers[1]].map((teacher, index) => (
+          {teachers.map((teacher, index) => (
             <div key={index} className="flex flex-col items-start gap-2">
               <div className="flex items-center">
                 {/* Profile Picture */}
@@ -150,11 +144,6 @@ const SchoolCase = ({
                     )}
                   </p>
                 </div>
-              </div>
-
-              {/* Review Text */}
-              <div className="text-sm text-gray-600 line-clamp-2">
-                {truncate(`${teacher?.reviews[0]?.comment}`, 22)}
               </div>
             </div>
           ))}

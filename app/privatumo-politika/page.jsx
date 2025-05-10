@@ -1,14 +1,4 @@
-"use client";
-
-import { useState } from "react";
-
 export default function PrivacyPolicyPage() {
-  const [openAccordion, setOpenAccordion] = useState(null);
-
-  const toggleAccordion = (id) => {
-    setOpenAccordion(openAccordion === id ? null : id);
-  };
-
   return (
     <div className="container max-w-4xl py-10 px-4 md:py-16 m-auto">
       <div className="space-y-6">
@@ -79,8 +69,7 @@ export default function PrivacyPolicyPage() {
                   <div>
                     <span className="font-medium">Paskyros duomenis:</span>{" "}
                     vardą, profilio nuotrauką ir el. paštą, kuriuos suteikia
-                    trečiosios šalys (Google, Facebook, Apple) prisijungimo
-                    metu.
+                    Google prisijungimo metu.
                   </div>
                 </li>
                 <li className="flex gap-3">
@@ -132,8 +121,7 @@ export default function PrivacyPolicyPage() {
               <div className="bg-amber-50 border border-amber-200 rounded-md p-4 mt-4">
                 <p className="text-sm text-amber-800">
                   <span className="font-medium">Pastaba:</span> Mes nesaugome
-                  slaptažodžių, nes autentifikaciją vykdo trečiosios šalys
-                  (Google, Facebook, Apple).
+                  slaptažodžių, nes autentifikaciją vykdo Google
                 </p>
               </div>
             </div>
@@ -196,106 +184,44 @@ export default function PrivacyPolicyPage() {
           </h2>
 
           <div className="w-full border rounded-lg divide-y">
-            <div className="border-b">
-              <button
-                onClick={() => toggleAccordion("rights-1")}
-                className="flex justify-between w-full p-4 text-left font-medium"
-              >
+            <div>
+              <button className="flex justify-between w-full p-4 text-left font-medium">
                 Peržiūrėti ir ištaisyti savo duomenis
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={`transition-transform ${
-                    openAccordion === "rights-1" ? "rotate-180" : ""
-                  }`}
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
               </button>
-              {openAccordion === "rights-1" && (
-                <div className="p-4 pt-0">
-                  <p className="text-sm text-gray-500">
-                    Jūs turite teisę peržiūrėti ir ištaisyti savo asmeninius
-                    duomenis. Tai galite padaryti savo paskyros nustatymuose
-                    arba susisiekę su mumis el. paštu.
-                  </p>
-                </div>
-              )}
-            </div>
-
-            <div className="border-b">
-              <button
-                onClick={() => toggleAccordion("rights-2")}
-                className="flex justify-between w-full p-4 text-left font-medium"
-              >
-                Pašalinti savo paskyrą ir visus susijusius duomenis
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={`transition-transform ${
-                    openAccordion === "rights-2" ? "rotate-180" : ""
-                  }`}
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
-              {openAccordion === "rights-2" && (
-                <div className="p-4 pt-0">
-                  <p className="text-sm text-gray-500">
-                    Jūs galite bet kada pateikti prašymą ištrinti savo paskyrą
-                    ir visus su ja susijusius duomenis. Susisiekite su mumis el.
-                    paštu: [Įrašyk el. pašto adresą]
-                  </p>
-                </div>
-              )}
+              <div className="p-4 pt-0">
+                <p className="text-sm text-gray-500">
+                  Jūs turite teisę peržiūrėti ir ištaisyti savo asmeninius
+                  duomenis. Tai galite padaryti savo paskyros nustatymuose arba
+                  susisiekę su mumis el. paštu.
+                </p>
+              </div>
             </div>
 
             <div>
-              <button
-                onClick={() => toggleAccordion("rights-3")}
-                className="flex justify-between w-full p-4 text-left font-medium"
-              >
-                Atsisakyti informacinių pranešimų
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={`transition-transform ${
-                    openAccordion === "rights-3" ? "rotate-180" : ""
-                  }`}
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
+              <button className="flex justify-between w-full p-4 text-left font-medium">
+                Pašalinti savo paskyrą ir visus susijusius duomenis
               </button>
-              {openAccordion === "rights-3" && (
-                <div className="p-4 pt-0">
-                  <p className="text-sm text-gray-500">
-                    Jei nenorite gauti mūsų pranešimų, galite bet kada
-                    atsisakyti prenumeratos spustelėdami atsisakymo nuorodą el.
-                    laiške arba pakeisdami pranešimų nustatymus savo paskyroje.
-                  </p>
-                </div>
-              )}
+              <div className="p-4 pt-0">
+                <p className="text-sm text-gray-500">
+                  Jūs galite bet kada pateikti prašymą ištrinti savo paskyrą ir
+                  visus su ja susijusius duomenis. Susisiekite su mumis el.
+                  paštu: [Įrašyk el. pašto adresą]
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <button className="flex justify-between w-full p-4 text-left font-medium">
+                Atsisakyti informacinių pranešimų
+              </button>
+
+              <div className="p-4 pt-0">
+                <p className="text-sm text-gray-500">
+                  Jei nenorite gauti mūsų pranešimų, galite bet kada atsisakyti
+                  prenumeratos spustelėdami atsisakymo nuorodą el. laiške arba
+                  pakeisdami pranešimų nustatymus savo paskyroje.
+                </p>
+              </div>
             </div>
           </div>
           <p className="text-sm text-gray-500">

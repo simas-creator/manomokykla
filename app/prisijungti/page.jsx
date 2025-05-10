@@ -16,7 +16,10 @@ function LoginForm() {
 
           <div className="mt-8 space-y-4">
             {/* Google Sign In Button */}
-            <button onClick={() => signIn('google')} className="w-full flex items-center justify-center gap-2 h-12 px-4 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+            <button
+              onClick={() => signIn("google")}
+              className="w-full flex items-center justify-center gap-2 h-12 px-4 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
+            >
               {/* Google icon */}
               <svg
                 viewBox="0 0 24 24"
@@ -44,14 +47,19 @@ function LoginForm() {
               </svg>
               <span className="text-gray-700">Prisijungti su Google</span>
             </button>
-
           </div>
         </div>
         <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
-        <p className="text-xs text-center text-gray-500">
-          Prieš tęsdami patvirtinate, jog susipažinote su mūsų <Link className="hover:underline underline-offset-1 text-primary cursor-pointer" href="/privatumo-politika">privatumo politika</Link>
-        </p>
-      </div>
+          <p className="text-xs text-center text-gray-500">
+            Prieš tęsdami patvirtinate, jog susipažinote su mūsų{" "}
+            <Link
+              className="hover:underline underline-offset-1 text-primary cursor-pointer"
+              href="/privatumo-politika"
+            >
+              privatumo politika
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

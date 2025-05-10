@@ -1,13 +1,6 @@
-"use client"
 
-import { useState } from "react"
 
 export default function GuidelinesPage() {
-  const [openAccordion, setOpenAccordion] = useState(null)
-
-  const toggleAccordion = (id) => {
-    setOpenAccordion(openAccordion === id ? null : id)
-  }
 
   return (
     <div className="container max-w-4xl py-10 px-4 md:py-16 m-auto">
@@ -119,7 +112,7 @@ export default function GuidelinesPage() {
                     <line x1="12" y1="8" x2="12" y2="12" />
                     <line x1="12" y1="16" x2="12.01" y2="16" />
                   </svg>
-                  Draudžiamas elgesys
+                  Nepriimtinas elgesys
                 </div>
               </div>
               <div className="p-4 pt-2">
@@ -152,59 +145,28 @@ export default function GuidelinesPage() {
           <div className="w-full border rounded-lg divide-y">
             <div className="border-b">
               <button
-                onClick={() => toggleAccordion("item-1")}
                 className="flex justify-between w-full p-4 text-left font-medium"
               >
                 Vertinimo kriterijai
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={`transition-transform ${openAccordion === "item-1" ? "rotate-180" : ""}`}
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
+                
               </button>
-              {openAccordion === "item-1" && (
                 <div className="p-4 pt-0">
                   <ul className="space-y-2 pl-6 text-sm list-disc">
-                    <li>Vertinti pagal mokymo efektyvumą, o ne asmeninius jausmus</li>
+                    <li>Vertinti pagal mokymo efektyvumą</li>
                     <li>Atsižvelgti į klasės valdymą, dalyko išmanymą ir mokymo stilių</li>
                     <li>Sutelkti dėmesį į tai, kaip gerai mokytojas padeda mokiniams mokytis</li>
                     <li>Atsižvelgti į vertinimo teisingumą ir pagalbos prieinamumą</li>
                   </ul>
                 </div>
-              )}
             </div>
 
             <div className="border-b">
               <button
-                onClick={() => toggleAccordion("item-2")}
                 className="flex justify-between w-full p-4 text-left font-medium"
               >
                 Atsiliepimų rašymas
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={`transition-transform ${openAccordion === "item-2" ? "rotate-180" : ""}`}
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
+                
               </button>
-              {openAccordion === "item-2" && (
                 <div className="p-4 pt-0">
                   <ul className="space-y-2 pl-6 text-sm list-disc">
                     <li>Parašykite išsamų komentarą</li>
@@ -213,41 +175,23 @@ export default function GuidelinesPage() {
                     <li>Venkite perdėjimų ir emocingos kalbos</li>
                   </ul>
                 </div>
-              )}
             </div>
 
             <div>
               <button
-                onClick={() => toggleAccordion("item-3")}
                 className="flex justify-between w-full p-4 text-left font-medium"
               >
                 Mokyklų ir mokytojų pridėjimas
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={`transition-transform ${openAccordion === "item-3" ? "rotate-180" : ""}`}
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
+                
               </button>
-              {openAccordion === "item-3" && (
                 <div className="p-4 pt-0">
                   <ul className="space-y-2 pl-6 text-sm list-disc">
                     <li>Pridėkite tik realias, patikrinamas švietimo įstaigas</li>
                     <li>Pateikite tikslią informaciją apie mokyklą/mokytoją</li>
                     <li>Nekurkite pasikartojančių įrašų</li>
                     <li>Pridėkite tik mokytojus, kurie šiuo metu moko arba neseniai mokė</li>
-                    <li>Gerbkite privatumą naudodami tik viešai prieinamą informaciją</li>
                   </ul>
                 </div>
-              )}
             </div>
           </div>
         </section>
@@ -260,31 +204,22 @@ export default function GuidelinesPage() {
               <div>
                 <h3 className="font-medium">Peržiūros procesas</h3>
                 <p className="text-sm text-gray-500 mt-1">
-                  Visi atsiliepimai yra moderuojami. Turinys, pažeidžiantis mūsų gaires, bus pašalintas. Pakartotiniai
-                  pažeidimai gali lemti paskyros sustabdymą.
+                  Atsiliepimai nėra moderuojami. Turinys, pažeidžiantis mūsų gaires, patvirtintas nebus.
                 </p>
               </div>
 
               <div>
-                <h3 className="font-medium">Turinio pranešimas</h3>
+                <h3 className="font-medium">Klaidinga informacija</h3>
                 <p className="text-sm text-gray-500 mt-1">
-                  Jei matote turinį, kuris pažeidžia šias gaires, praneškite apie jį naudodami mygtuką „Pranešti". Mūsų
-                  moderavimo komanda peržiūrės visus pranešimus per 48 valandas.
+                  Jei matote klaidingą turinį, praneškite apie jį naudodami mygtuką „Pranešti".
                 </p>
               </div>
 
-              <div>
-                <h3 className="font-medium">Apeliacijos</h3>
-                <p className="text-sm text-gray-500 mt-1">
-                  Jei jūsų turinys buvo pašalintas ir manote, kad tai buvo padaryta per klaidą, galite apskųsti
-                  sprendimą susisiekdami su mūsų pagalbos komanda.
-                </p>
-              </div>
             </div>
           </div>
         </section>
         <p className="text-center text-sm text-gray-500 pt-4">
-          Paskutinį kartą atnaujinta: 2025 m. kovo 15 d.
+          Paskutinį kartą atnaujinta: 2025 m. gegužės 10 d.
         </p>
       </div>
     </div>
