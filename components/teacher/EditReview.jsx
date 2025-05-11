@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
 import LoadingSpinner from "@/components/UI/LoadingSpinner";
+import { useSession } from "next-auth/react";
 const EditReview = ({ setOpen, open, review, admin }) => {
-  const { criterion1, criterion2, criterion3, comment, n, m, r, anonymous: isAnonymous } = review;
-  const [anonymous, setAnonymous] = useState(isAnonymous)
+  const { data: session } = useSession();
+  const {
+    criterion1,
+    criterion2,
+    criterion3,
+    comment,
+    anonymous: isAnonymous,
+  } = review;
+  const [anonymous, setAnonymous] = useState(isAnonymous);
   const [criteria, setCriteria] = useState([
     criterion1,
     criterion2,
@@ -12,7 +20,7 @@ const EditReview = ({ setOpen, open, review, admin }) => {
     criteria: [criterion1, criterion2, criterion3],
     comment,
     rec: review.rec,
-    anonymous: isAnonymous
+    anonymous: isAnonymous,
   });
   const [loading, setLoading] = useState(false);
   const [changes, setChanges] = useState(false);
@@ -27,15 +35,16 @@ const EditReview = ({ setOpen, open, review, admin }) => {
     setChanges(true);
   };
   const toggleAnonymous = () => {
-    if(anonymous === isAnonymous) {
-      setChanges({anonymous}) 
-    } 
-    setAnonymous(!anonymous)
+    if (anonymous === isAnonymous) {
+      setChanges({ anonymous });
+    }
+    setAnonymous(!anonymous);
     setJsonData((prev) => ({
-      ...prev, anonymous: !anonymous
-    }))
-    console.log(jsonData)
-  }
+      ...prev,
+      anonymous: !anonymous,
+    }));
+    console.log(jsonData);
+  };
   const handleChange = (e) => {
     const value = e.target.value;
     setJsonData((prev) => ({ ...prev, comment: value }));
@@ -94,32 +103,31 @@ const EditReview = ({ setOpen, open, review, admin }) => {
       return;
     } else setError("");
 
-    if (admin) {
-      const res = await fetch(`/api/reviews/status?s=ok&n=${n}&m=${m}&r=${r}`, {
+    try {
+      const response = await fetch(`/api/reviews/edit?id=${review._id}`, {
         method: "PATCH",
-      });
-    } else
-      try {
-        const response = await fetch(`/api/reviews/edit?id=${review._id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(jsonData),
-        });
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + session.user.accessToken,
+        },
 
-        if (!response.ok) {
-          throw new Error("Klaida išsaugant duomenis");
-        }
-      } catch (error) {
-        console.log("Error updating review:", error);
-        setError("Nepavyko išsaugoti. Bandykite dar kartą.");
-      } finally {
-        if (admin) {
-          setOpen(false);
-          return;
-        }
-        setLoading(false);
-        window.location.reload();
+        body: JSON.stringify(jsonData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Klaida išsaugant duomenis");
       }
+    } catch (error) {
+      console.log("Error updating review:", error);
+      setError("Nepavyko išsaugoti. Bandykite dar kartą.");
+    } finally {
+      if (admin) {
+        setOpen(false);
+        return;
+      }
+      setLoading(false);
+      window.location.reload();
+    }
     setOpen(false);
   };
   const deleteReview = async () => {
@@ -127,6 +135,9 @@ const EditReview = ({ setOpen, open, review, admin }) => {
     try {
       const res = await fetch(`/api/reviews/delete?id=${review._id}`, {
         method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + session.user.accessToken,
+        },
       });
       if (!res.ok) {
         setDeleting(false);
@@ -222,17 +233,23 @@ const EditReview = ({ setOpen, open, review, admin }) => {
             </div>
           </div>
           <div className="flex flex-wrap flex-col gap-2 mt-3">
-              <p className="font-medium text-gray-700">Slėpti vartotojo vardą</p>
-              <button
-                type="button"
-                className={`rounded-sm w-6 h-6 flex transition-all items-center justify-center border border-black hover:border-primary ${
-                  anonymous ? "border-primary" : ""
-                }`}
-                onClick={toggleAnonymous}
-              >
-                {anonymous && <img className="transition-all w-4 h-4" src="/images/check.svg" alt="Checked" />}
-              </button>
-            </div>
+            <p className="font-medium text-gray-700">Slėpti vartotojo vardą</p>
+            <button
+              type="button"
+              className={`rounded-sm w-6 h-6 flex transition-all items-center justify-center border border-black hover:border-primary ${
+                anonymous ? "border-primary" : ""
+              }`}
+              onClick={toggleAnonymous}
+            >
+              {anonymous && (
+                <img
+                  className="transition-all w-4 h-4"
+                  src="/images/check.svg"
+                  alt="Checked"
+                />
+              )}
+            </button>
+          </div>
           <div className="flex justify-between pt-4">
             <button
               type="delete"

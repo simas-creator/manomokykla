@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import EditReview from "../teacher/EditReview";
 import LoadingSpinner from "../UI/LoadingSpinner";
-import AdminDash from "../dashboard/AdminDash";
 import Image from "next/image";
 
 const Dashb = () => {
@@ -10,7 +9,6 @@ const Dashb = () => {
   const [r, setR] = useState();
   const [t, setT] = useState();
   const [a, setA] = useState();
-  const [role, setRole] = useState("viewer");
   const [admin, setAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -90,9 +88,7 @@ const Dashb = () => {
     return <div className="flex w-full justify-center p-20">Kraunama...</div>;
   }
 
-  return admin === true ? (
-    <AdminDash admin={admin} setAdmin={setAdmin} />
-  ) : (
+  return (
     <>
       <div className="">
         {open && <EditReview review={reviewData} setOpen={setOpen} />}
@@ -101,31 +97,6 @@ const Dashb = () => {
         {/* Main Content */}
         <main className="flex-1 p-4 md:p-8">
           <header className="mb-8 flex justify-between flex-col gap-4">
-            {role === "admin" && (
-              <div>
-                <button
-                  className={`${
-                    admin === true
-                      ? "bg-white text-black px-2 py-1"
-                      : "bg-black text-gray-300 px-2 py-2 rounded-md"
-                  }`}
-                  onClick={() => setAdmin(false)}
-                >
-                  Mokinys
-                </button>
-                <button
-                  className={`${
-                    admin === true
-                      ? "bg-primary border border-white text-white px-2 py-2 rounded-md"
-                      : "bg-white px-2 py-1"
-                  }`}
-                  onClick={() => setAdmin(true)}
-                >
-                  Admin
-                </button>
-              </div>
-            )}
-
             <div className="flex flex-wrap gap-3 items-center">
               <p className="rounded-full overflow-hidden w-fit h-fit">
                 <Image
@@ -143,7 +114,6 @@ const Dashb = () => {
               </div>
             </div>
             <p className="text-gray-600">Jūsų veiklos apžvalga.</p>
-
           </header>
 
           {/* Stats Cards */}
@@ -155,7 +125,9 @@ const Dashb = () => {
                   <LoadingSpinner></LoadingSpinner>
                 </div>
               )}
-              <p className="text-4xl font-bold text-primary">{Number(r?.length) + Number(pendingReviews?.length)}</p>
+              <p className="text-4xl font-bold text-primary">
+                {Number(r?.length) + Number(pendingReviews?.length)}
+              </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="text-xl font-semibold">Vidutinis įvertinimas</h3>
