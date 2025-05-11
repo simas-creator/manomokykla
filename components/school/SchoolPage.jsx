@@ -304,7 +304,7 @@ const SchoolPage = ({ School }) => {
             
           </div>
         </div>
-        <div className="mt-3 w-full z-10 flex justify-between relative px-6 sm:px-10">
+        <div className="mt-3 w-full z-10 flex justify-between relative px-6 sm:px-10 flex-wrap gap-3">
           <div className="flex flex-col gap-y-3">
             <button
               onClick={() => handleForm()}

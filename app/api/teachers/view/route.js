@@ -33,16 +33,13 @@ export const GET = async (req) => {
         const limit = query['limit']
         const id = query['school']
         let data;
-        console.log(filter)
         if(filter && filter !== 'undefined') {
             data = await Teacher.find({school_id: id, subject: filter})
-            console.log('hehe')
         } else if(limit) {
             data = await Teacher.find({school_id: id}).limit(Number(limit));
         } else {
             data = await Teacher.find({school_id: id}).lean()
         }
-        console.log(data)
         if(!data) {
             return NextResponse.json({ message: 'No teacher found' }, { status: 404 });
         }

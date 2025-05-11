@@ -9,7 +9,6 @@ const Dashb = () => {
   const [r, setR] = useState();
   const [t, setT] = useState();
   const [a, setA] = useState();
-  const [admin, setAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [reviewData, setReviewData] = useState();

@@ -28,7 +28,7 @@ const TeacherForm = ({School}) => {
       "Vokiečių"
     ];
       const {data: session, status} = useSession();
-
+      console.log(session.user.accessToken, 'our token')
       const handleData = (e) => {
         setJsonData({
           ...jsonData,

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import LoadingSpinner from "@/components/UI/LoadingSpinner";
 import { useSession } from "next-auth/react";
-const EditReview = ({ setOpen, open, review, admin }) => {
+const EditReview = ({ setOpen, open, review }) => {
   const { data: session } = useSession();
   const {
     criterion1,
@@ -43,7 +43,6 @@ const EditReview = ({ setOpen, open, review, admin }) => {
       ...prev,
       anonymous: !anonymous,
     }));
-    console.log(jsonData);
   };
   const handleChange = (e) => {
     const value = e.target.value;
@@ -90,22 +89,21 @@ const EditReview = ({ setOpen, open, review, admin }) => {
       ...prev,
       rec: value,
     }));
-    console.log(jsonData);
   };
 
   const submitForm = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    if (!changes && !admin) {
+    if (!changes) {
       setError("Nieko nepakeitei!");
-      setLoading(false);
+      setLoading(false); 
       return;
     } else setError("");
 
     try {
       const response = await fetch(`/api/reviews/edit?id=${review._id}`, {
-        method: "PATCH",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + session.user.accessToken,
@@ -121,10 +119,6 @@ const EditReview = ({ setOpen, open, review, admin }) => {
       console.log("Error updating review:", error);
       setError("Nepavyko išsaugoti. Bandykite dar kartą.");
     } finally {
-      if (admin) {
-        setOpen(false);
-        return;
-      }
       setLoading(false);
       window.location.reload();
     }
@@ -149,9 +143,7 @@ const EditReview = ({ setOpen, open, review, admin }) => {
     } finally {
       setDeleting(false);
       setOpen(false);
-      if (!admin) {
-        window.location.reload();
-      }
+      window.location.reload(true)
     }
   };
   return (
@@ -170,7 +162,7 @@ const EditReview = ({ setOpen, open, review, admin }) => {
           ✖
         </button>
         <h3 className="text-2xl font-title text-center mb-6 font-bold">
-          {admin === true ? "Mokinio įvertinimas" : "Mano įvertinimas"}
+          Mano įvertinimas
         </h3>
         <form onSubmit={submitForm} className="flex flex-col">
           <div>
@@ -209,9 +201,8 @@ const EditReview = ({ setOpen, open, review, admin }) => {
           ></textarea>
           <div className="mt-3">
             <p className="mb-2 font-medium text-gray-700">
-              {admin === true
-                ? "Rekomendacija"
-                : "Ar rekomenduoji šį mokytoją kitiems?"}
+
+               Ar rekomenduoji šį mokytoją kitiems?
             </p>
             <div className="flex gap-3">
               <div
@@ -263,11 +254,7 @@ const EditReview = ({ setOpen, open, review, admin }) => {
               disabled={loading}
               className="px-4 py-2 border border-primary text-primary rounded-md hover:bg-primary hover:text-white"
             >
-              {loading
-                ? "Kraunama..."
-                : admin === true
-                ? "Patvirtinti"
-                : "Išsaugoti"}
+              {loading ? "Kraunama..." : "Išsaugoti"}
             </button>
           </div>
 

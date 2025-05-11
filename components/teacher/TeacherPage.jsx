@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import StarRating from "../UI/StarRating";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ReviewForm from "@/components/teacher/ReviewForm";
@@ -88,27 +88,27 @@ const TeacherPage = ({ teacher }) => {
             "ivertinimai"
           )}`
         );
-      
+
         const reviewsData = await reviewsRes.json();
-        
+
         // Process the data without early returns
-        if(reviewsData.length > 0) {
-          const userSubmittedReview = reviewsData.find((review) => (
-            review.user === session?.user?.email
-          ));
-          
-          if(userSubmittedReview) {
+        if (reviewsData.length > 0) {
+          const userSubmittedReview = reviewsData.find(
+            (review) => review.user === session?.user?.email
+          );
+
+          if (userSubmittedReview) {
             setIndividualReview(userSubmittedReview);
           }
-          
+
           setLength(reviewsData.length);
-          
+
           if (reviewsRes.ok) {
             setReviews(reviewsData);
             const recommendedCount = reviewsData.filter(
               (r) => r.rec === true
             ).length;
-            
+
             setRec(
               reviewsData.length > 0
                 ? (recommendedCount / reviewsData.length) * 100
@@ -149,7 +149,7 @@ const TeacherPage = ({ teacher }) => {
   if (report) {
     return (
       <div>
-        <div className="px-6 sm:px-10 mt-14 sm:mt-10 pb-8">
+        <div className="px-6 sm:px-10 mt-14 sm:mt-10">
           <div className="flex gap-3 md:mb-2 flex-col md:flex-row md:items-center flex-wrap">
             <div className="p-3 rounded-full border-2 overflow-hidden w-20 h-20">
               <img src={teacher?.imageUrl} alt="" />
@@ -202,14 +202,19 @@ const TeacherPage = ({ teacher }) => {
         <div className="px-6 sm:px-8 mb-8">
           <TeacherReport object={teacher} setReport={setReport} />
         </div>
-
+        <div className="absolute right-20 md:right-24 top-[95px] text-sm hidden md:block">
+          {teacher.school.name}
+        </div>
         <div className="absolute end-0 top-[63px]">
           <div className="border-2 w-28 h-28 md:w-20 md:h-20">
-            <img
-              className="w-full h-full object-cover"
-              src={teacher.school.imgUrl}
-              alt=""
-            />
+            {teacher.school.status !== "pending" && (
+              <Image
+                className="w-full h-full object-cover"
+                src={teacher.school.imgUrl}
+                alt="school-image"
+                fill
+              />
+            )}
           </div>
         </div>
       </div>
@@ -221,7 +226,12 @@ const TeacherPage = ({ teacher }) => {
         <LoginRegister setLogin={setShowLogin} login={showLogin} />
       )}
       {edit === true && (
-        <EditReview setOpen={setEdit} open={edit} review={individualReview} />
+        <EditReview
+          setOpen={setEdit}
+          open={edit}
+          review={individualReview}
+          token={session?.user?.accessToken}
+        />
       )}
       <button
         onClick={handleBack}
@@ -283,7 +293,7 @@ const TeacherPage = ({ teacher }) => {
                 </>
               )}
             </div>
-            <div className="flex w-full items-end justify-between">
+            <div className="flex w-full items-end justify-between flex-wrap gap-2">
               {loading ? (
                 <button className="mt-2 px-4 py-2 border rounded-md border-primary text-primary">
                   Kraunama...
@@ -349,11 +359,14 @@ const TeacherPage = ({ teacher }) => {
         </div>
         <div className="absolute end-0 top-[63px]">
           <div className="border-2 w-28 h-28 md:w-20 md:h-20">
-            <img
-              className="w-full h-full object-cover"
-              src={teacher.school.imgUrl}
-              alt=""
-            />
+            {teacher.school.status !== "pending" && (
+              <Image
+                className="w-full h-full object-cover"
+                src={teacher.school.imgUrl}
+                alt="school-image"
+                fill
+              />
+            )}
           </div>
         </div>
       </main>

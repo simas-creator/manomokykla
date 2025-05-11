@@ -34,7 +34,7 @@ const LoginRegister = ({ setLogin, login }) => {
 
   return (
     <div className="z-[21] fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm px-10">
-      <div className="bg-white relative rounded-lg shadow-lg h-fit mt-24 overflow-hidden max-w-[500px] border">
+      <div className="bg-white relative rounded-lg shadow-lg h-fit mt-32 overflow-hidden m-auto max-w-[500px] border">
         <X onClick={() => setLogin(false)} className="absolute right-2 top-2 cursor-pointer" size={28}></X>
         <div className="px-6 py-8">
           <h2 className="text-2xl font-bold text-center text-gray-800">

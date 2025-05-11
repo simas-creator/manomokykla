@@ -4,6 +4,7 @@ import  Footer from "/components/UI/Footer";
 import { Montserrat } from 'next/font/google';
 import { Roboto } from 'next/font/google';
 import SessionWrapper from "@/components/SessionWrapper";
+
 const montserrat = Montserrat({
   subsets: ['latin'],
   display: 'swap',
@@ -41,6 +42,7 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  
   return (
     <SessionWrapper>
       <html lang="lt">
@@ -48,7 +50,7 @@ export default function RootLayout({ children }) {
         <body suppressHydrationWarning={true}
           className={`${montserrat.className} ${roboto.className} antialiased flex flex-col min-h-screen bg-transparent`}
         >
-          <Nav />
+          <Nav/>
           <main className="flex-grow pt-[65px]">
            {children}
           </main>

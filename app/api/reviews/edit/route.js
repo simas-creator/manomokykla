@@ -3,9 +3,8 @@ import Review from "@/lib/modals/review";
 import connect from "@/lib/mongodb";
 import recalculateTeacher from "@/lib/recalculateTeacher";
 import { getToken } from "next-auth/jwt";
-export async function PATCH(req) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_URL });
-
+export async function POST(req) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   if (!token) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }

@@ -10,7 +10,7 @@ function Nav() {
     setDropdownOpen((prev) => !prev);
   };
 
-  const { data: session, status } = useSession(false);
+  const { data: session, status } = useSession();
 
   return (
     <div className="navbar bg-base-100 border-b border-gray-100 fixed z-20">
@@ -87,20 +87,17 @@ function Nav() {
           </li>
         </ul>
       </div>
-
-      {session ? (
-        <div className="navbar-end">
+      <div className="navbar-end">
+        {status === "authenticated" ? (
           <a href="/skydelis" className="btn btn-outline btn-primary">
             Paskyra
           </a>
-        </div>
-      ) : (
-        <div className="navbar-end">
+        ) : (
           <a href="/prisijungti" className="btn btn-outline btn-primary">
-            Paskyra
+            Prisijungti
           </a>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
