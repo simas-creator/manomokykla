@@ -1,8 +1,11 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["mokyklos.s3.eu-north-1.amazonaws.com"],
+    remotePatterns: [
+      new URL('https://mokyklos.s3.eu-north-1.amazonaws.com/**'),
+      new URL('https://lh3.googleusercontent.com/**'),
+    ],
   },
 };
 

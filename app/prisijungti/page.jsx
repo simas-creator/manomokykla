@@ -1,7 +1,6 @@
 "use client";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useState, useEffect, Suspense } from "react";
 function LoginForm() {
   return (
     <div className="w-full flex justify-center py-10 px-8 h-screen">
@@ -64,12 +63,4 @@ function LoginForm() {
     </div>
   );
 }
-
-const Page = () => {
-  return (
-    <Suspense fallback="">
-      <Login />
-    </Suspense>
-  );
-};
 export default LoginForm;

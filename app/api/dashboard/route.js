@@ -35,7 +35,7 @@ export async function GET() {
         const pendSchools = schools.filter((t) => t.status === 'pending')
         const pendReviews = reviews.filter((t) => t.status === 'pending')
 
-        return NextResponse.json({data: {confTeachers, confSchools, confReviews, pendTeachers, pendSchools, pendReviews, reviewsNames, role: 'notadmin'}}, {status: 200})
+        return NextResponse.json({data: {confTeachers, confSchools, confReviews, pendTeachers, pendSchools, pendReviews, reviewsNames }}, {status: 200})
     } catch (error) {
         console.log(error, 'error')
         return NextResponse.json({message: 'failed to fetch'}, {status: 500})
