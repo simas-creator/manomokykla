@@ -90,7 +90,7 @@ function Nav() {
 
       <div className="navbar-end">
         {status === "loading" ? (
-          <a className="btn btn-outline btn-primary">Kraunama...</a>
+          <a className=""></a>
         ) : status === "authenticated" ? (
           <a href="/skydelis" className="btn btn-outline btn-primary">
             Paskyra
