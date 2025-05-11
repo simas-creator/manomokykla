@@ -87,17 +87,19 @@ function Nav() {
           </li>
         </ul>
       </div>
-      <div className="navbar-end">
-        {status === "authenticated" ? (
-          <a href="/skydelis" className="btn btn-outline btn-primary">
-            Paskyra
-          </a>
-        ) : (
-          <a href="/prisijungti" className="btn btn-outline btn-primary">
-            Prisijungti
-          </a>
-        )}
-      </div>
+      {status !== "loading" && (
+        <div className="navbar-end">
+          {status === "authenticated" ? (
+            <a href="/skydelis" className="btn btn-outline btn-primary">
+              Paskyra
+            </a>
+          ) : (
+            <a href="/prisijungti" className="btn btn-outline btn-primary">
+              Prisijungti
+            </a>
+          )}
+        </div>
+      )}
     </div>
   );
 }
