@@ -42,27 +42,50 @@ const Case = ({
   return (
     <div className="w-auto bg-gray-800 relative h-fit border rounded-lg shadow-lg">
       <div className="px-4 pt-4 flex justify-center flex-col">
-        <div className="mb-2 p-4 h-36 flex gap-x-2 border relative border-black items-center w-full justify-center bg-white"
-        style={{
-          backgroundImage: `url(${teacher.imageUrl})`,
-          backgroundSize: "contain",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center"
-        }}
+        <div
+          className="mb-2 p-4 h-36 flex gap-x-2 border relative border-black w-full justify-center bg-white"
+          style={{
+            backgroundImage: `url(${teacher.imageUrl})`,
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
         >
-          <div className="group w-full flex flex-col items-end absolute top-2 px-4 gap-y-1 z-10">
-            <Info className="group" size={38} fill="white" stroke="#009dff" />
-            <div className="rounded-lg border border-primary w-full bg-white p-3">
-              <div className="border-b">
+          <div className="relative w-full flex flex-col items-end px-4 gap-y-1 z-10">
+            <div className="peer">
+              {" "}
+              {/* this is the hover target */}
+              <Info size={38} fill="white" stroke="#009dff" />
+            </div>
+
+            <div className="absolute top-10 right-0 rounded-lg border border-primary pointer-events-none w-full max-w-sm bg-white p-3 opacity-0 peer-hover:opacity-100 transition-opacity duration-300">
+              <div className="border-b py-2">
                 <h5>Kaip naudotis?</h5>
               </div>
 
-              <ol className="text-sm text-gray-500 list-decimal px-6 space-y-2">
+              <ol className="text-sm text-gray-600 list-decimal px-6 space-y-2 py-2">
                 <li>
-                  Jeigu jūsų nemoko rodomas mokytojas, spauskite <code className="bg-primary/20 px-1">Neturiu šito mokytojo</code> 
+                  Jeigu jūsų nemoko rodomas mokytojas, spauskite{" "}
+                  <code className="bg-gray-300 px-1 font-bold">
+                    Neturiu šito mokytojo
+                  </code>
                 </li>
                 <li className="text-nowrap">
-                  Įvertinkite mokytoją pateiktais 3 kriterijais<span className="flex items-center gap-x-1">1-5<StarIcon/></span>
+                  Įvertinkite mokytoją pateiktais 3 kriterijais
+                  <span className="flex items-center gap-x-1 font-bold">
+                    1-5
+                    <StarIcon />
+                  </span>
+                </li>
+                <li>
+                  Priduodami įvertinimą pasirinkite{" "}
+                  <code className="bg-red-300 px-1 font-bold">
+                    Nerekomenduoju
+                  </code>
+                  {" / "}
+                  <code className="bg-primary/50 px-1 font-bold">
+                    Rekomenduoju
+                  </code>
                 </li>
               </ol>
             </div>
