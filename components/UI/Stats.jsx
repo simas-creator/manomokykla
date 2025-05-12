@@ -4,7 +4,6 @@ import Review from "@/lib/modals/review";
 import {
   School as SchoolLogo,
   Star,
-  User as UserLogo,
   Book,
 } from "lucide-react";
 import connect from "@/lib/mongodb";
@@ -38,7 +37,7 @@ const Stats = async () => {
   ];
   return (
     <div
-      className="mt-16 bg-primary border-2 border-primary bg-opacity-10 grid grid-cols-1 gap-4 p-6 sm:grid-cols-3 "
+      className="mt-16 bg-primary border-b-2 border-primary bg-opacity-10 grid grid-cols-1 gap-4 p-6 sm:grid-cols-3 "
       style={{
         background:
           "radial-gradient(125% 125% at 50% 10%, #000 40%, #009dff 100%)",

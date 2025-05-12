@@ -122,30 +122,29 @@ const Card = ({ type }) => {
 
 function Hero() {
   return (
-    <section className="relative pt-16 md:pt-24 min-h-screen bg-transparent">
-      {/* Add the coordinate background */}
-      <div className=" mx-auto">
-        {/* Hero header */}
-        <div className="mb-12 text-center  px-4">
-          <h1 className="mb-4 md:h-14 text-3xl typed font-bold tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
-            Atraskite ir įvertinkite{" "}
-            <span className="text-primary">mokyklas</span>
-          </h1>
-          <p className="mx-auto max-w-2xl text-gray-600 md:text-lg">
-            Padėkite kitiems mokiniams rasti geriausius mokytojus ir mokyklas
-            Lietuvoje.
-          </p>
-        </div>
+    <>
+      <section className="relative pt-16 md:pt-24 h-fit bg-transparent">
+        <div className=" mx-auto">
+          <div className="mb-12 text-center  px-4">
+            <h1 className="mb-4 md:h-14 text-3xl typed font-bold tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
+              Atraskite ir įvertinkite{" "}
+              <span className="text-primary">mokyklas</span>
+            </h1>
+            <p className="mx-auto max-w-2xl text-gray-600 md:text-lg">
+              Padėkite kitiems mokiniams rasti geriausius mokytojus ir mokyklas
+              Lietuvoje.
+            </p>
+          </div>
 
-        {/* Cards */}
-        <div className="flex flex-col items-center justify-center gap-6 md:flex-row px-4">
-          <Card type="view" />
-          <Card type="rate" />
+          {/* Cards */}
+          <div className="flex flex-col items-center justify-center gap-6 md:flex-row px-4">
+            <Card type="view" />
+            <Card type="rate" />
+          </div>
         </div>
-
-        <Stats />
-      </div>
-    </section>
+      </section>
+      <Stats />
+    </>
   );
 }
 

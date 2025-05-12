@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Check, StarIcon, X } from "lucide-react";
-import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { Star, Info } from "lucide-react";
 const criteria = [
@@ -46,15 +45,13 @@ const Case = ({
           className="mb-2 p-4 h-36 flex gap-x-2 border relative border-black w-full justify-center bg-white"
           style={{
             backgroundImage: `url(${teacher.imageUrl})`,
-            backgroundSize: "contain",
+            backgroundSize: "120px",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
           }}
         >
           <div className="relative w-full flex flex-col items-end px-4 gap-y-1 z-10">
             <div className="peer">
-              {" "}
-              {/* this is the hover target */}
               <Info size={38} fill="white" stroke="#009dff" />
             </div>
 
@@ -92,12 +89,12 @@ const Case = ({
           </div>
 
           {/* Card counter */}
-          <div className="absolute top-2 left-2">
+          <div className="absolute left-2 bottom-2">
             {currentIndex + 1} / {length}
           </div>
           <button
             onClick={() => setOpen(false)}
-            className="absolute left-2 bottom-2 px-2 py-2 bg-primary rounded-md text-white text-sm"
+            className="absolute  top-0 left-0 px-2 py-2 border-primary border z-10 text-sm"
           >
             Grįžti
           </button>
@@ -204,9 +201,9 @@ const TinderCard = ({ teachers, setOpen }) => {
     );
   }
   return (
-    <div className="h-screen w-full absolute bg-white border-b border-white px-8">
+    <div className="h-fit w-full absolute bg-white border-b border-white px-8">
       {/* Display current teacher card */}
-      <div className="flex justify-center mt-8">
+      <div className="flex justify-center my-6">
         {teachers.length > 0 && status === "authenticated" && (
           <Case
             teacher={teachers[currentIndex]}
