@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, X } from "lucide-react";
+import { Check, StarIcon, X } from "lucide-react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { Star, Info } from "lucide-react";
@@ -42,19 +42,32 @@ const Case = ({
   return (
     <div className="w-auto bg-gray-800 relative h-fit border rounded-lg shadow-lg">
       <div className="px-4 pt-4 flex justify-center flex-col">
-        <div className="mb-2 p-4 flex gap-x-2 border relative border-black items-center w-full justify-center bg-white">
-          <Image
-            src={teacher.imageUrl}
-            width={100}
-            height={100}
-            alt="mokytojas"
-          ></Image>
-          <Info
-            className="absolute top-2 right-2"
-            size={38}
-            fill="white"
-            stroke="#009dff"
-          />
+        <div className="mb-2 p-4 h-36 flex gap-x-2 border relative border-black items-center w-full justify-center bg-white"
+        style={{
+          backgroundImage: `url(${teacher.imageUrl})`,
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center"
+        }}
+        >
+          <div className="group w-full flex flex-col items-end absolute top-2 px-4 gap-y-1 z-10">
+            <Info className="group" size={38} fill="white" stroke="#009dff" />
+            <div className="rounded-lg border border-primary w-full bg-white p-3">
+              <div className="border-b">
+                <h5>Kaip naudotis?</h5>
+              </div>
+
+              <ol className="text-sm text-gray-500 list-decimal px-6 space-y-2">
+                <li>
+                  Jeigu jūsų nemoko rodomas mokytojas, spauskite <code className="bg-primary/20 px-1">Neturiu šito mokytojo</code> 
+                </li>
+                <li className="text-nowrap">
+                  Įvertinkite mokytoją pateiktais 3 kriterijais<span className="flex items-center gap-x-1">1-5<StarIcon/></span>
+                </li>
+              </ol>
+            </div>
+          </div>
+
           {/* Card counter */}
           <div className="absolute top-2 left-2">
             {currentIndex + 1} / {length}
@@ -152,7 +165,9 @@ const TinderCard = ({ teachers, setOpen }) => {
     return (
       <div className="h-screen w-full absolute bg-white border-b border-white">
         <div className="flex justify-center flex-col items-center mt-20 bg-white h-32 m-auto w-80 rounded-lg shadow-lg">
-          <h1 className="text-white text-2xl typed w-full">Ačiū už atsiliepimus</h1>
+          <h1 className="text-white text-2xl typed w-full">
+            Ačiū už atsiliepimus
+          </h1>
           <div className="w-full flex justify-center mt-4">
             <button
               onClick={() => setOpen(false)}
