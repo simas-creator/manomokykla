@@ -39,10 +39,10 @@ const Case = ({
     }
   }
   return (
-    <div className="w-auto bg-gray-800 relative h-fit border rounded-lg shadow-lg">
-      <div className="px-4 pt-4 flex justify-center flex-col">
+    <div className=" bg-gray-800 relative h-fit border rounded-lg shadow-lg">
+      <div className="px-4 pt-4 flex justify-center flex-col w-auto">
         <div
-          className="mb-2 p-4 h-36 flex gap-x-2 border relative border-black w-full justify-center bg-white"
+          className="mb-2 p-4 h-36 flex gap-x-2 border relative border-black w-auto justify-center bg-white"
           style={{
             backgroundImage: `url(${teacher.imageUrl})`,
             backgroundSize: "120px",
@@ -201,9 +201,9 @@ const TinderCard = ({ teachers, setOpen }) => {
     );
   }
   return (
-    <div className="h-fit w-full absolute bg-white border-b border-white px-8">
+    <div className="h-fit w-full absolute bg-white border-b border-white">
       {/* Display current teacher card */}
-      <div className="flex justify-center my-6">
+      <div className="flex justify-center">
         {teachers.length > 0 && status === "authenticated" && (
           <Case
             teacher={teachers[currentIndex]}

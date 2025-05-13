@@ -235,7 +235,7 @@ const TeacherPage = ({ teacher }) => {
       )}
       <button
         onClick={handleBack}
-        className="flex fixed top-16 bg-white z-20 h-10 w-32 border p-2 sm:hidden items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
+        className="flex fixed top-16 bg-white z-[15] h-10 w-32 border p-2 sm:hidden items-center gap-2 text-gray-700 hover:text-black transition-all duration-300  group"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
