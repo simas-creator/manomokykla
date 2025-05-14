@@ -1,15 +1,14 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import TeacherCase from "@/components/teacher/TeacherCase";
 import StarRating from "@/components/UI/StarRating";
 import SearchBar from "@/components/UI/SearchBar";
 import FilterParameter from "../FilterParameter";
 import TeacherForm from "@/components/teacher/TeacherForm";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Report from "@/components/school/SchoolReport";
 import LoginRegister from "@/components/UI/LoginRegister";
-import TinderCard from "@/components/teacher/TinderCard";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { Verified } from "lucide-react";
 const decodeSub = (str) => {
@@ -58,6 +57,7 @@ const checkIfReported = async (object, session) => {
 const SchoolPage = ({ School }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const pathname = usePathname()
   const [showReport, setShowReport] = useState(false);
   const searchParams = useSearchParams();
   const queries = Object.fromEntries(searchParams.entries());
@@ -71,8 +71,6 @@ const SchoolPage = ({ School }) => {
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState();
   const [login, setLogin] = useState(false);
-  const [user, setUser] = useState();
-  const [tinder, setTinder] = useState(false);
   const subjects = [
     "Biologija",
     "Chemija",
@@ -92,7 +90,6 @@ const SchoolPage = ({ School }) => {
     "Rusų",
     "Vokiečių",
   ];
-
   const handleForm = () => {
     if (status !== "authenticated") {
       setLogin(true);
@@ -109,7 +106,8 @@ const SchoolPage = ({ School }) => {
       const scrollY = window.scrollY || window.pageYOffset;
       try {
         const response = await fetch(
-          `/api/teachers/view?school=${School._id}&dalykas=${queries["dalykas"]}`
+          `/api/teachers/view?school=${School._id}&dalykas=${queries["dalykas"]}`, 
+          {next: {revalidate: 100}}
         );
         if (!response.ok) throw new Error("Failed to fetch teachers");
 
@@ -143,16 +141,7 @@ const SchoolPage = ({ School }) => {
       setShowReport(true);
       return;
     }
-    setUser(session.user.email);
-    const fetchIfReported = async () => {
-      const res = await checkIfReported(School, session);
-      if (res === true) {
-        setShowReport(false);
-      } else {
-        setShowReport(true);
-      }
-    };
-    fetchIfReported();
+    setShowReport(true)
   }, [session, School]);
   const handleReport = () => {
     if (status === "loading") {
@@ -164,24 +153,6 @@ const SchoolPage = ({ School }) => {
     }
     setReport(true);
   };
-  const handleRateAll = () => {
-    if (tinder) {
-      setTinder(false);
-      return;
-    }
-    setTinder(true);
-  };
-  if (tinder && session) {
-    return (
-      <>
-        <TinderCard
-          setOpen={setTinder}
-          teachers={teachers}
-          user={user}
-        ></TinderCard>
-      </>
-    );
-  }
   if (report) {
     return (
       <>
@@ -313,7 +284,7 @@ const SchoolPage = ({ School }) => {
               Pridėti {School.type === "Gimnazija" ? "mokytoją" : "dėstytoją"}
             </button>
             <button
-              onClick={() => handleRateAll()}
+              onClick={() => router.push(`${pathname}/greitas-vertinimas`)}
               className="md:hidden w-auto px-5 py-2 border rounded-lg border-primary bg-gradient-to-r from-primary to-violet-200 text-white text-sm hover:scale-[1.01] transition-transform shadow-lg"
             >
               Greitai įvertinti mokytojus

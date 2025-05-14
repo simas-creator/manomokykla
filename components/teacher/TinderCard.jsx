@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Check, StarIcon, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Star, Info } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 const criteria = [
   "Gebėjimas perteikti žinias",
   "Gebėjimas bendrauti su mokiniais",
@@ -15,7 +16,7 @@ const Case = ({
   currentIndex,
   setDone,
   length,
-  setOpen,
+  navigateBack,
 }) => {
   const [jsonData, setJsonData] = useState({
     "Gebėjimas bendrauti su mokiniais": 0,
@@ -39,7 +40,7 @@ const Case = ({
     }
   }
   return (
-    <div className=" bg-gray-800 relative h-fit border rounded-lg shadow-lg">
+    <div className="bg-gray-800 relative h-fit border rounded-lg shadow-lg">
       <div className="px-4 pt-4 flex justify-center flex-col w-auto">
         <div
           className="mb-2 p-4 h-36 flex gap-x-2 border relative border-black w-auto justify-center bg-white"
@@ -93,7 +94,7 @@ const Case = ({
             {currentIndex + 1} / {length}
           </div>
           <button
-            onClick={() => setOpen(false)}
+            onClick={navigateBack}
             className="absolute  top-0 left-0 px-2 py-2 border-primary border z-10 text-sm"
           >
             Grįžti
@@ -167,12 +168,18 @@ const Case = ({
   );
 };
 
-const TinderCard = ({ teachers, setOpen }) => {
+const TinderCard = ({ teachers }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
   const { data: session, status } = useSession();
-
+  const router = useRouter()
+  const pathname = usePathname()
+  const navigateBack = () => {
+    const pathnameParts = pathname.split("/");
+    const schoolPath = pathnameParts[0]  + pathnameParts[1] + "/" + pathnameParts[2]
+    router.push(`/${schoolPath}`)
+  }
   if (status === "loading") {
     return (
       <div className="flex justify-center items-center h-screen text-white">
@@ -190,7 +197,7 @@ const TinderCard = ({ teachers, setOpen }) => {
           </h1>
           <div className="w-full flex justify-center mt-4">
             <button
-              onClick={() => setOpen(false)}
+              onClick={navigateBack}
               className="px-4 py-2 border border-primary text-gray-700 rounded-md text-sm"
             >
               Grįžti
@@ -211,7 +218,7 @@ const TinderCard = ({ teachers, setOpen }) => {
             setDone={setDone}
             currentIndex={currentIndex}
             length={teachers.length}
-            setOpen={setOpen}
+            navigateBack={navigateBack}
           />
         )}
       </div>

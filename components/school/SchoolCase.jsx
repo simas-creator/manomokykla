@@ -13,7 +13,7 @@ const SchoolCase = ({
   ref,
 }) => {
   const rating = school.rating;
-  const [teachers, setTeachers] = useState([]);
+  const [teachers, setTeachers] = useState([1, 2]);
   async function getTeachers() {
     try {
       const res = await fetch(
@@ -41,8 +41,11 @@ const SchoolCase = ({
 
   const id = replaceLithuanianChars(school.name);
   useEffect(() => {
+    if(school.status === 'pending') {
+      return
+    }
     getTeachers(setTeachers, school);
-  }, [school.n]);
+  }, []);
   const truncate = useCallback((str, n) => {
     if (!str) return "";
     if (str === `${undefined} ${undefined}` && n === 12) {

@@ -86,7 +86,7 @@ const TeacherPage = ({ teacher }) => {
         const reviewsRes = await fetch(
           `/api/reviews/view?n=${teacher._id}&ivertinimai=${searchParams.get(
             "ivertinimai"
-          )}`
+          )}`, {next: {revalidate: 20}}
         );
 
         const reviewsData = await reviewsRes.json();
@@ -301,7 +301,7 @@ const TeacherPage = ({ teacher }) => {
               ) : form === true ? (
                 <button
                   onClick={() => setForm(false)}
-                  className="px-4 py-2 border rounded-md my-2"
+                  className="px-4 py-2 border rounded-md mt-2"
                 >
                   Grįžti atgal
                 </button>

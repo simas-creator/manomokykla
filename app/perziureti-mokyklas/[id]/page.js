@@ -1,9 +1,9 @@
 import SchoolPage from "@/components/school/SchoolPage";
-
+import { notFound } from "next/navigation";
 async function getSchoolData(n) {
   const res = await fetch(`${process.env.NEXTAUTH_URL}/api/schools/${n}`, {
     next: { tags: [`school-${n}`,
-      {revalidate: 60,}
+      {revalidate: 3600,}
     ]}
   });
 
@@ -20,7 +20,7 @@ export default async function Page({ params }) {
   const school = await getSchoolData(n);
 
   if (!school) {
-    return <div>Mokykla nerasta</div>;
+    notFound()
   }
   return <SchoolPage School={school} />;
 }

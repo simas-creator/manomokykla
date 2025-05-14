@@ -3,6 +3,7 @@ import TeacherPage from "@/components/teacher/TeacherPage";
 import School from "@/lib/modals/school";
 import Teacher from "@/lib/modals/teacher";
 import connect from "@/lib/mongodb";
+import { notFound } from "next/navigation";
 
 export default async function Page({ params }) {
   await connect()
@@ -10,10 +11,15 @@ export default async function Page({ params }) {
   const id = await data.id;
   const teacher = await data.teacher;
     // Fetch school
-    const school = await School.findOne({ url: id }).lean();  
+    const school = await School.findOne({ url: id }).lean(); 
+    if(!school) {
+      notFound()
+    } 
     // Fetch teacher
     const t = await Teacher.findOne({ school_id: school._id, url: teacher }).lean();
-  
+    if(!t) {
+      notFound()
+    }
     const plainSchool = {
       ...school,
       _id: school._id.toString(),
