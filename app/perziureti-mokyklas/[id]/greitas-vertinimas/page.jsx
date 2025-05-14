@@ -16,7 +16,7 @@ export default async function Page({ params }) {
     return clean;
   });
   return (
-    <main className="absolute z-[200] h-screen inset-0 bg-black">
+    <main className="absolute z-[20] h-fit inset-0 bg-black" id="main-root-for-modal">
       <TinderCard teachers={cleanT} />
     </main>
   );
