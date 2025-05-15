@@ -62,34 +62,34 @@ const Case = ({
         </div>
         <button
           onClick={navigateBack}
-          className="absolute top-0 left-0 px-2 py-2 bg-gray-700 text-white z-10 text-xs sm:text-sm"
+          className="absolute top-0 left-0 px-2 py-2 bg-gray-700 text-white z-10"
         >
           Grįžti
         </button>
       </div>
       <div className="flex flex-col bg-gray-200 text-center p-2">
-        <h3 className="text-xl sm:text-2xl font-bold truncate">
+        <h3 className="text-2xl font-bold truncate">
           {(teacher.name + " " + teacher.surname).slice(0, 21)}
           {teacher.name.length + teacher.surname.length > 20 && "..."}
         </h3>
 
         {teacher.subject && (
-          <p className="text-gray-500 text-sm sm:text-base">{teacher.subject}</p>
+          <p className="text-gray-500 text-lg">{teacher.subject}</p>
         )}
       </div>
       <div className="space-y-2 mt-2">
         {criteria.map((criterion) => (
           <div key={criterion} className="bg-gray-600 p-1 px-2">
             <div className="flex justify-between items-center mb-1">
-              <p className="font-medium text-gray-200 text-xs sm:text-sm">{criterion}</p>
+              <p className=" text-gray-200 text-sm">{criterion}</p>
             </div>
-            <div className="rating flex gap-0.5 justify-center">
+            <div className="rating flex gap-0.5 justify-start">
               {[1, 2, 3, 4, 5].map((index) => (
                 <button
                   key={index}
                   type="button"
                   onClick={() => handleRating(criterion, index)}
-                  className={`star-rating w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center transition-all ${
+                  className={`star-rating w-10 h-10 flex items-center justify-center transition-all ${
                     jsonData[criterion] >= index
                       ? "text-amber-400"
                       : "text-gray-300"
@@ -97,7 +97,7 @@ const Case = ({
                 >
                   <Star
                     fill={jsonData[criterion] >= index ? "#fbbf24" : "white"}
-                    size={window.innerWidth < 640 ? 20 : 24}
+                    size={32}
                   />
                 </button>
               ))}
@@ -107,10 +107,10 @@ const Case = ({
       </div>
     </div>
     <div className="flex flex-col px-2 sm:px-8 pb-4">
-      <div className="my-4 flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
+      <div className="my-4 flex justify-center gap-2 sm:gap-4">
         <button
           onClick={() => handleSubmit("recommend")}
-          className="gap-x-2 py-2 border-2 border-red-800 bg-red-600 px-3 text-xs sm:text-sm flex items-center justify-center text-white w-full"
+          className="gap-x-2 py-2 border-2 border-red-800 bg-red-600 px-3 text-sm flex items-center justify-center text-white w-full"
         >
           <X strokeWidth={1} size={16} className="sm:mr-1" />
           <p>Nerekomenduoju</p>
@@ -118,7 +118,7 @@ const Case = ({
 
         <button
           onClick={() => handleSubmit("norecommend")}
-          className="bg-green-500 border-2 border-green-700 text-white gap-x-2 py-2 text-xs sm:text-sm flex px-3 items-center justify-center w-full"
+          className="bg-green-500 border-2 border-green-700 text-white gap-x-2 py-2 text-sm flex px-3 items-center justify-center w-full"
         >
           <Check strokeWidth={1} size={16} className="sm:mr-1" />
           <p>Rekomenduoju</p>
@@ -127,7 +127,7 @@ const Case = ({
 
       <button
         onClick={() => handleSubmit("skip")}
-        className="bg-white text-black text-xs sm:text-sm py-3 h-12 flex items-center justify-center"
+        className="bg-white border-2 border-gray-400 text-black text-sm py-3 mx-10 flex items-center justify-center"
       >
         Neturiu šito mokytojo
       </button>
@@ -136,7 +136,7 @@ const Case = ({
 );
 };
 
-const Modal = ({ onClose }) => {
+export const Modal = ({ onClose }) => {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -146,7 +146,7 @@ const Modal = ({ onClose }) => {
   if(!mounted) {
     return
   }
-  return createPortal(
+  return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50">
       <div className="px-4 max-w-sm gap-y-1 h-fit bg-white rounded-lg border border-primary w-fit p-3">
         <div className="border-b py-2">
@@ -187,30 +187,15 @@ const Modal = ({ onClose }) => {
           </button>
         </div>
       </div>
-    </div>,
-    document.getElementById("main-root-for-modal")
+    </div>
   );
 };
 
-const TinderCard = ({ teachers }) => {
+const TinderCard = ({ teachers, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isFirstTime, setIsFirstTime] = useState(true);
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
   const { data: session, status } = useSession();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const navigateBack = () => {
-    const pathnameParts = pathname.split("/");
-    const schoolPath =
-      pathnameParts[0] + pathnameParts[1] + "/" + pathnameParts[2];
-    router.push(`/${schoolPath}`);
-  };
-
-  const closeModal = () => {
-    setIsFirstTime(false);
-  };
 
   if (status === "loading") {
     return (
@@ -239,11 +224,8 @@ const TinderCard = ({ teachers }) => {
       </div>
     );
   }
-
   return (
     <div className="h-auto w-full absolute bg-black border-white pt-4 flex items-center justify-center">
-      {isFirstTime && <Modal onClose={closeModal} />}
-
       {teachers.length > 0 && status === "authenticated" && (
         <Case
           teacher={teachers[currentIndex]}
@@ -251,7 +233,7 @@ const TinderCard = ({ teachers }) => {
           setDone={setDone}
           currentIndex={currentIndex}
           length={teachers.length}
-          navigateBack={navigateBack}
+          navigateBack={onClose}
         />
       )}
     </div>

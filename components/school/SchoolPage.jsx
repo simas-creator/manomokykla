@@ -6,7 +6,8 @@ import StarRating from "@/components/UI/StarRating";
 import SearchBar from "@/components/UI/SearchBar";
 import FilterParameter from "../FilterParameter";
 import TeacherForm from "@/components/teacher/TeacherForm";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import TinderCard, { Modal } from "@/components/teacher/TinderCard";
+import { useSearchParams } from "next/navigation";
 import Report from "@/components/school/SchoolReport";
 import LoginRegister from "@/components/UI/LoginRegister";
 import LoadingSpinner from "../UI/LoadingSpinner";
@@ -56,8 +57,8 @@ const checkIfReported = async (object, session) => {
 };
 const SchoolPage = ({ School }) => {
   const { data: session, status } = useSession();
-  const router = useRouter();
-  const pathname = usePathname()
+  const [openFastRating, setOpenFastRating] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const searchParams = useSearchParams();
   const queries = Object.fromEntries(searchParams.entries());
@@ -100,14 +101,26 @@ const SchoolPage = ({ School }) => {
   const handleBack = () => {
     router.push("/perziureti-mokyklas");
   };
+  const handleFastRating = () => {
+    if (!session) {
+      setLogin(true);
+      return;
+    }
+    setOpenModal(true);
+  };
+
+  const handleProceedToRate = () => {
+    setOpenModal(false)
+    setOpenFastRating(true)
+  }
   useEffect(() => {
     async function getTeachers() {
       setLoading(true);
       const scrollY = window.scrollY || window.pageYOffset;
       try {
         const response = await fetch(
-          `/api/teachers/view?school=${School._id}&dalykas=${queries["dalykas"]}`, 
-          {next: {revalidate: 100}}
+          `/api/teachers/view?school=${School._id}&dalykas=${queries["dalykas"]}`,
+          { next: { revalidate: 100 } }
         );
         if (!response.ok) throw new Error("Failed to fetch teachers");
 
@@ -141,7 +154,7 @@ const SchoolPage = ({ School }) => {
       setShowReport(true);
       return;
     }
-    setShowReport(true)
+    setShowReport(true);
   }, [session, School]);
   const handleReport = () => {
     if (status === "loading") {
@@ -157,45 +170,42 @@ const SchoolPage = ({ School }) => {
     return (
       <>
         <main className="bsm:mt-10 w-auto flex flex-col pb-8">
-        <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row bsm:px-6 sm:px-10">
-          <div className="h-54 w-full bsm:w-auto overflow-hidden relative bsm:border-b-0 bsm:h-20">
-            {School.status !== "pending" && (
-              <img
-                src={School.imgUrl}
-                className="h-64 w-full bsm:h-20 bsm:w-20 bsm:opacity-100 object-cover bsm:rounded-lg bsm:border-2 md:border-2"
-              />
-            )}
-            {School.status === "pending" && (
-              <div className="h-20 bsm:h-20 bsm:rounded-lg bsm:border-2 md:border-2 bsm:w-20 bg-gray-100 flex items-center bsm:text-xs pl-1 justify-center">
-
-              </div>
-            )}
-            <div className="bsm:hidden absolute bottom-0 left-0 w-full h-[70%] bg-gradient-to-t from-white/100 to-transparent"></div>
-          </div>
-          <div className="flex flex-col z-10 px-6 bsm:px-0">
-            <h1 className="font-title text-xl font-medium md:text-3xl">
-              {School.name}
-            </h1>
-            <div className="flex gap-2 mt-2">
-              <StarRating r={schoolRating} size="xl" />
-              <div className="relative group cursor-pointer">
-              <Verified
-                size={36}
-                fill="white"
-                stroke={School.status === "ok" ? "#009dff" : "#6b7280"}
-              />
-              <div
-                className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap 
+          <div className="flex gap-5 bsm:items-center flex-wrap flex-col bsm:flex-row bsm:px-6 sm:px-10">
+            <div className="h-54 w-full bsm:w-auto overflow-hidden relative bsm:border-b-0 bsm:h-20">
+              {School.status !== "pending" && (
+                <img
+                  src={School.imgUrl}
+                  className="h-64 w-full bsm:h-20 bsm:w-20 bsm:opacity-100 object-cover bsm:rounded-lg bsm:border-2 md:border-2"
+                />
+              )}
+              {School.status === "pending" && (
+                <div className="h-20 bsm:h-20 bsm:rounded-lg bsm:border-2 md:border-2 bsm:w-20 bg-gray-100 flex items-center bsm:text-xs pl-1 justify-center"></div>
+              )}
+              <div className="bsm:hidden absolute bottom-0 left-0 w-full h-[70%] bg-gradient-to-t from-white/100 to-transparent"></div>
+            </div>
+            <div className="flex flex-col z-10 px-6 bsm:px-0">
+              <h1 className="font-title text-xl font-medium md:text-3xl">
+                {School.name}
+              </h1>
+              <div className="flex gap-2 mt-2">
+                <StarRating r={schoolRating} size="xl" />
+                <div className="relative group cursor-pointer">
+                  <Verified
+                    size={36}
+                    fill="white"
+                    stroke={School.status === "ok" ? "#009dff" : "#6b7280"}
+                  />
+                  <div
+                    className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap 
                               bg-black text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 
                               transition-opacity duration-200 pointer-events-none z-10"
-              >
-                {School.status === "ok" ? "Patvirtinta" : "Nepatvirtinta"}
+                  >
+                    {School.status === "ok" ? "Patvirtinta" : "Nepatvirtinta"}
+                  </div>
+                </div>
               </div>
             </div>
-            </div>
-            
           </div>
-        </div>
 
           <div className="mt-3 w-full z-10 flex justify-between relative px-6 sm:px-10">
             <button
@@ -214,8 +224,19 @@ const SchoolPage = ({ School }) => {
       </>
     );
   }
+  if (openFastRating) {
+    return (
+      <main
+        className="absolute z-[20] h-fit inset-0 bg-black"
+        id="main-root-for-modal"
+      >
+        <TinderCard teachers={teachers} onClose={() => setOpenFastRating(false)}/>
+      </main>
+    );
+  }
   return (
     <section className="pb-8">
+      {openModal && <Modal onClose={handleProceedToRate}/>}
       {login && <LoginRegister setLogin={setLogin} login={login} />}
       <button
         onClick={handleBack}
@@ -245,9 +266,7 @@ const SchoolPage = ({ School }) => {
               />
             )}
             {School.status === "pending" && (
-              <div className="h-20 bsm:h-20 bsm:rounded-lg bsm:border-2 md:border-2 bsm:w-20 bg-gray-100 flex items-center bsm:text-xs pl-1 justify-center">
-
-              </div>
+              <div className="h-20 bsm:h-20 bsm:rounded-lg bsm:border-2 md:border-2 bsm:w-20 bg-gray-100 flex items-center bsm:text-xs pl-1 justify-center"></div>
             )}
             <div className="bsm:hidden absolute bottom-0 left-0 w-full h-[70%] bg-gradient-to-t from-white/100 to-transparent"></div>
           </div>
@@ -258,21 +277,20 @@ const SchoolPage = ({ School }) => {
             <div className="flex gap-2 mt-2">
               <StarRating r={schoolRating} size="xl" />
               <div className="relative group cursor-pointer">
-              <Verified
-                size={36}
-                fill="white"
-                stroke={School.status === "ok" ? "#009dff" : "#6b7280"}
-              />
-              <div
-                className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap 
+                <Verified
+                  size={36}
+                  fill="white"
+                  stroke={School.status === "ok" ? "#009dff" : "#6b7280"}
+                />
+                <div
+                  className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap 
                               bg-black text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 
                               transition-opacity duration-200 pointer-events-none z-10"
-              >
-                {School.status === "ok" ? "Patvirtinta" : "Nepatvirtinta"}
+                >
+                  {School.status === "ok" ? "Patvirtinta" : "Nepatvirtinta"}
+                </div>
               </div>
             </div>
-            </div>
-            
           </div>
         </div>
         <div className="mt-3 w-full z-10 flex justify-between relative px-6 sm:px-10 flex-wrap gap-3">
@@ -284,7 +302,7 @@ const SchoolPage = ({ School }) => {
               Pridėti {School.type === "Gimnazija" ? "mokytoją" : "dėstytoją"}
             </button>
             <button
-              onClick={() => router.push(`${pathname}/greitas-vertinimas`)}
+              onClick={handleFastRating}
               className="md:hidden w-auto px-5 py-2 border rounded-lg border-primary bg-gradient-to-r from-primary to-violet-200 text-white text-sm hover:scale-[1.01] transition-transform shadow-lg"
             >
               Greitai įvertinti mokytojus
