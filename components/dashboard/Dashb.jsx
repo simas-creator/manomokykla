@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import EditReview from "../teacher/EditReview";
@@ -5,9 +6,6 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 import Image from "next/image";
 
 const Dashb = () => {
-  const [s, setS] = useState();
-  const [r, setR] = useState();
-  const [t, setT] = useState();
   const [a, setA] = useState();
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -15,13 +13,12 @@ const Dashb = () => {
   const [teacherNames, setTeacherNames] = useState({});
   const { data: session } = useSession();
 
-  const [pendingReviews, setPendingReviews] = useState([]);
-  const [pendingTeachers, setPendingTeachers] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [teachers, setTeachers] = useState([]);
   const [pendingSchools, setPendingSchools] = useState([]);
+  const [confirmedSchools, setConfirmedSchools] = useState([]);
 
-  const [showPendingR, setShowPendingR] = useState(false);
   const [showPendingS, setShowPendingS] = useState(false);
-  const [showPendingT, setShowPendingT] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -46,32 +43,26 @@ const Dashb = () => {
       const block = await response.json();
       const { data } = block;
       const {
-        confTeachers,
         confSchools,
-        confReviews,
-        pendTeachers,
         pendSchools,
-        pendReviews,
+        reviews,
+        teachers,
         reviewsNames,
       } = data;
 
-      const total = [...confReviews, ...pendReviews].reduce(
+      const total = reviews.reduce(
         (acc, review) =>
           acc + (review.criterion1 + review.criterion2 + review.criterion3) / 3,
         0
       );
-      const avg = total / (pendReviews?.length + confReviews.length) || 0;
+      const avg = total / reviews.length;
 
-      setS(confSchools || false);
-      setT(confTeachers || false);
       setA(avg);
-      setR(confReviews || false);
-
-      setPendingReviews(pendReviews || []);
+      setReviews(reviews || []);
       setPendingSchools(pendSchools || []);
-      setPendingTeachers(pendTeachers || []);
       setTeacherNames(reviewsNames);
-
+      setConfirmedSchools(confSchools || []);
+      setTeachers(teachers || []);
       setLoading(false);
     };
 
@@ -116,26 +107,26 @@ const Dashb = () => {
           </header>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 mb-8">
             <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-xl font-semibold">Iš viso įvertinimų</h3>
-              {r !== false && !r && (
+              <h3 className="text-md sm:text-xl sm:font-semibold font-medium">Iš viso įvertinimų</h3>
+              {reviews !== false && !reviews && (
                 <div className="w-full flex mt-2">
                   <LoadingSpinner></LoadingSpinner>
                 </div>
               )}
               <p className="text-4xl font-bold text-primary">
-                {Number(r?.length) + Number(pendingReviews?.length)}
+                {Number(reviews?.length)}
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-xl font-semibold">Vidutinis įvertinimas</h3>
-              {!r && r !== false && (
+              <h3 className="text-md sm:text-xl sm:font-semibold font-medium">Vidutinis įvertinimas</h3>
+              {!reviews && reviews !== false && (
                 <div className="w-full flex mt-2">
                   <LoadingSpinner></LoadingSpinner>
                 </div>
               )}
-              <p className="text-4xl font-bold text-primary">{a?.toFixed(2)}</p>
+              <p className="text-4xl font-bold text-primary">{a?.toFixed(2) | 0}</p>
             </div>
           </div>
 
@@ -143,35 +134,11 @@ const Dashb = () => {
           <section className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
             {/* Reviews Component */}
             <div className="w-full relative bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-              {/* Tab navigation */}
-              <div className="flex border-b">
-                <button
-                  className={`flex-1 py-3 font-medium text-sm transition-colors ${
-                    !showPendingR
-                      ? "bg-white text-black border-b-2 border-black"
-                      : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                  }`}
-                  onClick={() => setShowPendingR(false)}
-                >
-                  Patvirtinta
-                </button>
-                <button
-                  className={`flex-1 py-3 font-medium text-sm transition-colors ${
-                    showPendingR
-                      ? "bg-white text-black border-b-2 border-black"
-                      : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                  }`}
-                  onClick={() => setShowPendingR(true)}
-                >
-                  Laukia patvirtinimo
-                </button>
-              </div>
-
               <div className="p-6">
                 <h3 className="text-xl font-bold mb-4">Mano įvertinimai</h3>
 
                 <div className="overflow-x-auto">
-                  {r !== undefined ? (
+                  {reviews !== undefined ? (
                     <div className="overflow-y-auto max-h-[300px]">
                       <table className="w-full">
                         <thead>
@@ -185,38 +152,17 @@ const Dashb = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {showPendingR ? (
-                            pendingReviews && pendingReviews.length > 0 ? (
-                              pendingReviews.map((review, index) => (
-                                <tr
-                                  key={index}
-                                  className="border-t hover:bg-gray-50"
-                                >
-                                  <td className="px-4 py-3 text-sm">
-                                    {teacherNames[`${review.n}-${review.m}`]}
-                                  </td>
-                                  <td className="px-4 py-3 text-sm">
-                                    <button
-                                      onClick={() => toggleEdit(review)}
-                                      className="text-gray-600 hover:text-black hover:underline transition-colors"
-                                    >
-                                      Redaguoti
-                                    </button>
-                                  </td>
-                                </tr>
-                              ))
-                            ) : (
-                              <tr>
-                                <td
-                                  colSpan="2"
-                                  className="px-4 py-8 text-center text-gray-500"
-                                >
-                                  Nėra laukiančių patvirtinimo įvertinimų
-                                </td>
-                              </tr>
-                            )
-                          ) : r && r.length > 0 ? (
-                            r.map((review, index) => (
+                          {reviews.length === 0 ? (
+                            <tr>
+                              <td
+                                colSpan="2"
+                                className="px-4 py-8 text-center text-gray-500"
+                              >
+                                Nėra patvirtintų įvertinimų
+                              </td>
+                            </tr>
+                          ) : (
+                            reviews.map((review, index) => (
                               <tr
                                 key={index}
                                 className="border-t hover:bg-gray-50"
@@ -227,22 +173,13 @@ const Dashb = () => {
                                 <td className="px-4 py-3 text-sm">
                                   <button
                                     onClick={() => toggleEdit(review)}
-                                    className="text-gray-600 hover:text-black hover:underline transition-colors"
+                                    className="text-gray-600 rhover:text-black hover:underline transition-colors"
                                   >
                                     Redaguoti
                                   </button>
                                 </td>
                               </tr>
                             ))
-                          ) : (
-                            <tr>
-                              <td
-                                colSpan="2"
-                                className="px-4 py-8 text-center text-gray-500"
-                              >
-                                Nėra patvirtintų įvertinimų
-                              </td>
-                            </tr>
                           )}
                         </tbody>
                       </table>
@@ -258,34 +195,11 @@ const Dashb = () => {
 
             {/* Teachers Component */}
             <div className="w-full relative bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-              <div className="flex border-b">
-                <button
-                  className={`flex-1 py-3 font-medium text-sm transition-colors ${
-                    !showPendingT
-                      ? "bg-white text-black border-b-2 border-black"
-                      : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                  }`}
-                  onClick={() => setShowPendingT(false)}
-                >
-                  Patvirtinta
-                </button>
-                <button
-                  className={`flex-1 py-3 font-medium text-sm transition-colors ${
-                    showPendingT
-                      ? "bg-white text-black border-b-2 border-black"
-                      : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                  }`}
-                  onClick={() => setShowPendingT(true)}
-                >
-                  Laukia patvirtinimo
-                </button>
-              </div>
-
               <div className="p-6">
                 <h3 className="text-xl font-bold mb-4">Pridėti mokytojai</h3>
 
                 <div className="overflow-x-auto">
-                  {t !== undefined ? (
+                  {teachers !== undefined ? (
                     <div className="overflow-y-auto max-h-[300px]">
                       <table className="w-full">
                         <thead>
@@ -299,33 +213,8 @@ const Dashb = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {showPendingT ? (
-                            pendingTeachers && pendingTeachers.length > 0 ? (
-                              pendingTeachers.map((teacher, index) => (
-                                <tr
-                                  key={index}
-                                  className="border-t hover:bg-gray-50"
-                                >
-                                  <td className="px-4 py-3 text-sm">
-                                    {teacher.name} {teacher.surname}
-                                  </td>
-                                  <td className="px-4 py-3 text-sm text-gray-600">
-                                    {teacher.createdAt.split("T")[0]}
-                                  </td>
-                                </tr>
-                              ))
-                            ) : (
-                              <tr>
-                                <td
-                                  colSpan="2"
-                                  className="px-4 py-8 text-center text-gray-500"
-                                >
-                                  Nėra laukiančių patvirtinimo mokytojų
-                                </td>
-                              </tr>
-                            )
-                          ) : t && t.length > 0 ? (
-                            t.map((teacher, index) => (
+                          {teachers && teachers.length > 0 ? (
+                            teachers.map((teacher, index) => (
                               <tr
                                 key={index}
                                 className="border-t hover:bg-gray-50"
@@ -361,9 +250,9 @@ const Dashb = () => {
             </div>
 
             {/* Schools Component */}
-            <div className="w-full  relative bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+            <div className="w-full relative bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
               {/* Tab navigation */}
-              <div className="flex border-b ">
+              <div className="flex border-b">
                 <button
                   className={`flex-1 py-3 font-medium text-sm transition-colors ${
                     !showPendingS
@@ -392,7 +281,7 @@ const Dashb = () => {
                 </h3>
 
                 <div className="overflow-x-auto">
-                  {s !== undefined ? (
+                  {confirmedSchools !== undefined && pendingSchools !== undefined ? (
                     <div className="max-h-[300px] overflow-y-auto">
                       <table className="w-full">
                         <thead>
@@ -432,8 +321,8 @@ const Dashb = () => {
                                 </td>
                               </tr>
                             )
-                          ) : s && s.length > 0 ? (
-                            s.map((school, index) => (
+                          ) : confirmedSchools && confirmedSchools.length > 0 ? (
+                            confirmedSchools.map((school, index) => (
                               <tr
                                 key={index}
                                 className="border-t hover:bg-gray-50"
