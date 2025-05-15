@@ -227,7 +227,7 @@ const SchoolPage = ({ School }) => {
   if (openFastRating) {
     return (
       <main
-        className="absolute z-[20] h-fit inset-0 bg-black"
+        className="absolute z-[20] h-screen inset-0 bg-black"
         id="main-root-for-modal"
       >
         <TinderCard teachers={teachers} onClose={() => setOpenFastRating(false)}/>

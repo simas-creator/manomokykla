@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, StarIcon, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Star, Info } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import { createPortal } from "react-dom";
 
 const criteria = [
   "Gebėjimas perteikti žinias",
@@ -20,7 +18,9 @@ const Case = ({
   setDone,
   length,
   navigateBack,
+  user,
 }) => {
+  const [error, setError] = useState("")
   const [jsonData, setJsonData] = useState({
     "Gebėjimas bendrauti su mokiniais": 0,
     "Gebėjimas perteikti žinias": 0,
@@ -42,114 +42,131 @@ const Case = ({
       }
       setCurrentIndex((prev) => prev + 1);
     }
+    const errors = Object.fromEntries(Object.entries(jsonData).filter(([_, value]) => value === 0))
+    if(errors) {
+      setError(errors)
+      return
+    }
+    if (direction === "recommend") {
+      const formData = {
+        ...jsonData,
+        rec: true,
+      };
+    }
+    if (direction === "norecommend") {
+    }
   }
 
- return (
-  <div className="bg-gray-800 relative h-fit border rounded-lg shadow-lg max-w-md w-[95%] mx-auto">
-    <div className="px-2 sm:px-4 pt-4 flex justify-center flex-col w-full">
-      <div
-        className="mb-2 p-4 h-36 flex gap-x-2 border relative border-black w-full justify-center bg-white"
-        style={{
-          backgroundImage: `url(${teacher.imageUrl})`,
-          backgroundSize: "120px",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-        }}
-      >
-        {/* Card counter */}
-        <div className="absolute left-2 bottom-2 text-sm">
-          {currentIndex + 1} / {length}
-        </div>
-        <button
-          onClick={navigateBack}
-          className="absolute top-0 left-0 px-2 py-2 bg-gray-700 text-white z-10"
+  return (
+    <div className="bg-gray-800 relative h-fit border rounded-lg shadow-lg max-w-md w-[95%] mx-auto">
+      <div className="px-4 pt-4 flex justify-center flex-col w-full">
+        <div
+          className="mb-2 p-4 h-36 flex gap-x-2 border relative border-black w-full justify-center bg-white"
+          style={{
+            backgroundImage: `url(${teacher.imageUrl})`,
+            backgroundSize: "120px",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
         >
-          Grįžti
-        </button>
-      </div>
-      <div className="flex flex-col bg-gray-200 text-center p-2">
-        <h3 className="text-2xl font-bold truncate">
-          {(teacher.name + " " + teacher.surname).slice(0, 21)}
-          {teacher.name.length + teacher.surname.length > 20 && "..."}
-        </h3>
-
-        {teacher.subject && (
-          <p className="text-gray-500 text-lg">{teacher.subject}</p>
-        )}
-      </div>
-      <div className="space-y-2 mt-2">
-        {criteria.map((criterion) => (
-          <div key={criterion} className="bg-gray-600 p-1 px-2">
-            <div className="flex justify-between items-center mb-1">
-              <p className=" text-gray-200 text-sm">{criterion}</p>
-            </div>
-            <div className="rating flex gap-0.5 justify-start">
-              {[1, 2, 3, 4, 5].map((index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => handleRating(criterion, index)}
-                  className={`star-rating w-10 h-10 flex items-center justify-center transition-all ${
-                    jsonData[criterion] >= index
-                      ? "text-amber-400"
-                      : "text-gray-300"
-                  }`}
-                >
-                  <Star
-                    fill={jsonData[criterion] >= index ? "#fbbf24" : "white"}
-                    size={32}
-                  />
-                </button>
-              ))}
-            </div>
+          {/* Card counter */}
+          <div className="absolute left-2 bottom-2 text-sm">
+            {currentIndex + 1} / {length}
           </div>
-        ))}
+          <button
+            onClick={navigateBack}
+            className="absolute top-0 left-0 px-2 py-2 bg-gray-700 text-white z-10"
+          >
+            Grįžti
+          </button>
+        </div>
+        <div className="flex flex-col bg-gray-200 text-center p-2">
+          <h3 className="text-2xl font-bold truncate">
+            {(teacher.name + " " + teacher.surname).slice(0, 21)}
+            {teacher.name.length + teacher.surname.length > 20 && "..."}
+          </h3>
+
+          {teacher.subject && (
+            <p className="text-gray-500 text-lg">{teacher.subject}</p>
+          )}
+        </div>
+        <div className="space-y-2 mt-2">
+          {criteria.map((criterion) => (
+            <div key={criterion} className="bg-gray-600 p-1 px-2">
+              <div className="flex justify-between items-center mb-1">
+                <p className=" text-gray-200 text-sm">{criterion}</p>
+              </div>
+              <div className="rating flex gap-0.5 justify-start">
+                {[1, 2, 3, 4, 5].map((index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => handleRating(criterion, index)}
+                    className={`star-rating w-10 h-10 flex items-center justify-center transition-all ${
+                      jsonData[criterion] >= index
+                        ? "text-amber-400"
+                        : "text-gray-300"
+                    }`}
+                  >
+                    <Star
+                      fill={jsonData[criterion] >= index ? "#fbbf24" : "white"}
+                      size={32}
+                    />
+                  </button>
+                ))}
+              </div>
+              {error[criterion] !== undefined && <div>
+                  <p className="text-red-500 text-xs">Užpildykite šį laukelį</p>
+                </div>}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-    <div className="flex flex-col px-2 sm:px-8 pb-4">
-      <div className="my-4 flex justify-center gap-2 sm:gap-4">
-        <button
-          onClick={() => handleSubmit("recommend")}
-          className="gap-x-2 py-2 border-2 border-red-800 bg-red-600 px-3 text-sm flex items-center justify-center text-white w-full"
-        >
-          <X strokeWidth={1} size={16} className="sm:mr-1" />
-          <p>Nerekomenduoju</p>
-        </button>
+      <div className="flex flex-col px-2 pb-4">
+        <div className="my-4 flex justify-center gap-2">
+          <button
+            onClick={() => handleSubmit("norecommend")}
+            className="gap-x-2 py-2 border-2 border-red-800 bg-red-600 text-sm flex items-center px-1 justify-center text-white w-full"
+          >
+            <X strokeWidth={1} size={16} className="sm:mr-1" />
+            <p>Nerekomenduoju</p>
+          </button>
+
+          <button
+            onClick={() => handleSubmit("recommend")}
+            className="bg-green-500 border-2 border-green-700 text-white gap-x-2 py-2 text-sm flex px-1 items-center justify-center w-full"
+          >
+            <Check strokeWidth={1} size={16} className="sm:mr-1" />
+            <p>Rekomenduoju</p>
+          </button>
+        </div>
 
         <button
-          onClick={() => handleSubmit("norecommend")}
-          className="bg-green-500 border-2 border-green-700 text-white gap-x-2 py-2 text-sm flex px-3 items-center justify-center w-full"
+          onClick={() => handleSubmit("skip")}
+          className="bg-white border-2 border-gray-400 text-black text-sm py-3 mx-10 flex items-center justify-center"
         >
-          <Check strokeWidth={1} size={16} className="sm:mr-1" />
-          <p>Rekomenduoju</p>
+          Neturiu šito mokytojo
         </button>
       </div>
-
-      <button
-        onClick={() => handleSubmit("skip")}
-        className="bg-white border-2 border-gray-400 text-black text-sm py-3 mx-10 flex items-center justify-center"
-      >
-        Neturiu šito mokytojo
-      </button>
     </div>
-  </div>
-);
+  );
 };
 
 export const Modal = ({ onClose }) => {
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
+    setMounted(true);
   }, [mounted]);
 
-  if(!mounted) {
-    return
+  if (!mounted) {
+    return;
   }
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50">
-      <div className="px-4 max-w-sm gap-y-1 h-fit bg-white rounded-lg border border-primary w-fit p-3">
-        <div className="border-b py-2">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center w-full px-4 justify-center z-50">
+      <div className="px-4 max-w-sm gap-y-1 h-fit bg-white rounded-lg border border-primary w-auto p-3">
+        <div className="border-b py-2 flex w-full gap-x-2">
+          <Info stroke="#009DFF" />
           <h5>Kaip naudotis?</h5>
         </div>
 
@@ -160,7 +177,7 @@ export const Modal = ({ onClose }) => {
               Neturiu šito mokytojo
             </code>
           </li>
-          <li className="text-nowrap">
+          <li className="">
             Įvertinkite mokytoją pateiktais 3 kriterijais
             <span className="flex items-center gap-x-1 font-bold">
               1-5
@@ -234,6 +251,7 @@ const TinderCard = ({ teachers, onClose }) => {
           currentIndex={currentIndex}
           length={teachers.length}
           navigateBack={onClose}
+          user={session.user.email}
         />
       )}
     </div>
