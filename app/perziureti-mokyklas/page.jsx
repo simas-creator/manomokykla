@@ -1,11 +1,37 @@
 "use client";
-import { Suspense, use, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import FilterParameter from "@/components/FilterParameter";
 import SchoolCase from "@/components/school/SchoolCase";
 import SearchBar from "@/components/UI/SearchBar";
 import Fallback from "@/components/UI/Fallback";
 import LoadingSpinner from "@/components/UI/LoadingSpinner";
+// export const metadata = {
+//   title: "Lietuvos mokyklų mokytojų įvertinimai",
+//   description: "Mano Mokykla leidžia moksleiviams ir tėvams lengvai rasti bei įvertinti mokyklas visoje Lietuvoje. Peržiūrėkite mokyklas, skaitykite tikrų mokinių atsiliepimus, palyginkite skirtingas mokymo įstaigas ir padėkite kurti skaidresnę ir geresnę švietimo sistemą. Sužinokite, kur vaikai jaučiasi geriausiai, ir pasidalinkite savo patirtimi.",
+//   openGraph: {
+//     title: "Lietuvos mokyklų mokytojų įvertinimai",
+//     description:
+//       "Mano Mokykla leidžia moksleiviams ir tėvams lengvai rasti bei įvertinti mokyklas visoje Lietuvoje. Peržiūrėkite mokyklas, skaitykite tikrų mokinių atsiliepimus, palyginkite skirtingas mokymo įstaigas ir padėkite kurti skaidresnę ir geresnę švietimo sistemą. Sužinokite, kur vaikai jaučiasi geriausiai, ir pasidalinkite savo patirtimi.",
+//     url: "https://manomokyk.la/",
+//     type: "website",
+//     images: [
+//       {
+//         url: "https://manomokyk.la/images/manomokykla.png",
+//         width: 1200,
+//         height: 630,
+//         alt: "Mano Mokykla",
+//       },
+//     ],
+//   },
+//   twitter: {
+//     card: "summary_large_image",
+//     title: "Lietuvos mokyklų mokytojų įvertinimai",
+//     description: "Mano Mokykla leidžia moksleiviams ir tėvams lengvai rasti bei įvertinti mokyklas visoje Lietuvoje. Peržiūrėkite mokyklas, skaitykite tikrų mokinių atsiliepimus, palyginkite skirtingas mokymo įstaigas ir padėkite kurti skaidresnę ir geresnę švietimo sistemą. Sužinokite, kur vaikai jaučiasi geriausiai, ir pasidalinkite savo patirtimi.",
+//     images: ["https://manomokyk.la/images/manomokykla.png"],
+//   },
+// };
+
 const decodeLithuanianChars = (str) => {
   const wordMap = new Map([
     ["alytaus", "Alytaus"],
@@ -72,7 +98,10 @@ const PageContent = () => {
         `/api/schools/view?${searchParams}&pages=${pageRef.current}`,
         {
           method: "GET",
-          next: {tags: [`schools-pages-${pageRef.current}`], revalidate: 3600},
+          next: {
+            tags: [`schools-pages-${pageRef.current}`],
+            revalidate: 3600,
+          },
           headers: { "Content-Type": "application/json" },
         }
       );

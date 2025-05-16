@@ -1,3 +1,30 @@
+export const metadata = {
+  title: "Taisyklės | Mano Mokykla",
+  description:
+    "Naudotojo atsakomybė, turinio tvarkymas, duomenų naudojimas ir kiti svarbūs aspektai platformos veikimui.",
+  openGraph: {
+    title: "Taisyklės | Mano Mokykla",
+    description:
+      "Naudotojo atsakomybė, turinio tvarkymas, duomenų naudojimas ir kiti svarbūs aspektai platformos veikimui.",
+    url: "https://manomokykla.lt/taisyklės",
+    type: "article",
+    images: [
+      {
+        url: "/images/openGraph.png", 
+        width: 1200,
+        height: 630,
+        alt: "Taisyklės – Mano Mokykla",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Taisyklės | Mano Mokykla",
+    description:
+      "Naudotojo atsakomybė, turinio tvarkymas, duomenų naudojimas ir kiti svarbūs aspektai platformos veikimui.",
+    images: ["/images/openGraph.png"],
+  },
+};
 
 
 export default function GuidelinesPage() {

@@ -4,6 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import EditReview from "../teacher/EditReview";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import Image from "next/image";
+import { Star } from "lucide-react";
 
 const Dashb = () => {
   const [a, setA] = useState();
@@ -126,7 +127,10 @@ const Dashb = () => {
                   <LoadingSpinner></LoadingSpinner>
                 </div>
               )}
-              <p className="text-4xl font-bold text-primary">{a?.toFixed(2) | 0}</p>
+              <p className="text-4xl font-bold text-primary flex items-center gap-1">{a?.toFixed(2) | 0}
+                <Star size={32}/>
+              </p>
+              
             </div>
           </div>
 

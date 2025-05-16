@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Check, StarIcon, X, ArrowLeft, Info } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Star } from "lucide-react";
-import checkDidUserReview from "@/lib/checkUserReviews"
 import didUserReview from "@/lib/checkUserReviews";
 const criteria = [
   "Gebėjimas perteikti žinias",
@@ -266,23 +265,21 @@ const TinderCard = ({ teachers, onClose }) => {
   const [iterableTeachers, setIterableTeachers] = useState([])
   const { data: session, status } = useSession();
 useEffect(() => {
-  if (!session?.user?.email) return;
-
-  async function filterTeachers() {
-    const results = await Promise.all(
-      teachers.map(async (teacher) => {
-        const reviewed = await didUserReview(session.user.email, teacher._id);
-        console.log(`User reviewed teacher ${teacher._id}?`, reviewed);
-        return reviewed ? teacher : null;
-      })
-    );
-    const filteredTeachers = results.filter(t => t !== null);
-    console.log('Filtered teachers:', filteredTeachers);
-    setIterableTeachers(filteredTeachers);
+  if (!session?.user?.email || !Array.isArray(teachers) || !teachers) return;
+  async function filterTeachers(){
+    const teacherIds = teachers.map(teacher => teacher._id)
+    const reviewed = await didUserReview(teacherIds, session.user.email)
+    const unreviewed = teachers.filter(teacher => {
+          const result = reviewed.find(r => r.teacherId === teacher._id);
+          return result && !result.reviewed;
+        });
+        
+        setIterableTeachers(unreviewed);
   }
 
+
   filterTeachers();
-}, [session, teachers]);
+}, [session?.user?.email, teachers]);
   if (status === "loading") {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-900">

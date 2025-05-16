@@ -28,7 +28,7 @@ export const metadata = {
     title: "manomokyk.la",
     description: "Mokytojų ir dėstytojų vertinimo platforma.",
     url: "https://manomokyk.la",
-    siteName: "EDUinf",
+    siteName: "Mano Mokykla",
     images: [
       {
         url: "/images/openGraph.png", 

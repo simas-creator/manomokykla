@@ -1,3 +1,31 @@
+export const metadata = {
+  title: "Privatumo politika | Mano Mokykla",
+  description:
+    "Kaip ManoMokykla renka, naudoja ir saugo jūsų asmeninius duomenis. Skaitykite mūsų privatumo politiką, kad sužinotumėte apie slapukus, duomenų saugumą ir savo teises kaip vartotojo.",
+  openGraph: {
+    title: "Privatumo politika | Mano Mokykla",
+    description:
+      "Kaip ManoMokykla renka, naudoja ir saugo jūsų asmeninius duomenis. Skaitykite mūsų privatumo politiką, kad sužinotumėte apie slapukus, duomenų saugumą ir savo teises kaip vartotojo.",
+    url: "https://manomokykla.lt/privatumo-politika",
+    type: "article",
+    images: [
+      {
+        url: "/images/openGraph.png", 
+        width: 1200,
+        height: 630,
+        alt: "Privatumo politika – Mano Mokykla",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Privatumo politika | Mano Mokykla",
+    description:
+      "Perskaitykite ManoMokykla privatumo politiką ir sužinokite, kaip mes tvarkome jūsų duomenis, naudojame slapukus ir užtikriname informacijos saugumą.",
+    images: ["/images/openGraph.png"],
+  },
+};
+
 export default function PrivacyPolicyPage() {
   return (
     <div className="container max-w-4xl py-10 px-4 md:py-16 m-auto">

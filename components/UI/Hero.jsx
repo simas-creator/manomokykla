@@ -137,7 +137,7 @@ function Hero() {
           </div>
 
           {/* Cards */}
-          <div className="flex flex-col items-center justify-center gap-6 md:flex-row px-4">
+          <div className="flex flex-col items-center justify-center gap-6 md:flex-row px-8">
             <Card type="view" />
             <Card type="rate" />
           </div>

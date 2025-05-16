@@ -7,7 +7,7 @@ import SearchBar from "@/components/UI/SearchBar";
 import FilterParameter from "../FilterParameter";
 import TeacherForm from "@/components/teacher/TeacherForm";
 import TinderCard, { Modal } from "@/components/teacher/TinderCard";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Report from "@/components/school/SchoolReport";
 import LoginRegister from "@/components/UI/LoginRegister";
 import LoadingSpinner from "../UI/LoadingSpinner";
@@ -72,6 +72,7 @@ const SchoolPage = ({ School }) => {
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState();
   const [login, setLogin] = useState(false);
+  const router = useRouter()
   const subjects = [
     "Biologija",
     "Chemija",
@@ -301,12 +302,13 @@ const SchoolPage = ({ School }) => {
             >
               Pridėti {School.type === "Gimnazija" ? "mokytoją" : "dėstytoją"}
             </button>
-            <button
+            {/*fast rating(teacherss) */}
+            {/* <button
               onClick={handleFastRating}
               className="md:hidden w-auto px-5 py-2 border rounded-lg border-primary bg-gradient-to-r from-primary to-violet-200 text-white text-sm hover:scale-[1.01] transition-transform shadow-lg"
             >
               Greitai įvertinti mokytojus
-            </button>
+            </button> */}
           </div>
 
           {showReport === true && (
