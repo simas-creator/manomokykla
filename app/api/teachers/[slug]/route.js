@@ -2,7 +2,7 @@
 import Teacher from "@/lib/modals/teacher";
 import connect from "@/lib/mongodb";
 import { NextResponse } from "next/server";
-export const GET = async (request, { params }) => {
+export const PUT = async (request, { params }) => {
   const slug = (await params).slug;
   try {
     await connect();
@@ -18,10 +18,6 @@ export const GET = async (request, { params }) => {
 
     return NextResponse.json(teacher, {
       status: 200,
-      headers: {
-        "Cache-Control": "s-maxage=3000, stale-while-revalidate", // Cache for 50 minutes, serve stale content while revalidating
-        "x-next-cache-tags": "schools"
-      },
     });
   } catch (error) {
     console.log('ERROR:', error);

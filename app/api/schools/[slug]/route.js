@@ -2,7 +2,7 @@ import connect from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import School from "@/lib/modals/school";
 
-export const GET = async (request, { params }) => {
+export const PUT = async (request, { params }) => {
   const slug = (await params).slug;
   try {
     await connect();
@@ -10,24 +10,12 @@ export const GET = async (request, { params }) => {
     const school = await School.findOne({ url: slug });
 
     if (!school) {
-      return NextResponse.json(
-        { error: 'School not found' },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: "School not found" }, { status: 404 });
     }
 
-    return NextResponse.json(school, {
-      status: 200,
-      headers: {
-        "Cache-Control": "s-maxage=3000, stale-while-revalidate", // Cache for 50 minutes, serve stale content while revalidating
-        "x-next-cache-tags": "schools"
-      },
-    });
+    return NextResponse.json(school, { status: 200 });
   } catch (error) {
-    console.log('ERROR:', error);
-    return NextResponse.json(
-      { error: error },
-      { status: 500 }
-    );
+    console.log("ERROR:", error);
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 };
