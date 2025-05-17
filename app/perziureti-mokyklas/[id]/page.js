@@ -1,8 +1,10 @@
 import SchoolPage from "@/components/school/SchoolPage";
 import { notFound } from "next/navigation";
-import {getSchoolData} from "@/lib/getDataForPage"
+import { getSchoolData } from "@/lib/getDataForPage";
 import connect from "@/lib/mongodb";
 import School from "@/lib/modals/school";
+import { Suspense } from "react";
+import Fallback from "@/components/UI/Fallback";
 export async function generateMetadata({ params }) {
   const n = (await params).id;
   const school = await getSchoolData(n);
@@ -49,13 +51,13 @@ export async function generateStaticParams() {
   try {
     await connect();
     const schools = await School.find({}, { url: 1 });
-    console.log(schools, 'our schools')
+    console.log(schools, "our schools");
     return schools.map((s) => ({
       id: s.url,
     }));
   } catch (err) {
     console.error("Failed to fetch schools", err);
-    return []; 
+    return [];
   }
 }
 
@@ -67,5 +69,9 @@ export default async function Page({ params }) {
   if (!school) {
     notFound();
   }
-  return <SchoolPage School={school} />;
+  return (
+    <Suspense fallback={Fallback}>
+      <SchoolPage School={school} />;
+    </Suspense>
+  );
 }
