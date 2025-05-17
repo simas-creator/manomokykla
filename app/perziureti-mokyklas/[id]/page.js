@@ -1,6 +1,8 @@
 import SchoolPage from "@/components/school/SchoolPage";
 import { notFound } from "next/navigation";
 import {getSchoolData} from "@/lib/getDataForPage"
+import connect from "@/lib/mongodb";
+import School from "@/lib/modals/school";
 export async function generateMetadata({ params }) {
   const n = (await params).id;
   const school = await getSchoolData(n);
@@ -42,6 +44,21 @@ export async function generateMetadata({ params }) {
     },
   };
 }
+export const dynamicParams = false;
+export async function generateStaticParams() {
+  try {
+    await connect();
+    const schools = await School.find({}, { url: 1 });
+    console.log(schools, 'our schools')
+    return schools.map((s) => ({
+      id: s.url,
+    }));
+  } catch (err) {
+    console.error("Failed to fetch schools", err);
+    return []; 
+  }
+}
+
 export default async function Page({ params }) {
   const n = (await params).id;
 
