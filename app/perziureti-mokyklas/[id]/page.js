@@ -46,7 +46,6 @@ export async function generateMetadata({ params }) {
     },
   };
 }
-export const dynamicParams = false;
 export async function generateStaticParams() {
   try {
     await connect();

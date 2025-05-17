@@ -73,7 +73,7 @@ const ReviewForm = ({ teacher_id, open, type}) => {
           "Authorization": "Bearer " + session.user.accessToken
         },
       });
-  
+      
       const responseData = await res.json();
       console.log("Response data:", responseData);
   
