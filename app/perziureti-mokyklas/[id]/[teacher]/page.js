@@ -9,7 +9,7 @@ export async function generateMetadata({ params }) {
   const id = await data.id;
   const teacher = await data.teacher;
   const t = await getTeacherData(teacher)
-  const school = await getSchoolData(n);
+  const school = await getSchoolData(id);
   const { name: schoolName, imgUrl, type, url } = school;
   const { name: teacherName } = t
   return {
@@ -56,7 +56,7 @@ export default async function Page({ params }) {
   const id = await data.id;
   const teacher = await data.teacher;
     // Fetch school
-    const school = await getSchoolData(n);
+    const school = await getSchoolData(id);
     if(!school) {
       notFound()
     }
