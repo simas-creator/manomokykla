@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import {getSchoolData} from "@/lib/getDataForPage"
 export async function generateMetadata({ params }) {
   const n = (await params).id;
-
   const school = await getSchoolData(n);
   const { name, imgUrl, type, url } = school;
   return {

@@ -6,31 +6,6 @@ import SchoolCase from "@/components/school/SchoolCase";
 import SearchBar from "@/components/UI/SearchBar";
 import Fallback from "@/components/UI/Fallback";
 import LoadingSpinner from "@/components/UI/LoadingSpinner";
-// export const metadata = {
-//   title: "Lietuvos mokyklų mokytojų įvertinimai",
-//   description: "Mano Mokykla leidžia moksleiviams ir tėvams lengvai rasti bei įvertinti mokyklas visoje Lietuvoje. Peržiūrėkite mokyklas, skaitykite tikrų mokinių atsiliepimus, palyginkite skirtingas mokymo įstaigas ir padėkite kurti skaidresnę ir geresnę švietimo sistemą. Sužinokite, kur vaikai jaučiasi geriausiai, ir pasidalinkite savo patirtimi.",
-//   openGraph: {
-//     title: "Lietuvos mokyklų mokytojų įvertinimai",
-//     description:
-//       "Mano Mokykla leidžia moksleiviams ir tėvams lengvai rasti bei įvertinti mokyklas visoje Lietuvoje. Peržiūrėkite mokyklas, skaitykite tikrų mokinių atsiliepimus, palyginkite skirtingas mokymo įstaigas ir padėkite kurti skaidresnę ir geresnę švietimo sistemą. Sužinokite, kur vaikai jaučiasi geriausiai, ir pasidalinkite savo patirtimi.",
-//     url: "https://manomokyk.la/",
-//     type: "website",
-//     images: [
-//       {
-//         url: "https://manomokyk.la/images/manomokykla.png",
-//         width: 1200,
-//         height: 630,
-//         alt: "Mano Mokykla",
-//       },
-//     ],
-//   },
-//   twitter: {
-//     card: "summary_large_image",
-//     title: "Lietuvos mokyklų mokytojų įvertinimai",
-//     description: "Mano Mokykla leidžia moksleiviams ir tėvams lengvai rasti bei įvertinti mokyklas visoje Lietuvoje. Peržiūrėkite mokyklas, skaitykite tikrų mokinių atsiliepimus, palyginkite skirtingas mokymo įstaigas ir padėkite kurti skaidresnę ir geresnę švietimo sistemą. Sužinokite, kur vaikai jaučiasi geriausiai, ir pasidalinkite savo patirtimi.",
-//     images: ["https://manomokyk.la/images/manomokykla.png"],
-//   },
-// };
 
 const decodeLithuanianChars = (str) => {
   const wordMap = new Map([
@@ -213,7 +188,7 @@ const PageContent = () => {
           filteredData.length === 0 &&
           !isFetching.current &&
           !hasMore && (
-            <p className="mt-4 h-screen">Atsiprašome, bet nieko neradome.</p>
+            <p className="mt-4">Atsiprašome, bet nieko neradome.</p>
           )}
       </div>
 
@@ -228,7 +203,7 @@ const PageContent = () => {
         </div>
         <div
           ref={interRef}
-          className="text-center w-full h-creen"
+          className="w-full"
           style={{ visibility: hasMore ? "visible" : "hidden" }}
         >
           <LoadingSpinner />
