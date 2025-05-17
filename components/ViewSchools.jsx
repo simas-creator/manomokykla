@@ -73,8 +73,7 @@ const PageContent = () => {
         {
           method: "GET",
           next: {
-            tags: [`schools-pages-${pageRef.current}`],
-            revalidate: 3600,
+            revalidate: 10,
           },
           headers: { "Content-Type": "application/json" },
         }

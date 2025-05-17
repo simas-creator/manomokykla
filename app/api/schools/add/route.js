@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connect from "@/lib/mongodb";
 import School from "@/lib/modals/school";
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { getToken } from "next-auth/jwt";
 import replaceLithuanianChars from "@/lib/transfomUrl";
 export async function POST(req) {
@@ -31,7 +31,7 @@ export async function POST(req) {
 
     // Save the document to the database
     const savedSchool = await newSchool.save();
-    revalidateTag('schools');
+    revalidatePath('/perziureti-mokyklas')
     return NextResponse.json({ success: true, school: savedSchool });
   } catch (error) {
     console.error("error:", error.message);
