@@ -1,16 +1,6 @@
 import SchoolPage from "@/components/school/SchoolPage";
 import { notFound } from "next/navigation";
-async function getSchoolData(n) {
-  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/schools/${n}`, {
-    next: { tags: [`school-${n}`, { revalidate: 3600 }] },
-  });
-
-  if (!res.ok) {
-    return null;
-  }
-
-  return res.json();
-}
+import {getSchoolData} from "@/lib/getDataForPage"
 export async function generateMetadata({ params }) {
   const n = (await params).id;
 

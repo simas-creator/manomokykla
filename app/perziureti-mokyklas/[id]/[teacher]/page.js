@@ -1,9 +1,54 @@
 
 import TeacherPage from "@/components/teacher/TeacherPage";
-import School from "@/lib/modals/school";
-import Teacher from "@/lib/modals/teacher";
 import connect from "@/lib/mongodb";
 import { notFound } from "next/navigation";
+import {getTeacherData, getSchoolData} from "@/lib/getDataForPage"
+export async function generateMetadata({ params }) {
+  await connect()
+  const data = await params;
+  const id = await data.id;
+  const teacher = await data.teacher;
+  const t = await getTeacherData(teacher)
+  const school = await getSchoolData(n);
+  const { name: schoolName, imgUrl, type, url } = school;
+  const { name: teacherName } = t
+  return {
+    title: `${schoolName} - ${teacherName}`,
+    description: `Peržiūrėkite ${
+      type === "Gimnazija"
+        ? "šios mokyklos mokinių"
+        : "šio universiteto studentų"
+    }  įvertinimus ir komentarus.`,
+    openGraph: {
+      title: `${schoolName} - ${teacherName}`,
+      description: `Peržiūrėkite ${
+        type === "Gimnazija"
+          ? "šios mokyklos mokinių"
+          : "šio universiteto studentų"
+      }  įvertinimus ir komentarus.`,
+      url: `https://manomokykla.lt/${url}`,
+      type: "article",
+      images: [
+        {
+          url: imgUrl,
+          width: 1200,
+          height: 630,
+          alt: `${schoolName} – Mano Mokykla`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${schoolName} - ${teacherName}`,
+      description: `Peržiūrėkite ${
+        type === "Gimnazija"
+          ? "šios mokyklos mokinių"
+          : "šio universiteto studentų"
+      }  įvertinimus ir komentarus.`,
+      images: [imgUrl],
+    },
+  };
+}
 
 export default async function Page({ params }) {
   await connect()
@@ -11,12 +56,12 @@ export default async function Page({ params }) {
   const id = await data.id;
   const teacher = await data.teacher;
     // Fetch school
-    const school = await School.findOne({ url: id }).lean(); 
+    const school = await getSchoolData(n);
     if(!school) {
       notFound()
-    } 
+    }
     // Fetch teacher
-    const t = await Teacher.findOne({ school_id: school._id, url: teacher }).lean();
+    const t = await getTeacherData(teacher)
     if(!t) {
       notFound()
     }
