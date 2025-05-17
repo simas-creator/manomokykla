@@ -47,8 +47,7 @@ export async function POST(req) {
     await newReview.save();
 
     await recalculateTeacher(newReview.teacher_id)
-    revalidateTag(`teacher-${teacher.url}`)
-    revalidateTag(`school-${school.url}`)
+
     return NextResponse.json(
       { message: "Įvertinimas išsaugotas sėkmingai!" },
       { status: 200 }
