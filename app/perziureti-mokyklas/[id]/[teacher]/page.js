@@ -11,7 +11,7 @@ export async function generateMetadata({ params }) {
   const t = await getTeacherData(teacher)
   const school = await getSchoolData(id);
   const { name: schoolName, imgUrl, type, url } = school;
-  const { name: teacherName } = t
+  const { name: teacherName, surname } = t
   return {
     title: `${schoolName} - ${teacherName}`,
     description: `Peržiūrėkite ${
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }) {
         : "šio universiteto studentų"
     }  įvertinimus ir komentarus.`,
     openGraph: {
-      title: `${schoolName} - ${teacherName}`,
+      title: `${schoolName} - ${teacherName} ${surname}`,
       description: `Peržiūrėkite ${
         type === "Gimnazija"
           ? "šios mokyklos mokinių"
