@@ -70,7 +70,7 @@ const SchoolCase = ({
         }
 
         {school.status === "pending" &&
-          <p className="w-full h-full flex items-center bg-gray-50 justify-center text-gray-600 font-thin text-2xl">Laukia patvirtinimo...</p>
+          <p className="w-full h-full flex items-center bg-gray-50 justify-center text-gray-400 font-light  text-2xl">Laukia patvirtinimo...</p>
         }
         <div className="absolute top-2 right-2 group cursor-pointer">
           <Verified
@@ -156,7 +156,7 @@ const SchoolCase = ({
         <Link
           prefetch
           href={`/perziureti-mokyklas/${id}`}
-          className="mt-4 bg-primary self-start rounded-md px-5 py-2 text-white font-medium hover:opacity-80"
+          className="mt-4 self-start rounded-md px-5 py-2 text-white bg-primary font-medium hover:opacity-80"
         >
           Plačiau
         </Link>
