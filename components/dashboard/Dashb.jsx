@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import EditReview from "../teacher/EditReview";
@@ -43,13 +42,7 @@ const Dashb = () => {
       const response = await fetch(`/api/dashboard?id=${id}`);
       const block = await response.json();
       const { data } = block;
-      const {
-        confSchools,
-        pendSchools,
-        reviews,
-        teachers,
-        reviewsNames,
-      } = data;
+      const { confSchools, pendSchools, reviews, teachers, names } = data;
 
       const total = reviews.reduce(
         (acc, review) =>
@@ -61,7 +54,7 @@ const Dashb = () => {
       setA(avg);
       setReviews(reviews || []);
       setPendingSchools(pendSchools || []);
-      setTeacherNames(reviewsNames);
+      setTeacherNames(names);
       setConfirmedSchools(confSchools || []);
       setTeachers(teachers || []);
       setLoading(false);
@@ -110,7 +103,9 @@ const Dashb = () => {
           {/* Stats Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 mb-8">
             <div className="bg-white p-4 rounded-lg shadow">
-              <h3 className="text-md sm:text-xl sm:font-semibold font-medium">Iš viso įvertinimų</h3>
+              <h3 className="text-md sm:text-xl sm:font-semibold font-medium">
+                Iš viso įvertinimų
+              </h3>
               {reviews !== false && !reviews && (
                 <div className="w-full flex mt-2">
                   <LoadingSpinner></LoadingSpinner>
@@ -121,16 +116,18 @@ const Dashb = () => {
               </p>
             </div>
             <div className="bg-white p-4 rounded-lg shadow">
-              <h3 className="text-md sm:text-xl sm:font-semibold font-medium">Vidutinis įvertinimas</h3>
+              <h3 className="text-md sm:text-xl sm:font-semibold font-medium">
+                Vidutinis įvertinimas
+              </h3>
               {!reviews && reviews !== false && (
                 <div className="w-full flex mt-2">
                   <LoadingSpinner></LoadingSpinner>
                 </div>
               )}
-              <p className="text-4xl font-bold text-primary flex items-center gap-1">{a?.toFixed(2) | 0}
-                <Star size={32}/>
+              <p className="text-4xl font-bold text-primary flex items-center gap-1">
+                {a?.toFixed(2) | 0}
+                <Star size={32} />
               </p>
-              
             </div>
           </div>
 
@@ -166,24 +163,27 @@ const Dashb = () => {
                               </td>
                             </tr>
                           ) : (
-                            reviews.map((review, index) => (
-                              <tr
-                                key={index}
-                                className="border-t hover:bg-gray-50"
-                              >
-                                <td className="px-4 py-3 text-sm">
-                                  {teacherNames[`${review.n}-${review.m}`]}
-                                </td>
-                                <td className="px-4 py-3 text-sm">
-                                  <button
-                                    onClick={() => toggleEdit(review)}
-                                    className="text-gray-600 rhover:text-black hover:underline transition-colors"
-                                  >
-                                    Redaguoti
-                                  </button>
-                                </td>
-                              </tr>
-                            ))
+                            reviews.map((review, index) => {
+                              const teacher = teacherNames.find(
+                                (t) => t.id === review.teacher_id.toString()
+                              ).name || "Nežinomas mokytojas";
+                              return (
+                                <tr
+                                  key={index}
+                                  className="border-t hover:bg-gray-50"
+                                >
+                                  <td className="px-4 py-3 text-sm">{teacher}</td>
+                                  <td className="px-4 py-3 text-sm">
+                                    <button
+                                      onClick={() => toggleEdit(review)}
+                                      className="text-gray-600 rhover:text-black hover:underline transition-colors"
+                                    >
+                                      Redaguoti
+                                    </button>
+                                  </td>
+                                </tr>
+                              );
+                            })
                           )}
                         </tbody>
                       </table>
@@ -285,7 +285,8 @@ const Dashb = () => {
                 </h3>
 
                 <div className="overflow-x-auto">
-                  {confirmedSchools !== undefined && pendingSchools !== undefined ? (
+                  {confirmedSchools !== undefined &&
+                  pendingSchools !== undefined ? (
                     <div className="max-h-[300px] overflow-y-auto">
                       <table className="w-full">
                         <thead>
@@ -325,7 +326,8 @@ const Dashb = () => {
                                 </td>
                               </tr>
                             )
-                          ) : confirmedSchools && confirmedSchools.length > 0 ? (
+                          ) : confirmedSchools &&
+                            confirmedSchools.length > 0 ? (
                             confirmedSchools.map((school, index) => (
                               <tr
                                 key={index}

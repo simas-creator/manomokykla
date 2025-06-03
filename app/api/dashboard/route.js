@@ -9,7 +9,17 @@ export async function GET(req) {
   console.log(id, 'id')
   try {
     await connect();
-    const reviews = await Review.find({ user: parseInt(id) });
+    const reviews = await Review.find({ user: id });
+    const names = await Promise.all(
+      reviews.map(async r => {
+        const teacher = await Teacher.findOne({_id: r.teacher_id})
+        return {
+          id: r.teacher_id,
+          name: `${teacher.name} ${teacher.surname}`,
+        }
+      })
+    )
+    console.log(names, 'names')
     console.log(reviews, 'reviews')
     let reviewsNames = {};
     await Promise.all(
@@ -31,7 +41,7 @@ export async function GET(req) {
     const pendSchools = schools.filter((t) => t.status === "pending");
 
     return NextResponse.json(
-      { data: { confSchools, reviews, teachers, pendSchools, reviewsNames } },
+      { data: { confSchools, reviews, teachers, pendSchools, names } },
       { status: 200 }
     );
   } catch (error) {
