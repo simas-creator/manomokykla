@@ -13,6 +13,7 @@ export async function POST(req) {
     const body = await req.json();
     let {
       user,
+      name,
       teacher_id,
       criterion1,
       criterion2,
@@ -35,6 +36,7 @@ export async function POST(req) {
 
     const reviewData = {
       user,
+      name,
       teacher_id,
       rec,
       criterion1,

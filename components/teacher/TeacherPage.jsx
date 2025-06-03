@@ -94,7 +94,7 @@ const TeacherPage = ({ teacher }) => {
         // Process the data without early returns
         if (reviewsData.length > 0) {
           const userSubmittedReview = reviewsData.find(
-            (review) => review.user === session?.user?.email
+            (review) => review.user === session?.user?.id
           );
 
           if (userSubmittedReview) {
@@ -202,7 +202,7 @@ const TeacherPage = ({ teacher }) => {
         <div className="px-6 sm:px-8 mb-8">
           <TeacherReport object={teacher} setReport={setReport} />
         </div>
-        <div className="absolute right-20 md:right-24 top-[95px] text-sm hidden md:block">
+        <div className="absolute right-20 md:right-24 top-[95px] text-sm hidden lg:block">
           {teacher.school.name}
         </div>
         <div className="absolute end-0 top-[63px]">
@@ -354,7 +354,7 @@ const TeacherPage = ({ teacher }) => {
             </div>
           </div>
         </div>
-        <div className="absolute right-20 md:right-24 top-[95px] text-sm hidden md:block">
+        <div className="absolute right-20 md:right-24 top-[95px] text-sm hidden lg:block">
           {teacher.school.name}
         </div>
         <div className="absolute end-0 top-[63px]">

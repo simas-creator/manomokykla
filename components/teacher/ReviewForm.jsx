@@ -54,7 +54,8 @@ const ReviewForm = ({ teacher_id, open, type}) => {
   // Handles form submission
   const handleSubmit = async () => {
     const data = {
-      user: session.user.email,
+      user: session.user.id,
+      name: session.user.name,
       teacher_id,
       rec: jsonData.rec,
       criterion1: jsonData["Gebėjimas perteikti žinias"],

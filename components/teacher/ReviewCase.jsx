@@ -2,7 +2,7 @@ import { useState } from "react";
 import StarRating from "../UI/StarRating";
 import Popup from "@/components/UI/Popup";
 const ReviewCase = ({ review }) => {
-  const { criterion1, criterion2, criterion3, user, comment, updatedAt, rec } =
+  const { criterion1, criterion2, criterion3, name, comment, updatedAt, rec } =
     review;
   const rating = (criterion1 + criterion2 + criterion3) / 3;
   const [open, setOpen] = useState();
@@ -35,7 +35,7 @@ const ReviewCase = ({ review }) => {
       <div className="pt-4 pb-4 flex justify-between items-center flex-wrap gap-6">
         <div>
           {review?.anonymous === false && (
-            <p className="text-sm text-gray-600">{review?.user}</p>
+            <p className="text-sm text-gray-600">{name}</p>
           )}
           <p className="text-gray-400">{formatedDate}</p>
         </div>

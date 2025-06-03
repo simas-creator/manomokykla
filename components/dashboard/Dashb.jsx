@@ -37,10 +37,10 @@ const Dashb = () => {
   }, [open]);
 
   useEffect(() => {
-    if (!session?.user?.email) return;
+    if (!session?.user?.id) return;
 
-    const getData = async (email) => {
-      const response = await fetch(`/api/dashboard?email=${email}`);
+    const getData = async (id) => {
+      const response = await fetch(`/api/dashboard?id=${id}`);
       const block = await response.json();
       const { data } = block;
       const {
@@ -67,7 +67,7 @@ const Dashb = () => {
       setLoading(false);
     };
 
-    getData(session?.user?.email);
+    getData(session?.user?.id);
   }, [session]);
 
   const toggleEdit = (review) => {
@@ -109,7 +109,7 @@ const Dashb = () => {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 mb-8">
-            <div className="bg-white p-6 rounded-lg shadow">
+            <div className="bg-white p-4 rounded-lg shadow">
               <h3 className="text-md sm:text-xl sm:font-semibold font-medium">Iš viso įvertinimų</h3>
               {reviews !== false && !reviews && (
                 <div className="w-full flex mt-2">
@@ -120,7 +120,7 @@ const Dashb = () => {
                 {Number(reviews?.length)}
               </p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow">
+            <div className="bg-white p-4 rounded-lg shadow">
               <h3 className="text-md sm:text-xl sm:font-semibold font-medium">Vidutinis įvertinimas</h3>
               {!reviews && reviews !== false && (
                 <div className="w-full flex mt-2">
