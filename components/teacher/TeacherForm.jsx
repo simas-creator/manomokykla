@@ -28,7 +28,6 @@ const TeacherForm = ({School}) => {
       "Vokiečių"
     ];
       const {data: session, status} = useSession();
-      console.log(session.user.accessToken, 'our token')
       const handleData = (e) => {
         setJsonData({
           ...jsonData,
@@ -41,10 +40,22 @@ const TeacherForm = ({School}) => {
         e.preventDefault();
         setLoading(true);
         const { first, surname } = jsonData;
+        const doesTeacherExist = await fetch('/api/teachers/checkName', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: first, surname: surname, schoolId: School._id })}
+        )
+        if(!doesTeacherExist.ok) {
+          setError('Mokytojas jau egzistuoja');
+          setLoading(false);
+          return;
+        }
         const requestBody = {
           ...jsonData,
           subj: subj,
-          user: session?.user?.email,
+          user: session?.user?.id,
           school_id: School._id
       };
         if(!first || !surname || !subj) {
