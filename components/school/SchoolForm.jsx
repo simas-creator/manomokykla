@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import replaceLithuanianChars from "@/lib/transfomUrl";
 const SchoolForm = () => {
   const [error, setError] = useState(null);
   const [fileError, setFileError] = useState(null);
@@ -78,12 +79,13 @@ const SchoolForm = () => {
     } else {
       setFileError(null);
     }
+    const urlToCheck = replaceLithuanianChars(jsonData.name.trim())
     const isValidName = await fetch("/api/schools/checkName", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name: jsonData.name }),
+      body: JSON.stringify({ url: urlToCheck}),
     });
     if(!isValidName.ok) {
       setLoading(false);

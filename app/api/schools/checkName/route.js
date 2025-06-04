@@ -5,9 +5,9 @@ import { NextResponse } from 'next/server';
 export const POST = async (req) => {
     await connect()
   const data = await req.json();
-  const { name } = data;
+  const { url } = data;
 
-  const school = await School.findOne({ name });
+  const school = await School.findOne({ url });
 
   if (school) {
     return NextResponse.json(

@@ -45,7 +45,7 @@ const TeacherForm = ({School}) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name: first, surname: surname, schoolId: School._id })}
+          body: JSON.stringify({ name: first.trim(), surname: surname.trim(), schoolId: School._id })}
         )
         if(!doesTeacherExist.ok) {
           setError('Mokytojas jau egzistuoja');
