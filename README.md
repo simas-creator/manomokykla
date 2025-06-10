@@ -5,8 +5,7 @@
 Pagrindinis šio projekto tikslas – padėti mokiniams ir jų tėvams rasti tinkamiausią mokyklą ar mokytoją, remiantis kitų mokinių ar studentų pateiktais atsiliepimais. Platforma siekia sukurti skaidrią ir draugišką erdvę, kurioje kiekvienas galėtų dalintis savo patirtimi.
 
 ## Technologijos
-Kuriant šį projektą buvo naudojam
-os šios technologijos:
+Kuriant šį projektą buvo naudojamos šios technologijos:
 
 ### Next.js + NextAuth.js v4
 Pagrindinė platforma optimizuotai sąsajai kurti + Google autentifikacija
